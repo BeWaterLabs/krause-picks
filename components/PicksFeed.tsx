@@ -20,6 +20,13 @@ async function fetch(): Promise<SpreadPick[]> {
 export default async function PicksFeed() {
     const picks = await fetch();
 
+    if (picks.length === 0)
+        return (
+            <div className="w-full h-full flex items-center justify-center text-gray-500">
+                No recent picks.
+            </div>
+        );
+
     return (
         <div className="relative w-full h-full gap-4 shadow-md overflow-visible">
             <div className="absolute top-0 bottom-0 left-0 right-0 overflow-y-scroll scrollbar-none">

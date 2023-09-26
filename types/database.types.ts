@@ -50,6 +50,8 @@ export interface Database {
           home_spread: number | null
           home_team: number
           id: number
+          last_updated: string
+          odds_api_id: number | null
           over_under: number | null
           start: string
         }
@@ -62,6 +64,8 @@ export interface Database {
           home_spread?: number | null
           home_team: number
           id?: number
+          last_updated?: string
+          odds_api_id?: number | null
           over_under?: number | null
           start: string
         }
@@ -74,6 +78,8 @@ export interface Database {
           home_spread?: number | null
           home_team?: number
           id?: number
+          last_updated?: string
+          odds_api_id?: number | null
           over_under?: number | null
           start?: string
         }

@@ -1,3 +1,4 @@
+import Header from "@/components/Header";
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -17,9 +18,12 @@ export default function RootLayout({
     return (
         <html lang="en" className="dark">
             <body
-                className={`${inter.className} dark:bg-slate-900 dark:text-gray-200`}
+                className={`${inter.className} h-screen flex flex-col dark:bg-slate-900 dark:text-gray-200`}
             >
-                {children}
+                <Header />
+                <main className="px-8 py-4 w-screen overflow-x-hidden flex-1">
+                    {children}
+                </main>
             </body>
         </html>
     );

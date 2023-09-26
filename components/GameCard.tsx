@@ -19,7 +19,7 @@ function Side({ team, spread }: { team: Row<"teams">; spread: number }) {
                     src={team.icon_logo_url || team.primary_logo_url}
                     alt={`${team.full_name} logo`}
                     width={40}
-                    className="group-hover:scale-110 transition duration-200 h-10 w-auto"
+                    className="group-hover:scale-110 transition duration-200 h-8 w-auto"
                     height={40}
                 />
             </div>

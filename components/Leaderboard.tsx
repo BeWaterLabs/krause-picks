@@ -20,12 +20,10 @@ export default async function Leaderboard() {
 
     return (
         <div className="dark:bg-slate-800 flex overflow-hidden flex-col h-full bg-white border border-gray-200 dark:border-gray-700 shadow-md sm:rounded-lg">
-            <div className="flex items-center flex-0 justify-between p-4">
+            <div className="flex items-center flex-0 justify-start p-4">
                 <h2 className="text-xl dark:text-white text-black font-semibold">
-                    Leaderboard
+                    Daily Leaderboard
                 </h2>
-
-                <p className="dark:text-gray-400 text-sm">2:12:13</p>
             </div>
 
             <div className="text-sm flex-1 relative text-left">
@@ -54,7 +52,7 @@ export default async function Leaderboard() {
                                             {score.account.display_name}
                                         </div>
                                         <div className="font-normal text-gray-400 flex gap-1">
-                                            {score.account.username}
+                                            @{score.account.username}
                                         </div>
                                     </div>
                                 </div>

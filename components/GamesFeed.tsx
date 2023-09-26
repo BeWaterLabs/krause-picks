@@ -23,9 +23,9 @@ export default async function GamesFeedWrapper() {
     const games = await fetch();
 
     return (
-        <div className="relative w-full h-36">
+        <div className="relative w-full h-32">
             <div className="w-16 bg-gradient-to-r from-slate-900 to-transparent absolute left-0 z-10 top-0 bottom-0" />
-            <div className="absolute left-0 flex px-12 right-0 overflow-y-scroll scrollbar-none">
+            <div className="absolute top-0 bottom-0 my-auto left-0 flex px-8 right-0 overflow-y-scroll scrollbar-none">
                 {games.map((game) => (
                     <div className="mr-2" key={game.id}>
                         <GameCard game={game} />
