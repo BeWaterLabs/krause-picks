@@ -10,13 +10,9 @@ export default function SignupForm() {
     const signup = async (e: any) => {
         e.preventDefault();
 
-        if (e.target.password.value !== e.target["confirm-password"].value) {
-            alert("Passwords do not match");
-            return;
-        }
         const supabase = createClientComponentClient();
 
-        const { data, error } = await supabase.auth.signUp({
+        const { data, error } = await supabase.auth.signInWithPassword({
             email: e.target.email.value,
             password: e.target.password.value,
         });
@@ -57,34 +53,19 @@ export default function SignupForm() {
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-slate-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 />
             </div>
-            <div>
-                <label
-                    htmlFor="confirm-password"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
-                    Confirm Password
-                </label>
-                <input
-                    type="password"
-                    name="confirm-password"
-                    id="confirm-password"
-                    placeholder="••••••••"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-slate-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                />
-            </div>
             <button
                 type="submit"
                 className="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             >
-                Sign up
+                Login
             </button>
             <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                Already have an account?{" "}
+                Don&apos;t have an account?{" "}
                 <Link
-                    href="/auth/login"
+                    href="/auth/signup"
                     className="font-medium text-blue-600 hover:underline dark:text-blue-500"
                 >
-                    Login
+                    Sign up
                 </Link>
             </p>
         </form>
