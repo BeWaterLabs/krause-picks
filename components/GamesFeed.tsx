@@ -1,6 +1,7 @@
 import { Game } from "@/types/custom.types";
 import serverDatabaseClient from "@/util/server-database-client";
 import GameCard from "./GameCard";
+import HorizontalScroll from "./HorizontalScroll";
 
 async function fetch(): Promise<Game[]> {
     const supabase = serverDatabaseClient();
@@ -19,20 +20,16 @@ async function fetch(): Promise<Game[]> {
     return data as Game[];
 }
 
-export default async function GamesFeedWrapper() {
+export default async function GamesFeed() {
     const games = await fetch();
 
     return (
-        <div className="relative w-full h-32">
-            <div className="w-16 bg-gradient-to-r from-slate-900 to-transparent absolute left-0 z-10 top-0 bottom-0" />
-            <div className="absolute top-0 bottom-0 my-auto left-0 flex px-8 right-0 overflow-y-scroll scrollbar-none">
-                {games.map((game) => (
-                    <div className="mr-2" key={game.id}>
-                        <GameCard game={game} />
-                    </div>
-                ))}
-            </div>
-            <div className="w-16 bg-gradient-to-r to-slate-900 from-transparent absolute right-0 z-10 top-0 bottom-0" />
-        </div>
+        <HorizontalScroll>
+            {games.map((game) => (
+                <div className="mr-2" key={game.id}>
+                    <GameCard game={game} />
+                </div>
+            ))}
+        </HorizontalScroll>
     );
 }
