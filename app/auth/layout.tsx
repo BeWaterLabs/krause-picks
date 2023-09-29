@@ -1,5 +1,4 @@
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from "next/headers";
+import serverDatabaseClient from "@/util/server-database-client";
 import { redirect } from "next/navigation";
 
 export default async function AuthLayout({
@@ -7,7 +6,7 @@ export default async function AuthLayout({
 }: {
     children: React.ReactNode;
 }) {
-    const supabase = createServerComponentClient({ cookies });
+    const supabase = serverDatabaseClient();
     const {
         data: { user },
         error,

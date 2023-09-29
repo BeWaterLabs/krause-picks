@@ -1,11 +1,10 @@
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
-import LogoutButton from "./LogoutButton";
+import LogoutButton from "./auth/LogoutButton";
+import serverDatabaseClient from "@/util/server-database-client";
 
 export default async function Header() {
-    const supabase = createServerComponentClient({ cookies });
+    const supabase = serverDatabaseClient();
     const {
         data: { user },
         error,

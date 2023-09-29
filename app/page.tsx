@@ -1,8 +1,7 @@
-import Image from "next/image";
-import PicksFeed from "@/components/PicksFeed";
+import PicksFeed from "@/components/picks/PostsFeed";
 import Leaderboard from "@/components/Leaderboard";
 import UserPanel from "@/components/UserPanel";
-import GamesFeed from "@/components/GamesFeed";
+import GamesFeed from "@/components/games/GamesFeed";
 
 export default function Home() {
     return (
