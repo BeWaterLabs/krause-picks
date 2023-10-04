@@ -8,10 +8,12 @@ async function fetch(): Promise<Game[]> {
     const {
         data: { user },
     } = await supabase.auth.getUser();
+
     const { data: picks } = await supabase
         .from("spread_picks")
         .select("*")
         .eq("account", user?.id || "");
+
     const { data, error } = await supabase
         .from("games")
         .select(

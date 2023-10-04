@@ -1,8 +1,10 @@
 "use client";
 
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { RiTwitterXFill } from "react-icons/ri";
+import toast from "react-hot-toast";
+import createBrowserClient from "@/util/browser-database-client";
 
 export default function SignupForm() {
     const router = useRouter();
@@ -14,14 +16,31 @@ export default function SignupForm() {
             alert("Passwords do not match");
             return;
         }
-        const supabase = createClientComponentClient();
+        const supabase = createBrowserClient();
 
         const { data, error } = await supabase.auth.signUp({
             email: e.target.email.value,
             password: e.target.password.value,
         });
 
-        if (error) alert(error.message);
+        if (error) toast.error(error.message);
+        else router.refresh();
+    };
+
+    const loginWithTwitter = async () => {
+        const supabase = createBrowserClient();
+
+        const { data, error } = await supabase.auth.signInWithOAuth({
+            provider: "twitter",
+            options: {
+                redirectTo:
+                    process.env.NODE_ENV === "production"
+                        ? "https://krausepicks.com/auth/callback"
+                        : "http://localhost:3000/auth/callback",
+            },
+        });
+
+        if (error) toast.error(error.message);
         else router.refresh();
     };
 
@@ -78,6 +97,21 @@ export default function SignupForm() {
             >
                 Sign up
             </button>
+            <div>
+                <div className="flex mb-2 items-center text-gray-500 gap-4 justify-center">
+                    <div className="h-[1px] bg-gray-700 w-full" />
+                    or
+                    <div className="h-[1px] bg-gray-700 w-full" />
+                </div>
+                <button
+                    type="button"
+                    onClick={loginWithTwitter}
+                    className="w-full text-white bg-blue-400 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-900 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-950 dark:hover:bg-gray-900 dark:focus:ring-gray-900"
+                >
+                    <RiTwitterXFill className="inline-block w-4 h-4 mr-2" />
+                    Sign up with X
+                </button>
+            </div>
             <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                 Already have an account?{" "}
                 <Link

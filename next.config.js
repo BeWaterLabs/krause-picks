@@ -23,6 +23,14 @@ const nextConfig = {
                 protocol: "https",
                 hostname: "mavs.wpenginepowered.com",
             },
+            {
+                protocol: "https",
+                hostname: "static.www.nfl.com",
+            },
+            {
+                protocol: "https",
+                hostname: "res.cloudinary.com",
+            },
         ],
     },
 };

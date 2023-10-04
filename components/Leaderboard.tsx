@@ -19,7 +19,7 @@ export default async function Leaderboard() {
     const scores = await fetch();
 
     return (
-        <div className="dark:bg-slate-800 flex overflow-hidden flex-col h-full bg-white border border-gray-200 dark:border-gray-700 shadow-md sm:rounded-lg">
+        <div className="opacity-50 dark:bg-slate-800 flex overflow-hidden flex-col h-full bg-white border border-gray-200 dark:border-gray-700 shadow-md sm:rounded-lg">
             <div className="flex items-center flex-0 justify-start p-4">
                 <h2 className="text-xl dark:text-white text-black font-semibold">
                     Daily Leaderboard

@@ -9,6 +9,7 @@ export default async function Header() {
         data: { user },
         error,
     } = await supabase.auth.getUser();
+    console.log(user);
 
     return (
         <header>

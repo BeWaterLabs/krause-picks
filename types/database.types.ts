@@ -51,7 +51,7 @@ export interface Database {
           home_team: number
           id: number
           last_updated: string
-          odds_api_id: number | null
+          odds_api_id: string | null
           over_under: number | null
           start: string
         }
@@ -65,7 +65,7 @@ export interface Database {
           home_team: number
           id?: number
           last_updated?: string
-          odds_api_id?: number | null
+          odds_api_id?: string | null
           over_under?: number | null
           start: string
         }
@@ -79,7 +79,7 @@ export interface Database {
           home_team?: number
           id?: number
           last_updated?: string
-          odds_api_id?: number | null
+          odds_api_id?: string | null
           over_under?: number | null
           start?: string
         }
@@ -182,6 +182,7 @@ export interface Database {
           full_name: string
           icon_logo_url: string | null
           id: number
+          league: string | null
           primary_logo_url: string
           team_name: string | null
         }
@@ -191,6 +192,7 @@ export interface Database {
           full_name: string
           icon_logo_url?: string | null
           id?: number
+          league?: string | null
           primary_logo_url: string
           team_name?: string | null
         }
@@ -200,6 +202,7 @@ export interface Database {
           full_name?: string
           icon_logo_url?: string | null
           id?: number
+          league?: string | null
           primary_logo_url?: string
           team_name?: string | null
         }

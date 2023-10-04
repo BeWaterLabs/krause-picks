@@ -1,6 +1,5 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-import type { NextRequest } from "next/server";
 import type { Database } from "@/types/database.types";
 import { SupabaseClient, createClient } from "@supabase/supabase-js";
 import { Insert, Row } from "@/types/database-helpers.types";
@@ -39,15 +38,18 @@ export async function POST(request: NextRequest) {
     const now = new Date();
     const isoNow = now.toISOString().slice(0, 19) + "Z";
 
-    const midnight = new Date(now);
-    midnight.setHours(24, 0, 0, 0);
-    const isoMidnight = midnight.toISOString().slice(0, 19) + "Z";
+    const searchParams = request.nextUrl.searchParams;
+    const days = searchParams.get("days") || "1";
+    const category = searchParams.get("category");
+    if (!category) throw new Error("No category provided.");
 
-    const futureDate = new Date("2023-10-26T00:00:00");
-    const isoFutureDate = futureDate.toISOString().slice(0, 19) + "Z";
+    const endDate = new Date();
+    endDate.setHours(0, 0, 0, 0); // Set time to midnight
+    endDate.setDate(endDate.getDate() + Number(days)); // Add the number of days
+    const endTime = endDate.toISOString().slice(0, 19) + "Z";
 
     const oddsResponse = await fetch(
-        `https://api.the-odds-api.com/v4/sports/upcoming/odds/?regions=us&sport=basketball_nba&markets=spreads&oddsFormat=american&dateFormat=iso&commenceTimeFrom=${isoNow}&commenceTimeTo=${isoFutureDate}&apiKey=${process.env.ODDS_API_KEY}`
+        `https://api.the-odds-api.com/v4/sports/upcoming/odds/?regions=us&sport=${category}&markets=spreads&oddsFormat=american&dateFormat=iso&commenceTimeFrom=${isoNow}&commenceTimeTo=${endTime}&apiKey=${process.env.ODDS_API_KEY}`
     );
     const odds = await oddsResponse.json();
 
