@@ -65,16 +65,18 @@ export async function POST(request: NextRequest) {
         throw new Error("Failed to fetch teams.");
     }
 
-    odds.forEach(async (game: any) => {
-        try {
-            const { data, error } = await updateOdds(game, teams, supabase);
-            if (error) throw error;
-        } catch (e: any) {
-            console.error(
-                `Failed to update odds for game ${game.id}: ${e.message}`
-            );
-        }
-    });
+    await Promise.all(
+        odds.map(async (game: any) => {
+            try {
+                const { data, error } = await updateOdds(game, teams, supabase);
+                if (error) throw error;
+            } catch (e: any) {
+                console.error(
+                    `Failed to update odds for game ${game.id}: ${e.message}`
+                );
+            }
+        })
+    );
 
     return NextResponse.json({ success: true });
 }
