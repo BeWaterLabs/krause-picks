@@ -50,8 +50,7 @@ export default async function PostsFeed() {
                                 otherPicks={picks.filter(
                                     (p) =>
                                         p.game.id === pick.game.id &&
-                                        p.id !== pick.id &&
-                                        p.account.user_id !== user?.id
+                                        p.id !== pick.id
                                 )}
                                 user={user}
                             />

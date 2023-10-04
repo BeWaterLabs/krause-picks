@@ -43,11 +43,11 @@ export default async function UserPanel() {
                     <h6 className="text-center text-gray-500">Accuracy</h6>
                 </div>
             </div>
-            <div className="mt-4">
+            <div className="mt-4 h-full">
                 <h3 className="text-lg dark:text-white text-black font-semibold">
                     Today's Picks
                 </h3>
-                <div className="flex flex-col gap-4 mt-3">
+                <div className="flex flex-col h-full gap-4 mt-3">
                     <div className="flex gap-3 justify-between text-base items-center w-full">
                         <div className="flex gap-3 text-gray-500 font-semibold items-center w-full">
                             <Image
