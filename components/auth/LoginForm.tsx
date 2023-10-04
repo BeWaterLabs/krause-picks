@@ -31,7 +31,7 @@ export default function SignupForm() {
             options: {
                 redirectTo:
                     process.env.NODE_ENV === "production"
-                        ? "https://krausepicks.com/auth/callback"
+                        ? "https://krause-picks.vercel.app/auth/callback"
                         : "http://localhost:3000/auth/callback",
             },
         });
