@@ -72,11 +72,14 @@ export default async function UserPanel({ user }: { user: User }) {
             </div>
             <div className="mt-4 h-full">
                 <h3 className="text-lg dark:text-white text-black font-semibold">
-                    Today's Picks
+                    Today&apos;s Picks
                 </h3>
                 <div className="flex flex-col h-full gap-4 mt-3">
                     {picks.map((pick) => (
-                        <div className="flex gap-3 justify-between text-base items-center w-full">
+                        <div
+                            key={pick.id}
+                            className="flex gap-3 justify-between text-base items-center w-full"
+                        >
                             <div className="flex gap-3 text-gray-500 font-semibold items-center w-full">
                                 <Image
                                     src={
@@ -95,6 +98,13 @@ export default async function UserPanel({ user }: { user: User }) {
                             </div>
                         </div>
                     ))}
+                    {picks.length === 0 && (
+                        <div className="flex justify-center items-center h-full">
+                            <h6 className="text-gray-500">
+                                No picks made today
+                            </h6>
+                        </div>
+                    )}
                 </div>
             </div>
             <div className="mt-8 opacity-50 text-sm flex flex-col gap-2">
