@@ -79,7 +79,7 @@ export default function SignupForm() {
                 Login
             </button>
             <div>
-                <div className="flex mb-2 items-center text-gray-500 gap-4 justify-center">
+                <div className="flex mb-4 items-center text-gray-500 gap-4 justify-center">
                     <div className="h-[1px] bg-gray-700 w-full" />
                     or
                     <div className="h-[1px] bg-gray-700 w-full" />
