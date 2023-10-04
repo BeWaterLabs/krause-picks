@@ -23,8 +23,8 @@ async function updateAccountToLatest(
         display_name: user.user_metadata?.name,
         // for twitter profile images, retrieve the original size
         profile_picture_url: user.user_metadata?.avatar_url.replace(
-            "_normal.png",
-            ".png"
+            "_normal",
+            ""
         ),
     };
 

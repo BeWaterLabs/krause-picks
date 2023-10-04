@@ -16,16 +16,16 @@ export default async function Home() {
             <div className="flex flex-0 w-full gap-2">
                 <GamesFeed />
             </div>
-            <div className={`grid flex-1 grid-cols-${user ? "8" : "6"} gap-4`}>
+            <div className={`flex items-stretch flex-1 gap-4`}>
                 {user && (
-                    <div className="col-span-2">
+                    <div className="flex-1">
                         <UserPanel user={user} />
                     </div>
                 )}
-                <div className="col-span-4">
+                <div className="flex-[2]">
                     <PicksFeed />
                 </div>
-                <div className="col-span-2">
+                <div className="flex-1">
                     <Leaderboard />
                 </div>
             </div>
