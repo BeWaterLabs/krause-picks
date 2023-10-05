@@ -45,9 +45,12 @@ export async function GET(req: NextRequest) {
             await updateAccountToLatest(supabase, data.user);
             return NextResponse.redirect(new URL(`/${next.slice(1)}`, req.url));
         } else {
-            console.error(error);
+            console.error(error.message);
             return NextResponse.redirect(
-                new URL(`/error/auth-code-error?error=${error}`, req.url)
+                new URL(
+                    `/error/auth-code-error?error=${error.message}`,
+                    req.url
+                )
             );
         }
     }
