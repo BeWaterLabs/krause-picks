@@ -44,9 +44,16 @@ export async function GET(req: NextRequest) {
         if (!error) {
             await updateAccountToLatest(supabase, data.user);
             return NextResponse.redirect(new URL(`/${next.slice(1)}`, req.url));
+        } else {
+            console.error(error);
+            return NextResponse.redirect(
+                new URL(`/error/auth-code-error?error=${error}`, req.url)
+            );
         }
     }
 
     // return the user to an error page with instructions
-    return NextResponse.redirect(new URL("/auth/auth-code-error", req.url));
+    return NextResponse.redirect(
+        new URL(`/error/auth-code-error?error=${"No code provided"}`, req.url)
+    );
 }
