@@ -29,10 +29,7 @@ export default function SignupForm() {
         const { data, error } = await supabase.auth.signInWithOAuth({
             provider: "twitter",
             options: {
-                redirectTo:
-                    process.env.NODE_ENV === "production"
-                        ? "https://krause-picks.vercel.app/auth/callback"
-                        : "http://localhost:3000/auth/callback",
+                redirectTo: process.env.NEXT_PUBLIC_AUTH_CALLBACK_URL,
             },
         });
 
