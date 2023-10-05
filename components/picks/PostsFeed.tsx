@@ -41,20 +41,18 @@ export default async function PostsFeed() {
         <div className="relative w-full h-full gap-4 shadow-md overflow-visible">
             <div className="absolute top-0 bottom-0 left-0 right-0 overflow-y-scroll scrollbar-none">
                 <div className="flex flex-col gap-4">
-                    {picks
-                        .filter((p) => p.account.user_id !== user?.id)
-                        .map((pick) => (
-                            <PostCard
-                                key={pick.id}
-                                pick={pick}
-                                otherPicks={picks.filter(
-                                    (p) =>
-                                        p.game.id === pick.game.id &&
-                                        p.id !== pick.id
-                                )}
-                                user={user}
-                            />
-                        ))}
+                    {picks.map((pick) => (
+                        <PostCard
+                            key={pick.id}
+                            pick={pick}
+                            otherPicks={picks.filter(
+                                (p) =>
+                                    p.game.id === pick.game.id &&
+                                    p.id !== pick.id
+                            )}
+                            user={user}
+                        />
+                    ))}
                 </div>
             </div>
         </div>

@@ -38,7 +38,8 @@ export async function POST(request: NextRequest) {
         .select("*")
         .eq("game", game.id)
         .eq("account", account.user_id)
-        .single();
+        .maybeSingle();
+
     if (existingPick || existingPickError)
         throw new Error(
             `You already have a pick for this game: ${existingPickError?.message}}`

@@ -25,6 +25,7 @@ export default function SignupForm() {
 
     const loginWithTwitter = async () => {
         const supabase = createBrowserClient();
+        console.log(process.env.NEXT_PUBLIC_AUTH_CALLBACK_URL);
 
         const { data, error } = await supabase.auth.signInWithOAuth({
             provider: "twitter",

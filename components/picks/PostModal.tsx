@@ -7,6 +7,7 @@ import { Row } from "@/types/database-helpers.types";
 import toast from "react-hot-toast";
 import Spinner from "@/components/Spinner";
 import { User } from "@supabase/supabase-js";
+import { useRouter } from "next/navigation";
 
 export default function PostModal({
     game,
@@ -25,6 +26,7 @@ export default function PostModal({
 }) {
     const [content, setContent] = useState("");
     const [loading, setLoading] = useState(false);
+    const router = useRouter();
 
     const postPick = async () => {
         setLoading(true);
@@ -45,6 +47,7 @@ export default function PostModal({
 
             if (!data.success) toast.error("Failed to post pick.");
             else toast.success("Pick successfully posted!");
+            router.refresh();
         } catch (e) {
             toast.error("Failed to post pick.");
         }
