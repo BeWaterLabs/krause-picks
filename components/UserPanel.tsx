@@ -74,14 +74,14 @@ export default async function UserPanel({ user }: { user: User }) {
                 <h3 className="text-lg dark:text-white text-black font-semibold">
                     Today&apos;s Picks
                 </h3>
-                <div className="overflow-y-scroll scrollbar-track-transparent scrollbar-thumb-slate-700 scrollbar-thin scrollbar-thumb-rounded-md flex flex-1 relative mt-3">
-                    <div className="absolute top-0 px-2 flex gap-4 flex-col min-h-full right-0 left-0">
+                <div className="overflow-y-scroll scrollbar-track-transparent scrollbar-thumb-slate-700 scrollbar-none scrollbar-thumb-rounded-md flex flex-1 relative mt-3">
+                    <div className="absolute top-0 flex gap-4 flex-col min-h-full right-0 left-0">
                         {picks.map((pick) => (
                             <div
                                 key={pick.id}
                                 className="flex gap-3 justify-between text-base items-center w-full"
                             >
-                                <div className="flex gap-3 text-gray-500 font-semibold items-center w-full">
+                                <div className="flex text-sm gap-3 text-gray-500 font-semibold items-center w-full">
                                     <Image
                                         src={
                                             pick.selection.icon_logo_url ||
