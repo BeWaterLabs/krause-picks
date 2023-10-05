@@ -70,41 +70,44 @@ export default async function UserPanel({ user }: { user: User }) {
                     <h6 className="text-center text-gray-500">Accuracy</h6>
                 </div>
             </div>
-            <div className="mt-4 h-full">
+            <div className="mt-4 h-full flex flex-col">
                 <h3 className="text-lg dark:text-white text-black font-semibold">
                     Today&apos;s Picks
                 </h3>
-                <div className="flex flex-col h-full gap-4 mt-3">
-                    {picks.map((pick) => (
-                        <div
-                            key={pick.id}
-                            className="flex gap-3 justify-between text-base items-center w-full"
-                        >
-                            <div className="flex gap-3 text-gray-500 font-semibold items-center w-full">
-                                <Image
-                                    src={
-                                        pick.selection.icon_logo_url ||
-                                        pick.selection.primary_logo_url
-                                    }
-                                    alt={`${pick.selection.full_name} logo`}
-                                    width={125}
-                                    height={125}
-                                    className="w-auto h-7"
-                                />
-                                {pick.selection.full_name}
+                <div className="overflow-y-scroll scrollbar-track-transparent scrollbar-thumb-slate-700 scrollbar-thin scrollbar-thumb-rounded-md flex flex-1 relative mt-3">
+                    <div className="absolute top-0 px-2 flex gap-4 flex-col min-h-full right-0 left-0">
+                        {picks.map((pick) => (
+                            <div
+                                key={pick.id}
+                                className="flex gap-3 justify-between text-base items-center w-full"
+                            >
+                                <div className="flex gap-3 text-gray-500 font-semibold items-center w-full">
+                                    <Image
+                                        src={
+                                            pick.selection.icon_logo_url ||
+                                            pick.selection.primary_logo_url
+                                        }
+                                        alt={`${pick.selection.full_name} logo`}
+                                        width={125}
+                                        height={125}
+                                        className="w-auto h-7"
+                                    />
+                                    {pick.selection.full_name}
+                                </div>
+                                <div className="rounded-md w-16 flex justify-center py-1 text-sm bg-slate-700">
+                                    {pick.spread > 0 ? "+" : ""}
+                                    {pick.spread}
+                                </div>
                             </div>
-                            <div className="rounded-md w-16 flex justify-center py-1 text-sm bg-slate-700">
-                                -1.5
+                        ))}
+                        {picks.length === 0 && (
+                            <div className="flex justify-center items-center h-full">
+                                <h6 className="text-gray-500">
+                                    No picks made today
+                                </h6>
                             </div>
-                        </div>
-                    ))}
-                    {picks.length === 0 && (
-                        <div className="flex justify-center items-center h-full">
-                            <h6 className="text-gray-500">
-                                No picks made today
-                            </h6>
-                        </div>
-                    )}
+                        )}
+                    </div>
                 </div>
             </div>
             <div className="mt-8 opacity-50 text-sm flex flex-col gap-2">
