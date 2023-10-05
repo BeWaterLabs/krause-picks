@@ -19,8 +19,14 @@ async function updateAccountToLatest(
     const account: Insert<"accounts"> = {
         user_id: user.id,
         created_at: user.created_at,
-        username: user.user_metadata?.user_name,
-        display_name: user.user_metadata?.name,
+        username:
+            user.app_metadata.provider === "twitter"
+                ? user.user_metadata?.user_name
+                : user.user_metadata.name,
+        display_name:
+            user.app_metadata.provider === "twitter"
+                ? user.user_metadata?.name
+                : user.user_metadata.full_name,
         // for twitter profile images, retrieve the original size
         profile_picture_url: user.user_metadata?.avatar_url.replace(
             "_normal",
@@ -28,7 +34,10 @@ async function updateAccountToLatest(
         ),
     };
 
-    await client.from("accounts").upsert(account, { onConflict: "user_id" });
+    const { data, error } = await client
+        .from("accounts")
+        .upsert(account, { onConflict: "user_id" });
+    console.log(data, error);
 }
 
 export async function GET(req: NextRequest) {
@@ -41,6 +50,7 @@ export async function GET(req: NextRequest) {
         const { data, error } = await supabase.auth.exchangeCodeForSession(
             code
         );
+
         if (!error) {
             await updateAccountToLatest(supabase, data.user);
             return NextResponse.redirect(new URL(`/${next.slice(1)}`, req.url));
