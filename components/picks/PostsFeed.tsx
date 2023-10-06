@@ -9,9 +9,9 @@ async function fetch(): Promise<{ picks: SpreadPick[]; user: User | null }> {
     const { data: picks, error: picksError } = await supabase
         .from("spread_picks")
         .select(
-            "*, account: accounts!spread_picks_account_fkey(*), game: games!spread_picks_game_fkey(*, away_team: teams!games_away_team_fkey(*), home_team: teams!games_home_team_fkey(*)), selection: teams!spread_picks_selection_fkey(*)"
+            "*, account: accounts!spread_picks_account_fkey(*), game: games!inner(*, away_team: teams!games_away_team_fkey(*), home_team: teams!games_home_team_fkey(*)), selection: teams!spread_picks_selection_fkey(*)"
         )
-        .filter("game.start", "gte", new Date().toISOString())
+        .gte("games.start", new Date().toISOString())
         .order("created_at", { ascending: false });
 
     if (picksError) throw new Error(picksError.message);
@@ -29,6 +29,7 @@ async function fetch(): Promise<{ picks: SpreadPick[]; user: User | null }> {
 
 export default async function PostsFeed() {
     const { picks, user } = await fetch();
+    console.log(picks);
 
     if (picks.length === 0)
         return (
