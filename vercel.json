@@ -2,7 +2,13 @@
     "crons": [
         {
             "path": "/api/odds/spreads?days=6&category=americanfootball_nfl",
-            "schedule": "0 0 * * *"
+            "schedule": "0 * * * *",
+            "description": "Update NFL spreads"
+        },
+        {
+            "path": "/api/scores/?category=americanfootball_nfl",
+            "schedule": "0 * * * *",
+            "description": "Update NFL scores"
         }
     ]
 }

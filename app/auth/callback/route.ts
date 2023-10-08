@@ -37,7 +37,6 @@ async function updateAccountToLatest(
     const { data, error } = await client
         .from("accounts")
         .upsert(account, { onConflict: "user_id" });
-    console.log(data, error);
 }
 
 export async function GET(req: NextRequest) {

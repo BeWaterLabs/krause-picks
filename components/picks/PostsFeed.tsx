@@ -29,7 +29,6 @@ async function fetch(): Promise<{ picks: SpreadPick[]; user: User | null }> {
 
 export default async function PostsFeed() {
     const { picks, user } = await fetch();
-    console.log(picks);
 
     if (picks.length === 0)
         return (
