@@ -47,7 +47,6 @@ export async function GET(request: NextRequest) {
     const scores = (await scoresResponse.json()).filter(
         (g: any) => g.scores !== null
     );
-    console.log(scores);
 
     const supabase = createClient<Database>(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
