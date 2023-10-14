@@ -1,1 +1,1 @@
-# Krause Picks
+## Krause Picks
