@@ -5,6 +5,7 @@ import {
     User,
     createRouteHandlerClient,
 } from "@supabase/auth-helpers-nextjs";
+import { createClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
@@ -12,10 +13,7 @@ import type { NextRequest } from "next/server";
 
 export const dynamic = "force-dynamic";
 
-async function updateAccountToLatest(
-    client: SupabaseClient<Database>,
-    user: User
-) {
+async function updateAccountToLatest(user: User) {
     const account: Insert<"accounts"> = {
         user_id: user.id,
         created_at: user.created_at,
@@ -34,7 +32,12 @@ async function updateAccountToLatest(
         ),
     };
 
-    const { data, error } = await client
+    const adminClient = createClient<Database>(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.SUPABASE_ADMIN_KEY!
+    );
+
+    const { data, error } = await adminClient
         .from("accounts")
         .upsert(account, { onConflict: "user_id" });
 }
@@ -51,7 +54,7 @@ export async function GET(req: NextRequest) {
         );
 
         if (!error) {
-            await updateAccountToLatest(supabase, data.user);
+            await updateAccountToLatest(data.user);
             return NextResponse.redirect(new URL(`/${next.slice(1)}`, req.url));
         } else {
             console.error(error.message);

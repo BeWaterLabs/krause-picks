@@ -1,37 +1,68 @@
 import Image from "next/image";
 import serverDatabaseClient from "@/util/server-database-client";
 
-import { Score } from "@/types/custom.types";
+import { SpreadPick } from "@/types/custom.types";
+import { User } from "@supabase/supabase-js";
+import { Row } from "@/types/database-helpers.types";
 
-async function fetch(): Promise<Score[]> {
+async function fetch(): Promise<{ picks: SpreadPick[]; user: User | null }> {
     const supabase = serverDatabaseClient();
-    const { data, error } = await supabase
-        .from("scores")
-        .select("*, account: accounts!scores_account_fkey(*)")
-        .order("score", { ascending: false });
+    const { data: picks, error: picksError } = await supabase
+        .from("spread_picks")
+        .select(
+            "*, account: accounts!spread_picks_account_fkey(*), game: games!inner(*, away_team: teams!games_away_team_fkey(*), home_team: teams!games_home_team_fkey(*)), selection: teams!spread_picks_selection_fkey(*)"
+        )
+        .not("successful", "is", null);
 
-    if (error) throw new Error(error.message);
+    if (picksError) throw new Error(picksError.message);
 
-    return data as Score[];
+    const {
+        data: { user },
+        error: userError,
+    } = await supabase.auth.getUser();
+
+    return {
+        picks: picks as SpreadPick[],
+        user,
+    };
 }
 
 export default async function Leaderboard() {
-    const scores = await fetch();
+    const { picks, user } = await fetch();
+    let usersWithScores: { account: Row<"accounts">; score: number }[] = [];
+    let usersSet = new Set();
+
+    picks.forEach((pick) => {
+        if (!usersSet.has(pick.account.user_id)) {
+            usersSet.add(pick.account.user_id);
+            usersWithScores.push({
+                account: pick.account,
+                score: 10,
+            });
+        } else {
+            let userWithScore = usersWithScores.find(
+                (userWithScore) =>
+                    userWithScore.account.user_id === pick.account.user_id
+            )!;
+            userWithScore.score += 10;
+        }
+    });
+    usersWithScores.sort((a, b) => b.score - a.score);
 
     return (
-        <div className="opacity-50 dark:bg-slate-800 flex overflow-hidden flex-col h-full bg-white border border-gray-200 dark:border-gray-700 shadow-md sm:rounded-lg">
+        <div className="dark:bg-slate-800 flex overflow-hidden flex-col h-full bg-white border border-gray-200 dark:border-gray-700 shadow-md sm:rounded-lg">
             <div className="flex items-center flex-0 justify-start p-4">
                 <h2 className="text-xl dark:text-white text-black font-semibold">
-                    Daily Leaderboard
+                    Leaderboard
                 </h2>
             </div>
 
             <div className="text-sm flex-1 relative text-left">
                 <div className="absolute dark:scrollbar-thumb-slate-700 scrollbar-thin scrollbar-thumb-rounded-md dark:scrollbar-track-slate-800 left-0 right-0 top-0 bottom-0 overflow-y-scroll">
                     <div className="flex flex-col">
-                        {scores.map((score) => (
+                        {usersWithScores.map((userWithScore) => (
                             <div
-                                key={score.account.user_id}
+                                key={userWithScore.account.user_id}
                                 className="border-b flex justify-between items-center dark:border-slate-600 hover:bg-gray-50 dark:hover:bg-slate-700/50"
                             >
                                 <div className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
@@ -39,25 +70,25 @@ export default async function Leaderboard() {
                                         <Image
                                             className="w-10 h-10 rounded-full"
                                             src={
-                                                score.account
+                                                userWithScore.account
                                                     .profile_picture_url
                                             }
-                                            alt={`${score.account.username} profile image`}
+                                            alt={`${userWithScore.account.username} profile image`}
                                             width={40}
                                             height={40}
                                         />
                                     </div>
                                     <div className="pl-3">
                                         <div className="text-base font-semibold">
-                                            {score.account.display_name}
+                                            {userWithScore.account.display_name}
                                         </div>
                                         <div className="font-normal text-gray-400 flex gap-1">
-                                            @{score.account.username}
+                                            @{userWithScore.account.username}
                                         </div>
                                     </div>
                                 </div>
                                 <div className="px-6 py-4 text-xl text-center font-semibold">
-                                    {score.score}
+                                    {userWithScore.score}
                                 </div>
                             </div>
                         ))}

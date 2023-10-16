@@ -11,7 +11,7 @@ async function fetch(): Promise<{ picks: SpreadPick[]; user: User | null }> {
         .select(
             "*, account: accounts!spread_picks_account_fkey(*), game: games!inner(*, away_team: teams!games_away_team_fkey(*), home_team: teams!games_home_team_fkey(*)), selection: teams!spread_picks_selection_fkey(*)"
         )
-        .gte("games.start", new Date().toISOString())
+        .gte("game.start", new Date().toISOString())
         .order("created_at", { ascending: false });
 
     if (picksError) throw new Error(picksError.message);

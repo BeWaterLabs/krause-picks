@@ -22,6 +22,7 @@ const updateScore = async (
         start: game.commence_time,
         home_team: homeTeamId,
         away_team: awayTeamId,
+        final: true,
         home_score: Number(
             game.scores.find((s: any) => s.name === game.home_team)?.score
         ),

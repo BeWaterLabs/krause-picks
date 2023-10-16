@@ -31,7 +31,7 @@ export default function PostModal({
     const postPick = async () => {
         setLoading(true);
         try {
-            const res = await fetch("/api/picks/spreads", {
+            const res = await fetch("/api/pick/spreads", {
                 method: "POST",
                 body: JSON.stringify({
                     game_id: game.id,
