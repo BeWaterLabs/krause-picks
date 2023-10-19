@@ -65,7 +65,7 @@ export default async function Leaderboard() {
                                 key={userWithScore.account.user_id}
                                 className="border-b flex justify-between items-center dark:border-slate-600 hover:bg-gray-50 dark:hover:bg-slate-700/50"
                             >
-                                <div className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
+                                <div className="flex w-full items-center pl-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
                                     <div className="relative">
                                         <Image
                                             className="w-10 h-10 rounded-full"
@@ -87,7 +87,7 @@ export default async function Leaderboard() {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="px-6 py-4 text-xl text-center font-semibold">
+                                <div className="pr-6 py-4 text-xl text-center font-semibold">
                                     {userWithScore.score}
                                 </div>
                             </div>

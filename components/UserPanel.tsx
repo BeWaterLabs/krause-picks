@@ -66,7 +66,7 @@ export default async function UserPanel({ user }: { user: User }) {
                     <h6 className="text-center text-gray-500">Rank</h6>
                 </div>
                 <div>
-                    <h3 className="text-center font-bold">TBD</h3>
+                    <h3 className="text-center font-bold">47%</h3>
                     <h6 className="text-center text-gray-500">Accuracy</h6>
                 </div>
             </div>
