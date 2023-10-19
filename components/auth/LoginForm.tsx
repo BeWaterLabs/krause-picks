@@ -26,7 +26,7 @@ export default function SignupForm() {
     };
 
     return (
-        <div className="space-y-4 md:space-y-6">
+        <div className="space-y-4">
             <button
                 type="button"
                 onClick={() => loginWithOAuth("twitter")}
