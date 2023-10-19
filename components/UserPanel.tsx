@@ -12,9 +12,9 @@ async function fetch(
     const { data: picks, error: picksError } = await supabase
         .from("spread_picks")
         .select(
-            "*, account: accounts!spread_picks_account_fkey(*), game: games!spread_picks_game_fkey(*, away_team: teams!games_away_team_fkey(*), home_team: teams!games_home_team_fkey(*)), selection: teams!spread_picks_selection_fkey(*)"
+            "*, account: accounts!spread_picks_account_fkey(*), game: games!inner(*, away_team: teams!games_away_team_fkey(*), home_team: teams!games_home_team_fkey(*)), selection: teams!spread_picks_selection_fkey(*)"
         )
-        .filter("game.start", "gte", new Date().toISOString())
+        .gte("game.start", new Date().toISOString())
         .eq("account", user?.id || "")
         .order("created_at", { ascending: false });
 
@@ -72,7 +72,7 @@ export default async function UserPanel({ user }: { user: User }) {
             </div>
             <div className="mt-4 h-full flex flex-col">
                 <h3 className="text-lg dark:text-white text-black font-semibold">
-                    Today&apos;s Picks
+                    Recent Picks
                 </h3>
                 <div className="overflow-y-scroll scrollbar-track-transparent scrollbar-thumb-slate-700 scrollbar-none scrollbar-thumb-rounded-md flex flex-1 relative mt-3">
                     <div className="absolute top-0 flex gap-4 flex-col min-h-full right-0 left-0">
