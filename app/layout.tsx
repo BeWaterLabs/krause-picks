@@ -23,7 +23,15 @@ export default function RootLayout({
             <body
                 className={`${inter.className} h-screen flex flex-col dark:bg-slate-900 dark:text-gray-200`}
             >
-                <Toaster />
+                <Toaster
+                    toastOptions={{
+                        style: {
+                            background: "rgb(15, 23, 42)",
+                            color: "white",
+                            border: "1px solid #333",
+                        },
+                    }}
+                />
                 <Header />
                 <main className="px-8 py-4 w-screen overflow-x-hidden flex-1">
                     {children}
