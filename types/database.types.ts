@@ -11,6 +11,7 @@ export interface Database {
     Tables: {
       accounts: {
         Row: {
+          community: number | null
           created_at: string
           display_name: string
           profile_picture_url: string
@@ -18,6 +19,7 @@ export interface Database {
           username: string
         }
         Insert: {
+          community?: number | null
           created_at?: string
           display_name: string
           profile_picture_url?: string
@@ -25,6 +27,7 @@ export interface Database {
           username: string
         }
         Update: {
+          community?: number | null
           created_at?: string
           display_name?: string
           profile_picture_url?: string
@@ -33,12 +36,36 @@ export interface Database {
         }
         Relationships: [
           {
+            foreignKeyName: "accounts_community_fkey"
+            columns: ["community"]
+            referencedRelation: "communities"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "accounts_user_id_fkey"
             columns: ["user_id"]
             referencedRelation: "users"
             referencedColumns: ["id"]
           }
         ]
+      }
+      communities: {
+        Row: {
+          id: number
+          logo_url: string | null
+          name: string
+        }
+        Insert: {
+          id?: number
+          logo_url?: string | null
+          name: string
+        }
+        Update: {
+          id?: number
+          logo_url?: string | null
+          name?: string
+        }
+        Relationships: []
       }
       games: {
         Row: {
