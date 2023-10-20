@@ -2,10 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 
 import type { Database } from "@/types/database.types";
 import { SupabaseClient, createClient } from "@supabase/supabase-js";
-import { Insert, Row, Update } from "@/types/database-helpers.types";
+import { Insert } from "@/types/database-helpers.types";
 import { SpreadPick } from "@/types/custom.types";
 
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 async function fetchPicks(
     client: SupabaseClient<Database>

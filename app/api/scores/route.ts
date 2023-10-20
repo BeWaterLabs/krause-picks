@@ -5,6 +5,7 @@ import { SupabaseClient, createClient } from "@supabase/supabase-js";
 import { Insert, Row } from "@/types/database-helpers.types";
 
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 const updateScore = async (
     game: any,
