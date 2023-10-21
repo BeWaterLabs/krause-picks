@@ -13,7 +13,8 @@ import type { NextRequest } from "next/server";
 
 export const dynamic = "force-dynamic";
 
-async function updateAccountToLatest(user: User) {
+// TODO: Route this to different provider-specific functions
+async function updateAccountToLatest(user: User, community: string | null) {
     const account: Insert<"accounts"> = {
         user_id: user.id,
         created_at: user.created_at,
@@ -25,6 +26,7 @@ async function updateAccountToLatest(user: User) {
             user.app_metadata.provider === "twitter"
                 ? user.user_metadata?.name
                 : user.user_metadata.full_name,
+        community: community ? Number(community) : undefined,
         // for twitter profile images, retrieve the original size
         profile_picture_url: user.user_metadata?.avatar_url.replace(
             "_normal",
@@ -45,16 +47,26 @@ async function updateAccountToLatest(user: User) {
 export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const code = searchParams.get("code");
+    const community = searchParams.get("community");
     const next = searchParams.get("next") ?? "/";
 
     if (code) {
-        const supabase = createRouteHandlerClient({ cookies: () => cookies() });
+        const cookieStore = cookies();
+        const supabase = createRouteHandlerClient<Database>(
+            {
+                cookies: () => cookieStore,
+            },
+            {
+                supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL!,
+                supabaseKey: process.env.SUPABASE_ADMIN_KEY!,
+            }
+        );
         const { data, error } = await supabase.auth.exchangeCodeForSession(
             code
         );
 
         if (!error) {
-            await updateAccountToLatest(data.user);
+            await updateAccountToLatest(data.user, community);
             return NextResponse.redirect(new URL(`/${next.slice(1)}`, req.url));
         } else {
             console.error(error.message);

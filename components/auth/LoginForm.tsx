@@ -7,9 +7,16 @@ import { RiTwitterXFill } from "react-icons/ri";
 import { BsDiscord } from "react-icons/bs";
 import createBrowserClient from "@/util/browser-database-client";
 import { Provider } from "@supabase/supabase-js";
+import { Row } from "@/types/database-helpers.types";
 
-export default function SignupForm() {
+export default function LoginForm({
+    community,
+}: {
+    community?: Row<"communities">;
+}) {
     const router = useRouter();
+
+    const commuityParam = community ? `?community=${community.id}` : "";
 
     const loginWithOAuth = async (provider: Provider) => {
         const supabase = createBrowserClient();
@@ -17,7 +24,8 @@ export default function SignupForm() {
         const { data, error } = await supabase.auth.signInWithOAuth({
             provider,
             options: {
-                redirectTo: process.env.NEXT_PUBLIC_AUTH_CALLBACK_URL,
+                redirectTo:
+                    process.env.NEXT_PUBLIC_AUTH_CALLBACK_URL + commuityParam,
             },
         });
 

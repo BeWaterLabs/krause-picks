@@ -7,35 +7,38 @@ import { BsDiscord } from "react-icons/bs";
 import toast from "react-hot-toast";
 import createBrowserClient from "@/util/browser-database-client";
 import { Provider } from "@supabase/supabase-js";
+import { Row } from "@/types/database-helpers.types";
 
-export default function SignupForm() {
+const fetchCommunity = async (community: number) => {
+    const supabase = createBrowserClient();
+    const { data, error } = await supabase
+        .from("communities")
+        .select("*")
+        .eq("id", community)
+        .single();
+
+    if (error) throw new Error(error.message);
+
+    return data;
+};
+
+export default function SignupForm({
+    community,
+}: {
+    community?: Row<"communities">;
+}) {
     const router = useRouter();
 
-    const signup = async (e: any) => {
-        e.preventDefault();
+    const commuityParam = community ? `?community=${community.id}` : "";
 
-        if (e.target.password.value !== e.target["confirm-password"].value) {
-            alert("Passwords do not match");
-            return;
-        }
-        const supabase = createBrowserClient();
-
-        const { data, error } = await supabase.auth.signUp({
-            email: e.target.email.value,
-            password: e.target.password.value,
-        });
-
-        if (error) toast.error(error.message);
-        else router.refresh();
-    };
-
-    const loginWithOAuth = async (provider: Provider) => {
+    const signupWithOAuth = async (provider: Provider) => {
         const supabase = createBrowserClient();
 
         const { data, error } = await supabase.auth.signInWithOAuth({
             provider,
             options: {
-                redirectTo: process.env.NEXT_PUBLIC_AUTH_CALLBACK_URL,
+                redirectTo:
+                    process.env.NEXT_PUBLIC_AUTH_CALLBACK_URL + commuityParam,
             },
         });
 
@@ -47,7 +50,7 @@ export default function SignupForm() {
         <div className="space-y-4">
             <button
                 type="button"
-                onClick={() => loginWithOAuth("twitter")}
+                onClick={() => signupWithOAuth("twitter")}
                 className="w-full text-white bg-blue-400 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-900 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-950 dark:hover:bg-gray-900 dark:focus:ring-gray-900"
             >
                 <RiTwitterXFill className="inline-block w-4 h-4 mr-2" />
@@ -55,7 +58,7 @@ export default function SignupForm() {
             </button>
             <button
                 type="button"
-                onClick={() => loginWithOAuth("discord")}
+                onClick={() => signupWithOAuth("discord")}
                 className="w-full text-white bg-indigo-500 hover:bg-indigo-700 focus:ring-4 focus:outline-none focus:ring-indigo-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-indigo-900 dark:hover:bg-indigo-700 dark:focus:ring-indigo-700"
             >
                 <BsDiscord className="inline-block w-4 h-4 mr-2" />

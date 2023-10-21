@@ -35,6 +35,10 @@ const nextConfig = {
                 protocol: "https",
                 hostname: "cdn.discordapp.com",
             },
+            {
+                protocol: "http",
+                hostname: "localhost",
+            },
         ],
     },
 };

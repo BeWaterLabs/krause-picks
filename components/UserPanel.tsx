@@ -5,9 +5,10 @@ import { Row } from "@/types/database-helpers.types";
 import { User } from "@supabase/supabase-js";
 import { SpreadPick } from "@/types/custom.types";
 
-async function fetch(
-    user: User
-): Promise<{ picks: SpreadPick[]; account: Row<"accounts"> }> {
+async function fetch(user: User): Promise<{
+    picks: SpreadPick[];
+    account: Row<"accounts"> & { community: Row<"communities"> | null };
+}> {
     const supabase = serverDatabaseClient();
     const { data: picks, error: picksError } = await supabase
         .from("spread_picks")
@@ -22,7 +23,7 @@ async function fetch(
 
     const { data: account, error: accountError } = await supabase
         .from("accounts")
-        .select("*")
+        .select("*, community: communities!accounts_community_fkey(*)")
         .eq("user_id", user.id)
         .single();
 
@@ -42,13 +43,25 @@ export default async function UserPanel({ user }: { user: User }) {
     return (
         <div className="dark:bg-slate-800 p-6 flex overflow-hidden flex-col h-full bg-white border border-gray-200 dark:border-gray-700 shadow-md sm:rounded-lg">
             <div className="w-full text-center flex flex-col items-center justify-center">
-                <Image
-                    width={125}
-                    height={125}
-                    src={account.profile_picture_url}
-                    alt=""
-                    className="rounded-full"
-                />
+                <div className="relative">
+                    <Image
+                        width={125}
+                        height={125}
+                        src={account.profile_picture_url}
+                        alt=""
+                        className="rounded-full"
+                    />
+                    {account.community?.logo_url && (
+                        <div className="absolute bottom-0 right-0 w-8 h-8 opacity-75">
+                            <Image
+                                src={account.community?.logo_url}
+                                alt=""
+                                width={30}
+                                height={30}
+                            />
+                        </div>
+                    )}
+                </div>
                 <div className="mt-3">
                     <h2 className="text-white text-lg font-semibold">
                         {account.display_name}
