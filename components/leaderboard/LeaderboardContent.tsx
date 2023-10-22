@@ -1,66 +1,61 @@
+"use client";
 import Image from "next/image";
-import serverDatabaseClient from "@/util/server-database-client";
-
-import { SpreadPick } from "@/types/custom.types";
-import { User } from "@supabase/supabase-js";
 import { Row } from "@/types/database-helpers.types";
+import Dropdown from "@/components/common/Dropdown";
+import { useMemo, useState } from "react";
+import {
+    AccountWithCommunity,
+    CommunityLeaderboard,
+    UserLeaderboard,
+} from "@/types/custom.types";
+import { UserGroupIcon, UserIcon, UsersIcon } from "@heroicons/react/20/solid";
 
-async function fetch(): Promise<{ picks: SpreadPick[]; user: User | null }> {
-    const supabase = serverDatabaseClient();
-    const { data: picks, error: picksError } = await supabase
-        .from("spread_picks")
-        .select(
-            "*, account: accounts!spread_picks_account_fkey(*), game: games!inner(*, away_team: teams!games_away_team_fkey(*), home_team: teams!games_home_team_fkey(*)), selection: teams!spread_picks_selection_fkey(*)"
-        )
-        .not("successful", "is", null);
-
-    if (picksError) throw new Error(picksError.message);
-
-    const {
-        data: { user },
-        error: userError,
-    } = await supabase.auth.getUser();
-
-    return {
-        picks: picks as SpreadPick[],
-        user,
-    };
+enum Category {
+    Users = "Users",
+    Communities = "Communities",
 }
+const CategoryIcons = {
+    Users: <UserIcon className="w-5 h-5" />,
+    Communities: <UserGroupIcon className="w-5 h-5" />,
+};
 
-export default async function Leaderboard() {
-    const { picks, user } = await fetch();
-    let usersWithScores: { account: Row<"accounts">; score: number }[] = [];
-    let usersSet = new Set();
-
-    picks.forEach((pick) => {
-        if (!usersSet.has(pick.account.user_id)) {
-            usersSet.add(pick.account.user_id);
-            usersWithScores.push({
-                account: pick.account,
-                score: 10,
-            });
-        } else {
-            let userWithScore = usersWithScores.find(
-                (userWithScore) =>
-                    userWithScore.account.user_id === pick.account.user_id
-            )!;
-            userWithScore.score += 10;
-        }
-    });
-    usersWithScores.sort((a, b) => b.score - a.score);
+export default function LeaderboardContent({
+    topUserScores,
+    topCommunityScores,
+}: {
+    topUserScores: UserLeaderboard;
+    topCommunityScores: CommunityLeaderboard;
+}) {
+    const [selectedCategory, setSelectedCategory] = useState<Category>(
+        Category.Users
+    );
+    const categories = useMemo(() => {
+        return {
+            [Category.Users]: topUserScores,
+            [Category.Communities]: topCommunityScores,
+        };
+    }, [topUserScores, topCommunityScores]);
 
     return (
-        <div className="dark:bg-slate-800 flex overflow-hidden flex-col h-full bg-white border border-gray-200 dark:border-gray-700 shadow-md sm:rounded-lg">
-            <div className="flex items-center flex-0 justify-start p-4">
+        <div className="flex overflow-hidden flex-col h-full">
+            <div className="flex items-center flex-0 justify-between p-4">
                 <h2 className="text-xl dark:text-white text-black font-semibold">
                     Leaderboard
                 </h2>
+                <Dropdown
+                    values={Object.values(Category).map((category) => ({
+                        icon: CategoryIcons[category],
+                        value: category,
+                    }))}
+                    selectedValue={selectedCategory}
+                    setSelectedValue={setSelectedCategory}
+                />
             </div>
 
             <div className="text-sm flex-1 relative text-left">
                 <div className="absolute dark:scrollbar-thumb-slate-700 scrollbar-thin scrollbar-thumb-rounded-md dark:scrollbar-track-slate-800 left-0 right-0 top-0 bottom-0 overflow-y-scroll">
                     <div className="flex flex-col">
-                        {usersWithScores.map((userWithScore) => (
+                        {topUserScores.map((userWithScore) => (
                             <div
                                 key={userWithScore.account.user_id}
                                 className="border-b flex justify-between items-center dark:border-slate-600 hover:bg-gray-50 dark:hover:bg-slate-700/50"

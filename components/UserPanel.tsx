@@ -3,11 +3,11 @@ import serverDatabaseClient from "@/util/server-database-client";
 
 import { Row } from "@/types/database-helpers.types";
 import { User } from "@supabase/supabase-js";
-import { SpreadPick } from "@/types/custom.types";
+import { AccountWithCommunity, SpreadPick } from "@/types/custom.types";
 
 async function fetch(user: User): Promise<{
     picks: SpreadPick[];
-    account: Row<"accounts"> & { community: Row<"communities"> | null };
+    account: AccountWithCommunity;
 }> {
     const supabase = serverDatabaseClient();
     const { data: picks, error: picksError } = await supabase
@@ -52,7 +52,7 @@ export default async function UserPanel({ user }: { user: User }) {
                         className="rounded-full"
                     />
                     {account.community?.logo_url && (
-                        <div className="absolute bottom-0 right-0 w-8 h-8 opacity-75">
+                        <div className="absolute bottom-0 right-0 w-8 h-8">
                             <Image
                                 src={account.community?.logo_url}
                                 alt=""

@@ -19,3 +19,16 @@ export type SpreadPick = Row<"spread_picks"> & {
         text?: string;
     };
 };
+
+export type AccountWithCommunity = Row<"accounts"> & {
+    community: Row<"communities"> | null;
+};
+
+export type UserLeaderboard = {
+    account: AccountWithCommunity;
+    score: number;
+}[];
+export type CommunityLeaderboard = {
+    community: Row<"communities">;
+    score: number;
+}[];

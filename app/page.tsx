@@ -1,5 +1,5 @@
 import PicksFeed from "@/components/picks/PostsFeed";
-import Leaderboard from "@/components/Leaderboard";
+import Leaderboard from "@/components/leaderboard/Leaderboard";
 import UserPanel from "@/components/UserPanel";
 import GamesFeed from "@/components/games/GamesFeed";
 import serverDatabaseClient from "@/util/server-database-client";
