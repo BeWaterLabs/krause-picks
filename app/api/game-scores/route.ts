@@ -23,7 +23,7 @@ const updateScore = async (
         start: game.commence_time,
         home_team: homeTeamId,
         away_team: awayTeamId,
-        final: true,
+        final: game.completed,
         home_score: Number(
             game.scores.find((s: any) => s.name === game.home_team)?.score
         ),
@@ -41,6 +41,11 @@ export async function GET(request: NextRequest) {
     const days = searchParams.get("days") || "1";
     const category = searchParams.get("category");
     if (!category) throw new Error("No category provided.");
+
+    if (Number(days) > 3)
+        return new NextResponse("Max 3 days of scores available", {
+            status: 400,
+        });
 
     // see https://the-odds-api.com/liveapi/guides/v4/#get-scores
     const scoresResponse = await fetch(
