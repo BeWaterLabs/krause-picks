@@ -84,6 +84,6 @@ export async function GET(request: NextRequest) {
         })
     );
 
-    // console.info(`Updated odds for ${odds.length} games.`);
+    console.info(`Updated odds for ${scores.length} games.`);
     return NextResponse.json({ success: true });
 }

@@ -35,7 +35,6 @@ async function fetchData(): Promise<{
 
 export default async function Leaderboard() {
     const { userLeaderboard, communityLeaderboard } = await fetchData();
-    // console.log(userLeaderboard, communityLeaderboard);
 
     return (
         <div className="dark:bg-slate-800 overflow-hidden h-full bg-white border border-gray-200 dark:border-gray-700 shadow-md sm:rounded-lg">

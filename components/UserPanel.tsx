@@ -38,7 +38,6 @@ async function fetchData(user: User): Promise<{
     );
     const { data: stats } = await statsResponse.json();
 
-    console.log(stats, account.user_id, stats[account.user_id]);
     return {
         picks: picks as SpreadPick[],
         account,
@@ -50,7 +49,6 @@ export default async function UserPanel({ user }: { user: User }) {
     if (!user) return null;
 
     const { picks, account, stats } = await fetchData(user);
-    console.log("STATS", stats);
 
     return (
         <div className="dark:bg-slate-800 p-6 flex overflow-hidden flex-col h-full bg-white border border-gray-200 dark:border-gray-700 shadow-md sm:rounded-lg">
