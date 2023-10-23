@@ -32,3 +32,12 @@ export type CommunityLeaderboard = {
     community: Row<"communities">;
     score: number;
 }[];
+
+export type UserStats = {
+    successfulPicks: number;
+    totalPicks: number;
+    pendingPicks: number;
+    completedPicks: number;
+    accuracy: number;
+    rank?: number;
+};

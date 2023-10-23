@@ -1,13 +1,17 @@
 import Image from "next/image";
 import serverDatabaseClient from "@/util/server-database-client";
 
-import { Row } from "@/types/database-helpers.types";
 import { User } from "@supabase/supabase-js";
-import { AccountWithCommunity, SpreadPick } from "@/types/custom.types";
+import {
+    AccountWithCommunity,
+    SpreadPick,
+    UserStats,
+} from "@/types/custom.types";
 
-async function fetch(user: User): Promise<{
+async function fetchData(user: User): Promise<{
     picks: SpreadPick[];
     account: AccountWithCommunity;
+    stats: UserStats;
 }> {
     const supabase = serverDatabaseClient();
     const { data: picks, error: picksError } = await supabase
@@ -29,16 +33,24 @@ async function fetch(user: User): Promise<{
 
     if (accountError) throw new Error(accountError.message);
 
+    const statsResponse = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/stats/users?user=${user.id}`
+    );
+    const { data: stats } = await statsResponse.json();
+
+    console.log(stats, account.user_id, stats[account.user_id]);
     return {
         picks: picks as SpreadPick[],
         account,
+        stats: stats[account.user_id] as UserStats,
     };
 }
 
 export default async function UserPanel({ user }: { user: User }) {
     if (!user) return null;
 
-    const { picks, account } = await fetch(user);
+    const { picks, account, stats } = await fetchData(user);
+    console.log("STATS", stats);
 
     return (
         <div className="dark:bg-slate-800 p-6 flex overflow-hidden flex-col h-full bg-white border border-gray-200 dark:border-gray-700 shadow-md sm:rounded-lg">
@@ -71,15 +83,25 @@ export default async function UserPanel({ user }: { user: User }) {
             </div>
             <div className="grid grid-cols-3 py-4">
                 <div>
-                    <h3 className="text-center font-bold">{picks.length}</h3>
+                    <h3 className="text-center font-bold">
+                        {stats.totalPicks}
+                    </h3>
                     <h6 className="text-center text-gray-500">Picks</h6>
                 </div>
                 <div>
-                    <h3 className="text-center font-bold">TBD</h3>
+                    <h3 className="text-center font-bold">
+                        {stats.totalPicks > 0 && stats.rank
+                            ? stats.rank
+                            : "TBD"}
+                    </h3>
                     <h6 className="text-center text-gray-500">Rank</h6>
                 </div>
                 <div>
-                    <h3 className="text-center font-bold">47%</h3>
+                    <h3 className="text-center font-bold">
+                        {stats.totalPicks > 0
+                            ? Math.floor(stats.accuracy * 100) + "%"
+                            : "TBD"}
+                    </h3>
                     <h6 className="text-center text-gray-500">Accuracy</h6>
                 </div>
             </div>
