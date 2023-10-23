@@ -8,12 +8,12 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export async function GET(request: NextRequest) {
-    const today = new Date();
-    today.setHours(3, 0, 0, 0);
-    const isoToday = today.toISOString().slice(0, 19) + "Z";
+    const lastYear = new Date();
+    lastYear.setFullYear(lastYear.getFullYear() - 1);
+    const isoLastYear = lastYear.toISOString().slice(0, 19) + "Z";
 
     const searchParams = request.nextUrl.searchParams;
-    const since = searchParams.get("since") || isoToday;
+    const since = searchParams.get("since") || isoLastYear;
 
     const supabase = createClient<Database>(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
