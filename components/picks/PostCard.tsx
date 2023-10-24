@@ -8,6 +8,7 @@ import { User } from "@supabase/supabase-js";
 import { useMemo, useState } from "react";
 import PostModal from "./PostModal";
 import { motion } from "framer-motion";
+import interpretSpread from "@/util/interpret-spread";
 
 export default function PostCard({
     pick,
@@ -126,7 +127,7 @@ export default function PostCard({
                     ) : (
                         <div className="flex gap-1 mt-2 font-normal text-gray-500 text-sm">
                             You picked <b>{usersPick.selection.abbreviation}</b>{" "}
-                            at a spread of {usersPick.spread}
+                            at a spread of {interpretSpread(usersPick.spread)}
                         </div>
                     )}
                 </div>
