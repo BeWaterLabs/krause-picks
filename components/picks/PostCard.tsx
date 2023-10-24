@@ -75,8 +75,9 @@ export default function PostCard({
                                 <h3 className="font-bold">
                                     {pick.account.display_name}
                                 </h3>
-                                <h6 className="font-normal text-gray-500">
-                                    @<u>{pick.account.username}</u> •{" "}
+                                <h6 className="font-normal hidden md:block text-gray-500">
+                                    @<u>{pick.account.username}</u>
+                                    {" • "}
                                     {formatTimeSince(new Date(pick.created_at))}
                                 </h6>
                             </div>
@@ -97,26 +98,32 @@ export default function PostCard({
                     {!usersPick ? (
                         <div className="flex mt-2 gap-3 justify-between">
                             {accountsInAgreement.length > 0 ? (
-                                <div className="flex gap-1.5 items-center">
-                                    <StackedAvatars
-                                        avatars={accountsInAgreement
-                                            .map((a) => a.profile_picture_url)
-                                            .slice(
-                                                0,
-                                                Math.min(
-                                                    5,
-                                                    accountsInAgreement.length
+                                <>
+                                    <div className="md:hidden flex gap-1.5 items-center" />
+                                    <div className="md:flex hidden gap-1.5 items-center">
+                                        <StackedAvatars
+                                            avatars={accountsInAgreement
+                                                .map(
+                                                    (a) => a.profile_picture_url
                                                 )
-                                            )}
-                                    />
-                                    <span className="font-normal text-gray-500 text-sm">
-                                        {accountsInAgreement.length}{" "}
-                                        {accountsInAgreement.length > 1
-                                            ? "people have"
-                                            : "person has"}{" "}
-                                        picked with {pick.account.display_name}
-                                    </span>
-                                </div>
+                                                .slice(
+                                                    0,
+                                                    Math.min(
+                                                        5,
+                                                        accountsInAgreement.length
+                                                    )
+                                                )}
+                                        />
+                                        <span className="font-normal text-gray-500 text-sm">
+                                            {accountsInAgreement.length}{" "}
+                                            {accountsInAgreement.length > 1
+                                                ? "people have"
+                                                : "person has"}{" "}
+                                            picked with{" "}
+                                            {pick.account.display_name}
+                                        </span>
+                                    </div>
+                                </>
                             ) : (
                                 <div />
                             )}
