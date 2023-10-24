@@ -1,10 +1,9 @@
-"use client";
 import { Game } from "@/types/custom.types";
 import GamePickButton from "./GamePickButton";
-import browserDatabaseClient from "@/util/browser-database-client";
+import serverDatabaseClient from "@/util/server-database-client";
 
 export default async function GameCard({ game }: { game: Game }) {
-    const supabase = browserDatabaseClient();
+    const supabase = serverDatabaseClient();
     const {
         data: { user },
     } = await supabase.auth.getUser();
