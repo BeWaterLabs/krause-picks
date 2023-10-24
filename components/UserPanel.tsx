@@ -115,7 +115,7 @@ export default async function UserPanel({ user }: { user: User }) {
             </div>
             <div className="mt-4 h-full flex flex-col">
                 <h3 className="text-xl font-heading dark:text-white text-black font-semibold">
-                    Recent Picks
+                    Today's Picks
                 </h3>
                 <div className="overflow-y-scroll scrollbar-track-transparent scrollbar-thumb-slate-700 scrollbar-none scrollbar-thumb-rounded-md flex flex-1 relative mt-3">
                     <div className="absolute top-0 flex gap-4 flex-col min-h-full right-0 left-0">
