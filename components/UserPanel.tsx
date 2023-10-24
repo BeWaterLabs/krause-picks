@@ -146,7 +146,7 @@ export default async function UserPanel({ user }: { user: User }) {
                         {picks.length === 0 && (
                             <div className="flex justify-center mt-4 font-heading items-center h-full">
                                 <h6 className="text-gray-500">
-                                    No picks made for today's games
+                                    No picks made for today&apos;s games
                                 </h6>
                             </div>
                         )}
