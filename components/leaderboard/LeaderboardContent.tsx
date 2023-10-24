@@ -1,14 +1,11 @@
 "use client";
-import Image from "next/image";
-import { Row } from "@/types/database-helpers.types";
+import { AnimatePresence } from "framer-motion";
 import Dropdown from "@/components/common/Dropdown";
 import { useMemo, useState } from "react";
-import {
-    AccountWithCommunity,
-    CommunityLeaderboard,
-    UserLeaderboard,
-} from "@/types/custom.types";
-import { UserGroupIcon, UserIcon, UsersIcon } from "@heroicons/react/20/solid";
+import { CommunityLeaderboard, UserLeaderboard } from "@/types/custom.types";
+import { UserGroupIcon, UserIcon } from "@heroicons/react/20/solid";
+import UserList from "./UserList";
+import CommunityList from "./CommunityList";
 
 enum Category {
     Users = "Users",
@@ -54,40 +51,16 @@ export default function LeaderboardContent({
 
             <div className="text-sm flex-1 relative text-left">
                 <div className="absolute dark:scrollbar-thumb-slate-700 scrollbar-thin scrollbar-thumb-rounded-md dark:scrollbar-track-slate-800 left-0 right-0 top-0 bottom-0 overflow-y-scroll">
-                    <div className="flex flex-col">
-                        {topUserScores.map((userWithScore) => (
-                            <div
-                                key={userWithScore.account.user_id}
-                                className="border-b flex justify-between items-center dark:border-slate-600 hover:bg-gray-50 dark:hover:bg-slate-700/50"
-                            >
-                                <div className="flex w-full items-center pl-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
-                                    <div className="relative">
-                                        <Image
-                                            className="w-10 h-10 rounded-full"
-                                            src={
-                                                userWithScore.account
-                                                    .profile_picture_url
-                                            }
-                                            alt={`${userWithScore.account.username} profile image`}
-                                            width={40}
-                                            height={40}
-                                        />
-                                    </div>
-                                    <div className="pl-3">
-                                        <div className="text-base font-semibold">
-                                            {userWithScore.account.display_name}
-                                        </div>
-                                        <div className="font-normal text-gray-400 flex gap-1">
-                                            @{userWithScore.account.username}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="pr-6 py-4 text-xl text-center font-semibold">
-                                    {userWithScore.score}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
+                    <AnimatePresence>
+                        {selectedCategory === Category.Users && (
+                            <UserList users={categories[selectedCategory]} />
+                        )}
+                        {selectedCategory === Category.Communities && (
+                            <CommunityList
+                                communities={categories[selectedCategory]}
+                            />
+                        )}
+                    </AnimatePresence>
                 </div>
             </div>
         </div>
