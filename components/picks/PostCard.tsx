@@ -127,7 +127,8 @@ export default function PostCard({
                     ) : (
                         <div className="flex gap-1 mt-2 font-normal text-gray-500 text-sm">
                             You picked <b>{usersPick.selection.abbreviation}</b>{" "}
-                            at a spread of {interpretSpread(usersPick.spread)}
+                            at a spread of {usersPick.spread > 0 ? "+" : ""}
+                            {usersPick.spread}
                         </div>
                     )}
                 </div>
