@@ -93,7 +93,7 @@ export default async function UserPanel({ user }: { user: User }) {
                 </div>
                 <div className="flex flex-col -space-y-1">
                     <h3 className="text-center text-xl font-heading font-bold">
-                        {stats.totalPicks > 0 && stats.rank
+                        {stats.completedPicks > 0 && stats.rank
                             ? stats.rank
                             : "TBD"}
                     </h3>
@@ -101,7 +101,7 @@ export default async function UserPanel({ user }: { user: User }) {
                 </div>
                 <div className="flex flex-col -space-y-1">
                     <h3 className="text-center text-xl font-heading font-bold">
-                        {stats.totalPicks > 0
+                        {stats.completedPicks > 0
                             ? Math.floor(stats.accuracy * 100) + "%"
                             : "TBD"}
                     </h3>
