@@ -99,9 +99,15 @@ export default function PostCard({
                             {accountsInAgreement.length > 0 ? (
                                 <div className="flex gap-1.5 items-center">
                                     <StackedAvatars
-                                        avatars={accountsInAgreement.map(
-                                            (a) => a.profile_picture_url
-                                        )}
+                                        avatars={accountsInAgreement
+                                            .map((a) => a.profile_picture_url)
+                                            .slice(
+                                                0,
+                                                Math.min(
+                                                    5,
+                                                    accountsInAgreement.length
+                                                )
+                                            )}
                                     />
                                     <span className="font-normal text-gray-500 text-sm">
                                         {accountsInAgreement.length}{" "}

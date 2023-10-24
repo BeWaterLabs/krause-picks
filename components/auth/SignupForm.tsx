@@ -11,19 +11,6 @@ import { Row } from "@/types/database-helpers.types";
 import { useState } from "react";
 import Spinner from "@/components/common/Spinner";
 
-const fetchCommunity = async (community: number) => {
-    const supabase = createBrowserClient();
-    const { data, error } = await supabase
-        .from("communities")
-        .select("*")
-        .eq("id", community)
-        .single();
-
-    if (error) throw new Error(error.message);
-
-    return data;
-};
-
 export default function SignupForm({
     community,
 }: {
