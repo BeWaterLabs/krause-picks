@@ -8,6 +8,8 @@ import { BsDiscord } from "react-icons/bs";
 import createBrowserClient from "@/util/browser-database-client";
 import { Provider } from "@supabase/supabase-js";
 import { Row } from "@/types/database-helpers.types";
+import { useState } from "react";
+import Spinner from "@/components/common/Spinner";
 
 export default function LoginForm({
     community,
@@ -15,6 +17,8 @@ export default function LoginForm({
     community?: Row<"communities">;
 }) {
     const router = useRouter();
+    const [xLoading, setXLoading] = useState(false);
+    const [discordLoading, setDiscordLoading] = useState(false);
 
     const commuityParam = community ? `?community=${community.id}` : "";
 
@@ -31,24 +35,47 @@ export default function LoginForm({
 
         if (error) toast.error(error.message);
         else router.refresh();
+
+        setXLoading(false);
+        setDiscordLoading(false);
     };
 
     return (
         <div className="space-y-4">
             <button
                 type="button"
-                onClick={() => loginWithOAuth("twitter")}
-                className="w-full text-white bg-blue-400 hover:bg-gray-900 duration-200 transition focus:ring-2 focus:outline-none focus:ring-gray-900 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-950 dark:hover:bg-gray-900 dark:focus:ring-gray-900"
+                onClick={() => {
+                    setXLoading(true);
+                    loginWithOAuth("twitter");
+                }}
+                disabled={discordLoading || xLoading}
+                className={`w-full text-white flex justify-center items-center bg-blue-400 hover:bg-gray-900 duration-200 transition focus:ring-2 focus:outline-none focus:ring-gray-900 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-950 dark:hover:bg-gray-900 dark:focus:ring-gray-900 ${
+                    (discordLoading || xLoading) && "opacity-50 cursor-default"
+                }`}
             >
-                <RiTwitterXFill className="inline-block w-4 h-4 mr-2" />
+                {xLoading ? (
+                    <Spinner />
+                ) : (
+                    <RiTwitterXFill className="inline-block w-4 h-4 mr-2" />
+                )}
                 Login with X
             </button>
             <button
                 type="button"
-                onClick={() => loginWithOAuth("discord")}
-                className="w-full text-white duration-200 transition bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:outline-none focus:ring-blue-600 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-700 dark:hover:bg-blue-800 dark:focus:ring-blue-800"
+                onClick={() => {
+                    setDiscordLoading(true);
+                    loginWithOAuth("discord");
+                }}
+                disabled={discordLoading || xLoading}
+                className={`w-full text-white flex justify-center items-center duration-200 transition bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:outline-none focus:ring-blue-600 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-700 dark:hover:bg-blue-800 dark:focus:ring-blue-800 ${
+                    (discordLoading || xLoading) && "opacity-50 cursor-default"
+                }`}
             >
-                <BsDiscord className="inline-block w-4 h-4 mr-2" />
+                {discordLoading ? (
+                    <Spinner />
+                ) : (
+                    <BsDiscord className="inline-block w-4 h-4 mr-2" />
+                )}
                 Login with Discord
             </button>
 

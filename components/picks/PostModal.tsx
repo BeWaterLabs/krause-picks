@@ -5,7 +5,7 @@ import { Fragment, useState } from "react";
 import SpreadPickCallout from "./SpreadPickCallout";
 import { Row } from "@/types/database-helpers.types";
 import toast from "react-hot-toast";
-import Spinner from "@/components/Spinner";
+import Spinner from "@/components/common/Spinner";
 import { User } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
 
