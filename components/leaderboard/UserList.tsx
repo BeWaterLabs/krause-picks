@@ -29,7 +29,7 @@ export default function UserList({ users }: { users: UserLeaderboard }) {
                             </div>
                         </div>
                     </div>
-                    <div className="pr-6 py-4 text-xl text-center font-semibold">
+                    <div className="pr-6 font-heading py-4 text-2xl text-center font-semibold">
                         {userWithScore.score}
                     </div>
                 </div>

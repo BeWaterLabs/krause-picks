@@ -32,7 +32,7 @@ export default function CommunityList({
                             </div>
                         </div>
                     </div>
-                    <div className="pr-6 py-4 text-xl text-center font-semibold">
+                    <div className="pr-6 py-4 font-heading text-2xl text-center font-semibold">
                         {community.score}
                     </div>
                 </div>

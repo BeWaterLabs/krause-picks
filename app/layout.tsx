@@ -1,12 +1,17 @@
 import Header from "@/components/Header";
 import "./globals.css";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Play } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 
 export const dynamic = "force-dynamic";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"], variable: "--inter" });
+const play = Play({
+    subsets: ["latin"],
+    weight: ["400", "700"],
+    variable: "--play",
+});
 
 export const metadata: Metadata = {
     title: "Krause Picks",
@@ -21,7 +26,7 @@ export default function RootLayout({
     return (
         <html lang="en" className="dark">
             <body
-                className={`${inter.className} h-screen flex flex-col dark:bg-slate-900 dark:text-gray-200`}
+                className={`${inter.variable} ${play.variable} font-body h-screen flex flex-col dark:bg-slate-900 dark:text-gray-200`}
             >
                 <Toaster
                     toastOptions={{
