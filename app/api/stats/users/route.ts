@@ -74,7 +74,7 @@ export async function GET(request: NextRequest) {
     for (const userId in userStats) {
         userStats[userId].accuracy =
             userStats[userId].successfulPicks /
-            (userStats[userId].totalPicks || 1);
+            (userStats[userId].completedPicks || 1);
         userStats[userId].rank =
             leaderboard.findIndex((i) => i.account.user_id === userId) + 1;
     }
