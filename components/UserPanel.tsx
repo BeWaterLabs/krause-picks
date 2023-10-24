@@ -38,8 +38,8 @@ async function fetchData(user: User): Promise<{
         .select(
             "*, account: accounts!spread_picks_account_fkey(*), game: games!inner(*, away_team: teams!games_away_team_fkey(*), home_team: teams!games_home_team_fkey(*)), selection: teams!spread_picks_selection_fkey(*)"
         )
-        .gte("game.start", startOfTodayPT.toISOString())
-        .lte("game.start", endOfTodayPT.toISOString())
+        .gte("game.start", startOfTodayUTC.toISOString())
+        .lte("game.start", endOfTodayUTC.toISOString())
         .eq("account", user?.id || "")
         .order("created_at", { ascending: false });
 
