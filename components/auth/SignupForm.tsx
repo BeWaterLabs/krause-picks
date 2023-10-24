@@ -51,18 +51,18 @@ export default function SignupForm({
             <button
                 type="button"
                 onClick={() => signupWithOAuth("twitter")}
-                className="w-full text-white bg-blue-400 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-900 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-950 dark:hover:bg-gray-900 dark:focus:ring-gray-900"
+                className="w-full text-white bg-blue-400 hover:bg-gray-900 duration-200 transition focus:ring-2 focus:outline-none focus:ring-gray-900 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-950 dark:hover:bg-gray-900 dark:focus:ring-gray-900"
             >
                 <RiTwitterXFill className="inline-block w-4 h-4 mr-2" />
-                Sign up with X
+                Signup with X
             </button>
             <button
                 type="button"
                 onClick={() => signupWithOAuth("discord")}
-                className="w-full text-white bg-indigo-500 hover:bg-indigo-700 focus:ring-4 focus:outline-none focus:ring-indigo-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-indigo-900 dark:hover:bg-indigo-700 dark:focus:ring-indigo-700"
+                className="w-full text-white duration-200 transition bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:outline-none focus:ring-blue-600 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-700 dark:hover:bg-blue-800 dark:focus:ring-blue-800"
             >
                 <BsDiscord className="inline-block w-4 h-4 mr-2" />
-                Sign up with Discord
+                Signup with Discord
             </button>
 
             <p className="text-sm font-light text-gray-500 dark:text-gray-400">
