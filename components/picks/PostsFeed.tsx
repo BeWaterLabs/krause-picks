@@ -40,7 +40,7 @@ export default async function PostsFeed() {
     return (
         <div className="relative w-full h-full gap-4 shadow-md overflow-visible">
             <div className="absolute top-0 bottom-0 left-0 right-0 overflow-y-scroll scrollbar-none">
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-4 pb-4">
                     {picks.map((pick) => (
                         <PostCard
                             key={pick.id}
