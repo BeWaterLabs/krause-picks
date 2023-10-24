@@ -64,7 +64,7 @@ export async function GET(request: NextRequest) {
     const teams = teamsResponse.data;
 
     if (!teams) {
-        throw new Error("Failed to fetch teams.");
+        return new NextResponse("Failed to fetch teams.", { status: 500 });
     }
 
     await Promise.all(

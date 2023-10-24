@@ -27,7 +27,8 @@ export async function GET(request: NextRequest) {
         .from("communities")
         .select("*");
 
-    if (communitiesError) throw new Error(communitiesError.message);
+    if (communitiesError)
+        return new NextResponse(communitiesError.message, { status: 500 });
 
     // fetch the user leaderboard from /api/leaderboard/users
     const userLeaderboardResponse = await fetch(

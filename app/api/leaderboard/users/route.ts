@@ -28,7 +28,8 @@ export async function GET(request: NextRequest) {
         .not("successful", "is", null)
         .gte("game.start", since);
 
-    if (picksError) throw new Error(picksError.message);
+    if (picksError)
+        return new NextResponse(picksError.message, { status: 500 });
 
     let leaderboard: UserLeaderboard = [];
     let usersSet = new Set();

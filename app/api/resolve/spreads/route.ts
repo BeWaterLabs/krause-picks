@@ -21,7 +21,7 @@ async function fetchPicks(
         .is("game.final", true)
         .is("successful", null);
 
-    if (picksError) throw new Error(picksError.message);
+    if (picksError) throw picksError;
 
     return picks as SpreadPick[];
 }
@@ -31,7 +31,14 @@ export async function GET(request: NextRequest) {
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
         process.env.SUPABASE_ADMIN_KEY!
     );
-    const picks = await fetchPicks(supabase);
+
+    let picks: SpreadPick[] = [];
+    try {
+        picks = await fetchPicks(supabase);
+    } catch (error: any) {
+        return new NextResponse(error.message, { status: 500 });
+    }
+
     const upsertPicks: Insert<"spread_picks">[] = [];
 
     for (let pick of picks) {
@@ -61,7 +68,8 @@ export async function GET(request: NextRequest) {
         .upsert(upsertPicks, { onConflict: "id" })
         .select();
 
-    if (updatedPicksError) throw new Error(updatedPicksError.message);
+    if (updatedPicksError)
+        return new NextResponse(updatedPicksError.message, { status: 500 });
 
     console.info(`Updated ${updatedPicks.length} picks results.`);
     return NextResponse.json({ success: true });

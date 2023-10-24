@@ -42,7 +42,8 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
     const days = searchParams.get("days") || "1";
     const category = searchParams.get("category");
-    if (!category) throw new Error("No category provided.");
+    if (!category)
+        return new NextResponse("No category provided.", { status: 400 });
 
     const endDate = new Date();
     endDate.setHours(0, 0, 0, 0); // Set time to midnight
@@ -63,7 +64,7 @@ export async function GET(request: NextRequest) {
     const teams = teamsResponse.data;
 
     if (!teams) {
-        throw new Error("Failed to fetch teams.");
+        return new NextResponse("Failed to fetch teams.", { status: 500 });
     }
 
     await Promise.all(
