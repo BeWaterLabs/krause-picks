@@ -14,22 +14,32 @@ async function fetchData(user: User): Promise<{
     stats: UserStats;
 }> {
     const supabase = serverDatabaseClient();
-    // Get current date in Pacific Time
-    const currentDate = new Date();
-    currentDate.setHours(currentDate.getHours() - 8);
 
-    // Get end of today in Pacific Time
-    const endOfToday = new Date();
-    endOfToday.setHours(23, 59, 59, 999);
-    endOfToday.setHours(endOfToday.getHours() - 8);
+    // Get start of the day in Pacific Time
+    const startOfTodayPT = new Date();
+    startOfTodayPT.setHours(0, 0, 0, 0);
+    const startOfTodayUTC = new Date(
+        startOfTodayPT.toLocaleString("en-US", {
+            timeZone: "America/Los_Angeles",
+        })
+    );
+
+    // Get end of the day in Pacific Time
+    const endOfTodayPT = new Date();
+    endOfTodayPT.setHours(23, 59, 59, 999);
+    const endOfTodayUTC = new Date(
+        endOfTodayPT.toLocaleString("en-US", {
+            timeZone: "America/Los_Angeles",
+        })
+    );
 
     const { data: picks, error: picksError } = await supabase
         .from("spread_picks")
         .select(
             "*, account: accounts!spread_picks_account_fkey(*), game: games!inner(*, away_team: teams!games_away_team_fkey(*), home_team: teams!games_home_team_fkey(*)), selection: teams!spread_picks_selection_fkey(*)"
         )
-        .gte("game.start", currentDate.toISOString())
-        .lte("game.start", endOfToday.toISOString())
+        .gte("game.start", startOfTodayPT.toISOString())
+        .lte("game.start", endOfTodayPT.toISOString())
         .eq("account", user?.id || "")
         .order("created_at", { ascending: false });
 
