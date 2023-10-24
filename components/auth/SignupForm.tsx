@@ -32,9 +32,7 @@ export default function SignupForm({
                     process.env.NEXT_PUBLIC_AUTH_CALLBACK_URL + commuityParam,
             },
         });
-
         if (error) toast.error(error.message);
-        else router.refresh();
     };
 
     return (

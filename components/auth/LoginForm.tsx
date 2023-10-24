@@ -34,7 +34,6 @@ export default function LoginForm({
         });
 
         if (error) toast.error(error.message);
-        else router.refresh();
 
         setXLoading(false);
         setDiscordLoading(false);
