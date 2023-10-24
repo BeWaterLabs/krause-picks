@@ -51,26 +51,34 @@ export default function PostCard({
                 initial={{ scale: 0.8, opacity: 0 }}
                 whileInView={{ scale: 1, opacity: 1 }}
                 transition={{ ease: "easeOut", duration: 0.3, type: "tween" }}
-                className="dark:bg-slate-800 gap-3 p-5 flex overflow-hidden bg-white border border-gray-200 dark:border-gray-700 shadow-md sm:rounded-lg"
+                className="dark:bg-slate-800 gap-3 p-5 flex overflow-hidden bg-white border border-gray-200 dark:border-gray-700 shadow-md rounded-lg"
             >
                 <Image
                     src={pick.account.profile_picture_url}
                     alt={`${pick.account.username} profile picture`}
                     width={50}
                     height={50}
-                    className="w-12 h-12 bg-gray-100 border rounded-full dark:border-gray-800"
+                    className="hidden md:block w-12 h-12 bg-gray-100 border rounded-full dark:border-gray-800"
                 />
-
                 <div className="py-1 w-full flex flex-col gap-3">
                     <div>
-                        <div className="flex gap-1">
-                            <h3 className="font-bold">
-                                {pick.account.display_name}
-                            </h3>
-                            <h6 className="font-normal text-gray-500">
-                                @<u>{pick.account.username}</u> •{" "}
-                                {formatTimeSince(new Date(pick.created_at))}
-                            </h6>
+                        <div className="flex items-center gap-3">
+                            <Image
+                                src={pick.account.profile_picture_url}
+                                alt={`${pick.account.username} profile picture`}
+                                width={50}
+                                height={50}
+                                className="md:hidden w-10 h-10 bg-gray-100 border rounded-full dark:border-gray-800"
+                            />
+                            <div className="flex gap-1">
+                                <h3 className="font-bold">
+                                    {pick.account.display_name}
+                                </h3>
+                                <h6 className="font-normal text-gray-500">
+                                    @<u>{pick.account.username}</u> •{" "}
+                                    {formatTimeSince(new Date(pick.created_at))}
+                                </h6>
+                            </div>
                         </div>
                         {pick.content ? (
                             <p className="text-gray-300 mt-2">
