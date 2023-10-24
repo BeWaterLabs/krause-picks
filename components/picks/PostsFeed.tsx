@@ -32,7 +32,7 @@ export default async function PostsFeed() {
 
     if (picks.length === 0)
         return (
-            <div className="w-full h-full flex items-center justify-center text-gray-500">
+            <div className="font-heading text-xl w-full h-full flex items-center justify-center text-gray-500">
                 No recent picks.
             </div>
         );

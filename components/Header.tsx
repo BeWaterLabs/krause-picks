@@ -12,6 +12,9 @@ export default async function Header() {
 
     return (
         <header>
+            <div className="w-full from-blue-900 bg-gradient-to-br to-blue-700 p-1 text-center text-white font-heading">
+                Unlimited free picks • $20 daily prize to #1 performer
+            </div>
             <nav className="bg-white border-gray-200 border-b dark:border-gray-700 px-4 lg:px-6 py-2.5 dark:bg-slate-800">
                 <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
                     <Link href="/">
