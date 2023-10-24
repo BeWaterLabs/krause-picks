@@ -1,0 +1,24 @@
+{
+    "crons": [
+        {
+            "path": "/api/odds/spreads?days=6&category=americanfootball_nfl",
+            "schedule": "0 * * * *"
+        },
+        {
+            "path": "/api/scores/?category=americanfootball_nfl",
+            "schedule": "0 9 * * *"
+        },
+        {
+            "path": "/api/resolve/spreads",
+            "schedule": "10 * * * *"
+        },
+        {
+            "path": "/api/odds/spreads?days=6&category=basketball_nba",
+            "schedule": "0 * * * *"
+        },
+        {
+            "path": "/api/scores/?category=basketball_nba",
+            "schedule": "0 * * * *"
+        }
+    ]
+}
