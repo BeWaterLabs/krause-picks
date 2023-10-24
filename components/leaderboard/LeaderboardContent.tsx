@@ -36,7 +36,7 @@ export default function LeaderboardContent({
     return (
         <div className="flex overflow-hidden flex-col h-full">
             <div className="flex items-center flex-0 justify-between p-4">
-                <h2 className="text-xl dark:text-white text-black font-semibold">
+                <h2 className="text-2xl font-heading dark:text-white text-black font-semibold">
                     Leaderboard
                 </h2>
                 <Dropdown

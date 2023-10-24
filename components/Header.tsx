@@ -29,16 +29,16 @@ export default async function Header() {
                     </Link>
 
                     {!user ? (
-                        <div className="flex items-center lg:order-2">
+                        <div className="flex items-center font-heading lg:order-2">
                             <Link
                                 href="/auth/login"
-                                className="text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-slate-700 focus:outline-none dark:focus:ring-gray-800"
+                                className="text-gray-800 dark:text-white transition duration-200 hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-slate-700 focus:outline-none dark:focus:ring-gray-800"
                             >
                                 Log in
                             </Link>
                             <Link
                                 href="/auth/signup"
-                                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                                className="text-white bg-blue-700 hover:bg-blue-800 transition duration-200 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                             >
                                 Sign up
                             </Link>

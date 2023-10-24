@@ -82,11 +82,11 @@ export default function PostModal({
                                 leaveFrom="opacity-100 scale-100"
                                 leaveTo="opacity-0 scale-95"
                             >
-                                <Dialog.Panel className="flex flex-col gap-4 w-full max-w-md transform overflow-hidden rounded-lg border dark:border-gray-700 bg-white dark:bg-slate-800 p-4 lg:p-6 text-left align-middle shadow-xl transition-all">
+                                <Dialog.Panel className="flex flex-col gap-4 w-full max-w-lg transform overflow-hidden rounded-lg border dark:border-gray-700 bg-white dark:bg-slate-800 p-4 lg:p-6 text-left align-middle shadow-xl transition-all">
                                     <div className="flex justify-between items-center">
                                         <Dialog.Title
                                             as="h3"
-                                            className="text-lg font-medium leading-6 text-gray-900 dark:text-white"
+                                            className="text-xl font-heading font-semibold leading-6 text-gray-900 dark:text-white"
                                         >
                                             Make a pick
                                         </Dialog.Title>

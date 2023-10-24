@@ -25,7 +25,7 @@ export default async function Home() {
                 <div className="flex-[2]">
                     <PicksFeed />
                 </div>
-                <div className="flex-1 hidden lg:block">
+                <div className="flex-1 hidden xl:block">
                     <Leaderboard />
                 </div>
             </div>
