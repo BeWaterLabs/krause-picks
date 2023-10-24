@@ -1,8 +1,11 @@
-import Header from "@/components/Header";
 import "./globals.css";
+
+import { Analytics } from "@vercel/analytics/react";
 import type { Metadata } from "next";
 import { Inter, Play } from "next/font/google";
 import { Toaster } from "react-hot-toast";
+
+import Header from "@/components/Header";
 
 export const dynamic = "force-dynamic";
 
@@ -41,6 +44,7 @@ export default function RootLayout({
                 <main className="px-4 lg:px-8 pt-4 w-screen overflow-x-hidden flex-1">
                     {children}
                 </main>
+                <Analytics />
             </body>
         </html>
     );
