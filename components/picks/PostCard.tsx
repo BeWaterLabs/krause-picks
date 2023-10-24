@@ -5,9 +5,9 @@ import Image from "next/image";
 import StackedAvatars from "../StackedAvatars";
 import PickCallout from "./SpreadPickCallout";
 import { User } from "@supabase/supabase-js";
-import { useCallback, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import PostModal from "./PostModal";
-import { toast } from "react-hot-toast";
+import { motion } from "framer-motion";
 
 export default function PostCard({
     pick,
@@ -46,7 +46,13 @@ export default function PostCard({
                 selection={pick.selection}
                 spread={pick.spread}
             />
-            <div className="dark:bg-slate-800 gap-3 p-5 flex overflow-hidden bg-white border border-gray-200 dark:border-gray-700 shadow-md sm:rounded-lg">
+            <motion.div
+                key={pick.id}
+                initial={{ scale: 0.8, opacity: 0 }}
+                whileInView={{ scale: 1, opacity: 1 }}
+                transition={{ ease: "easeOut", duration: 0.3, type: "tween" }}
+                className="dark:bg-slate-800 gap-3 p-5 flex overflow-hidden bg-white border border-gray-200 dark:border-gray-700 shadow-md sm:rounded-lg"
+            >
                 <Image
                     src={pick.account.profile_picture_url}
                     alt={`${pick.account.username} profile picture`}
@@ -116,7 +122,7 @@ export default function PostCard({
                         </div>
                     )}
                 </div>
-            </div>
+            </motion.div>
         </>
     );
 }

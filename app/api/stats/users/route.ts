@@ -35,6 +35,15 @@ export async function GET(request: NextRequest) {
         .leaderboard as UserLeaderboard;
 
     const userStats: { [user: string]: UserStats } = {};
+    // guarantee requested user exists in response
+    if (userId)
+        userStats[userId] = {
+            successfulPicks: 0,
+            totalPicks: 0,
+            accuracy: 0,
+            pendingPicks: 0,
+            completedPicks: 0,
+        };
 
     picks.forEach((pick) => {
         if (!pick.account?.user_id) return;

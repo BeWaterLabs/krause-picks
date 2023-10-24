@@ -1,6 +1,8 @@
+"use client";
 import Image from "next/image";
 
 import { CommunityLeaderboard } from "@/types/custom.types";
+import { motion } from "framer-motion";
 
 export default function CommunityList({
     communities,
@@ -9,8 +11,15 @@ export default function CommunityList({
 }) {
     return (
         <div className="flex flex-col">
-            {communities.map((community) => (
-                <div
+            {communities.map((community, idx) => (
+                <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{
+                        opacity: 1,
+                        y: 0,
+                        transition: { delay: 0.1 * idx },
+                    }}
+                    exit={{ opacity: 0, y: 10 }}
                     key={community.community.id}
                     className="border-b flex justify-between items-center dark:border-slate-600 hover:bg-gray-50 dark:hover:bg-slate-700/50"
                 >
@@ -35,7 +44,7 @@ export default function CommunityList({
                     <div className="pr-6 py-4 font-heading text-2xl text-center font-semibold">
                         {community.score}
                     </div>
-                </div>
+                </motion.div>
             ))}
         </div>
     );

@@ -18,14 +18,14 @@ export default async function Home() {
             </div>
             <div className={`flex items-stretch flex-1 gap-4`}>
                 {user && (
-                    <div className="flex-1 hidden lg:block">
+                    <div className="flex-1 pb-4 hidden lg:block">
                         <UserPanel user={user} />
                     </div>
                 )}
                 <div className="flex-[2]">
                     <PicksFeed />
                 </div>
-                <div className="flex-1 hidden xl:block">
+                <div className="flex-1 pb-4 hidden xl:block">
                     <Leaderboard />
                 </div>
             </div>

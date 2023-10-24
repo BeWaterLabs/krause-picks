@@ -1,12 +1,21 @@
+"use client";
 import Image from "next/image";
 
 import { UserLeaderboard } from "@/types/custom.types";
+import { motion } from "framer-motion";
 
 export default function UserList({ users }: { users: UserLeaderboard }) {
     return (
         <div className="flex flex-col">
-            {users.map((userWithScore) => (
-                <div
+            {users.map((userWithScore, idx) => (
+                <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{
+                        opacity: 1,
+                        y: 0,
+                        transition: { delay: 0.1 * idx },
+                    }}
+                    exit={{ opacity: 0, y: 10 }}
                     key={userWithScore.account.user_id}
                     className="border-b flex justify-between items-center dark:border-slate-600 hover:bg-gray-50 dark:hover:bg-slate-700/50"
                 >
@@ -32,7 +41,7 @@ export default function UserList({ users }: { users: UserLeaderboard }) {
                     <div className="pr-6 font-heading py-4 text-2xl text-center font-semibold">
                         {userWithScore.score}
                     </div>
-                </div>
+                </motion.div>
             ))}
         </div>
     );

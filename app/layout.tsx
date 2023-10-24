@@ -38,7 +38,7 @@ export default function RootLayout({
                     }}
                 />
                 <Header />
-                <main className="px-4 lg:px-8 py-4 w-screen overflow-x-hidden flex-1">
+                <main className="px-4 lg:px-8 pt-4 w-screen overflow-x-hidden flex-1">
                     {children}
                 </main>
             </body>
