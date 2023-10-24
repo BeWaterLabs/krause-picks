@@ -7,6 +7,7 @@ import {
     SpreadPick,
     UserStats,
 } from "@/types/custom.types";
+import todayPacificTime from "@/util/today-pacific-time";
 
 async function fetchData(user: User): Promise<{
     picks: SpreadPick[];
@@ -15,23 +16,7 @@ async function fetchData(user: User): Promise<{
 }> {
     const supabase = serverDatabaseClient();
 
-    // Get start of the day in Pacific Time
-    const startOfTodayPT = new Date();
-    startOfTodayPT.setHours(0, 0, 0, 0);
-    const startOfTodayUTC = new Date(
-        startOfTodayPT.toLocaleString("en-US", {
-            timeZone: "America/Los_Angeles",
-        })
-    );
-
-    // Get end of the day in Pacific Time
-    const endOfTodayPT = new Date();
-    endOfTodayPT.setHours(23, 59, 59, 999);
-    const endOfTodayUTC = new Date(
-        endOfTodayPT.toLocaleString("en-US", {
-            timeZone: "America/Los_Angeles",
-        })
-    );
+    const { startOfTodayUTC, endOfTodayUTC } = todayPacificTime();
 
     const { data: picks, error: picksError } = await supabase
         .from("spread_picks")
