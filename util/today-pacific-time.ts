@@ -10,7 +10,5 @@ export default function todayPacificTime() {
         .endOf("day")
         .toDate();
 
-    console.log(startOfTodayPT, endOfTodayPT);
-
     return { startOfTodayPT, endOfTodayPT };
 }
