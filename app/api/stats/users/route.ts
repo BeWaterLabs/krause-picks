@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
 
     const searchParams = request.nextUrl.searchParams;
     const userId = searchParams.get("user");
-    const from = searchParams.get("from") || "2021-09-09T00:00:00.000000Z";
+    const from = searchParams.get("from") || "2023-10-23T00:00:00.000000Z";
     const to =
         searchParams.get("to") ||
         new Date(
