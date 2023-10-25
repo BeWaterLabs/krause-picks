@@ -6,7 +6,7 @@ async function fetchData(): Promise<{
     userLeaderboard: UserLeaderboard;
     communityLeaderboard: CommunityLeaderboard;
 }> {
-    const { startOfTodayPT } = todayPacificTime();
+    const { startOfTodayPT } = todayPacificTime(-1);
 
     const userLeaderboardResponse = await fetch(
         `${
@@ -39,7 +39,7 @@ export default async function Leaderboard() {
     return (
         <div className="dark:bg-slate-800 overflow-hidden h-full bg-white border border-gray-200 dark:border-gray-700 shadow-md sm:rounded-lg">
             <LeaderboardContent
-                topUserScores={userLeaderboard.slice(0, 25)}
+                topUserScores={userLeaderboard.slice(0, 50)}
                 topCommunityScores={communityLeaderboard}
             />
         </div>
