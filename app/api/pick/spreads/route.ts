@@ -1,3 +1,5 @@
+export const runtime = "edge";
+
 import { Insert } from "@/types/database-helpers.types";
 import { Database } from "@/types/database.types";
 import { createServerActionClient } from "@supabase/auth-helpers-nextjs";

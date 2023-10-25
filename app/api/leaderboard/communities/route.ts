@@ -1,16 +1,13 @@
+export const runtime = "edge";
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 import { NextRequest, NextResponse } from "next/server";
 
 import type { Database } from "@/types/database.types";
 import { createClient } from "@supabase/supabase-js";
-import {
-    AccountWithCommunity,
-    CommunityLeaderboard,
-    UserLeaderboard,
-} from "@/types/custom.types";
+import { CommunityLeaderboard, UserLeaderboard } from "@/types/custom.types";
 import todayPacificTime from "@/util/today-pacific-time";
-
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
 
 export async function GET(request: NextRequest) {
     const { startOfTodayPT, endOfTodayPT } = todayPacificTime();

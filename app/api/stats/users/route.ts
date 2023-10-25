@@ -1,10 +1,11 @@
+export const runtime = "edge";
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { Database } from "@/types/database.types";
 import { UserLeaderboard, UserStats } from "@/types/custom.types";
-
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
 
 export async function GET(request: NextRequest) {
     const supabase = createClient<Database>(
