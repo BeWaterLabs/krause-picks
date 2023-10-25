@@ -41,9 +41,10 @@ export async function GET(request: NextRequest) {
             usersSet.add(pick.account.user_id);
             leaderboard.push({
                 account: pick.account,
-                score: pick.successful ? 10 : 0,
+                score: 0,
             });
-        } else {
+        }
+        if (pick.successful) {
             let userWithScore = leaderboard.find(
                 (userWithScore) =>
                     userWithScore.account.user_id === pick.account.user_id
