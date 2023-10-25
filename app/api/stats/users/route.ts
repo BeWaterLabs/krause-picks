@@ -3,6 +3,9 @@ import { createClient } from "@supabase/supabase-js";
 import { Database } from "@/types/database.types";
 import { UserLeaderboard, UserStats } from "@/types/custom.types";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export async function GET(request: NextRequest) {
     const supabase = createClient<Database>(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -11,25 +14,35 @@ export async function GET(request: NextRequest) {
 
     const searchParams = request.nextUrl.searchParams;
     const userId = searchParams.get("user");
+    const from = searchParams.get("from") || "2021-09-09T00:00:00.000000Z";
+    const to =
+        searchParams.get("to") ||
+        new Date(
+            new Date().setFullYear(new Date().getFullYear() + 10)
+        ).toISOString();
 
     const { data: picks, error: picksError } = userId
         ? await supabase
               .from("spread_picks")
               .select(
-                  "account: accounts!spread_picks_account_fkey(*), successful"
+                  "account: accounts!spread_picks_account_fkey(*), successful, game: games!inner(*)"
               )
-              .eq("account.user_id", userId)
+              .gte("game.start", from)
+              .lte("game.start", to)
+              .eq("account", userId)
         : await supabase
               .from("spread_picks")
               .select(
-                  "account: accounts!spread_picks_account_fkey(*), successful"
-              );
+                  "account: accounts!spread_picks_account_fkey(*), successful, game: games!inner(*)"
+              )
+              .gte("game.start", from)
+              .lte("game.start", to);
 
     if (picksError)
         return new NextResponse(picksError.message.toString(), { status: 500 });
 
     const leaderboardResponse = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/leaderboard/users`
+        `${process.env.NEXT_PUBLIC_API_URL}/leaderboard/users?from=${from}&to=${to}`
     );
     const leaderboard = (await leaderboardResponse.json())
         .leaderboard as UserLeaderboard;
