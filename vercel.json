@@ -5,7 +5,7 @@
             "schedule": "0 * * * *"
         },
         {
-            "path": "/api/scores/?category=americanfootball_nfl",
+            "path": "/api/game-scores/?category=americanfootball_nfl",
             "schedule": "0 9 * * *"
         },
         {
@@ -17,7 +17,7 @@
             "schedule": "0 * * * *"
         },
         {
-            "path": "/api/scores/?category=basketball_nba",
+            "path": "/api/game-scores/?category=basketball_nba",
             "schedule": "0 * * * *"
         }
     ]
