@@ -7,17 +7,17 @@ import {
     CommunityLeaderboard,
     UserLeaderboard,
 } from "@/types/custom.types";
+import todayPacificTime from "@/util/today-pacific-time";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export async function GET(request: NextRequest) {
-    const today = new Date();
-    today.setHours(3, 0, 0, 0);
-    const isoToday = today.toISOString().slice(0, 19) + "Z";
+    const { startOfTodayPT, endOfTodayPT } = todayPacificTime();
 
     const searchParams = request.nextUrl.searchParams;
-    const since = searchParams.get("since") || isoToday;
+    const from = searchParams.get("from") || startOfTodayPT.toISOString();
+    const to = searchParams.get("to") || endOfTodayPT.toISOString();
 
     const supabase = createClient<Database>(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -32,7 +32,7 @@ export async function GET(request: NextRequest) {
 
     // fetch the user leaderboard from /api/leaderboard/users
     const userLeaderboardResponse = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/leaderboard/users?since=${since}`
+        `${process.env.NEXT_PUBLIC_API_URL}/leaderboard/users?from=${from}&to=${to}`
     );
     const { leaderboard: userLeaderboard }: { leaderboard: UserLeaderboard } =
         await userLeaderboardResponse.json();

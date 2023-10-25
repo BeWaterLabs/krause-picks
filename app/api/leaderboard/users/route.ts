@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 import type { Database } from "@/types/database.types";
 import { createClient } from "@supabase/supabase-js";
-import { AccountWithCommunity, UserLeaderboard } from "@/types/custom.types";
+import { UserLeaderboard } from "@/types/custom.types";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -13,7 +13,8 @@ export async function GET(request: NextRequest) {
     const isoLastYear = lastYear.toISOString().slice(0, 19) + "Z";
 
     const searchParams = request.nextUrl.searchParams;
-    const since = searchParams.get("since") || isoLastYear;
+    const from = searchParams.get("from") || isoLastYear;
+    const to = searchParams.get("to") || new Date().toISOString();
 
     const supabase = createClient<Database>(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -23,10 +24,11 @@ export async function GET(request: NextRequest) {
     const { data: picks, error: picksError } = await supabase
         .from("spread_picks")
         .select(
-            "*, account: accounts!inner(*, community: communities!accounts_community_fkey(*)), game: games!inner(*, away_team: teams!games_away_team_fkey(*), home_team: teams!games_home_team_fkey(*)), selection: teams!spread_picks_selection_fkey(*)"
+            "*, account: accounts!inner(*, community: communities!accounts_community_fkey(*)), game: games!inner(*)"
         )
         .not("successful", "is", null)
-        .gte("game.start", since);
+        .gte("game.start", from)
+        .lte("game.start", to);
 
     if (picksError)
         return new NextResponse(picksError.message, { status: 500 });
@@ -39,7 +41,7 @@ export async function GET(request: NextRequest) {
             usersSet.add(pick.account.user_id);
             leaderboard.push({
                 account: pick.account,
-                score: 10,
+                score: pick.successful ? 10 : 0,
             });
         } else {
             let userWithScore = leaderboard.find(

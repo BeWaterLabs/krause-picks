@@ -39,7 +39,9 @@ async function fetchData(user: User): Promise<{
     if (accountError) throw new Error(accountError.message);
 
     const statsResponse = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/stats/users?user=${user.id}`
+        `${process.env.NEXT_PUBLIC_API_URL}/stats/users?user=${
+            user.id
+        }&from=${startOfTodayPT.toISOString()}&to=${endOfTodayPT.toISOString()}`
     );
     const { data: stats } = await statsResponse.json();
 
@@ -84,40 +86,46 @@ export default async function UserPanel({ user }: { user: User }) {
                     <p className="text-gray-500">@{account.username}</p>
                 </div>
             </div>
-            <div className="grid grid-cols-3 py-4">
-                <div className="flex flex-col -space-y-1">
-                    <h3 className="text-center text-xl font-heading font-bold">
-                        {stats.totalPicks}
-                    </h3>
-                    <h6 className="text-center text-gray-500">Picks</h6>
-                </div>
-                <div className="flex flex-col -space-y-1">
-                    <h3 className="text-center text-xl font-heading font-bold">
-                        {stats.completedPicks > 0 && stats.rank
-                            ? stats.rank
-                            : "TBD"}
-                    </h3>
-                    <h6 className="text-center text-gray-500">Rank</h6>
-                </div>
-                <div className="flex flex-col -space-y-1">
-                    <h3 className="text-center text-xl font-heading font-bold">
-                        {stats.completedPicks > 0
-                            ? Math.floor(stats.accuracy * 100) + "%"
-                            : "TBD"}
-                    </h3>
-                    <h6 className="text-center text-gray-500">Accuracy</h6>
-                </div>
-            </div>
+
             <div className="mt-4 h-full flex flex-col">
                 <h3 className="text-xl font-heading dark:text-white text-black font-semibold">
                     Today&apos;s Picks
                 </h3>
+                <div className="grid grid-cols-3 py-4">
+                    <div className="flex flex-col -space-y-1">
+                        <h3 className="text-center text-xl font-heading font-bold">
+                            {stats.totalPicks}
+                        </h3>
+                        <h6 className="text-center text-gray-500">Picks</h6>
+                    </div>
+                    <div className="flex flex-col -space-y-1">
+                        <h3 className="text-center text-xl font-heading font-bold">
+                            {stats.completedPicks > 0 && stats.rank
+                                ? stats.rank
+                                : "TBD"}
+                        </h3>
+                        <h6 className="text-center text-gray-500">Rank</h6>
+                    </div>
+                    <div className="flex flex-col -space-y-1">
+                        <h3 className="text-center text-xl font-heading font-bold">
+                            {stats.completedPicks > 0
+                                ? Math.floor(stats.accuracy * 100) + "%"
+                                : "TBD"}
+                        </h3>
+                        <h6 className="text-center text-gray-500">Accuracy</h6>
+                    </div>
+                </div>
                 <div className="overflow-y-scroll scrollbar-track-transparent scrollbar-thumb-slate-700 scrollbar-none scrollbar-thumb-rounded-md flex flex-1 relative mt-3">
                     <div className="absolute top-0 flex gap-4 flex-col min-h-full right-0 left-0">
                         {picks.map((pick) => (
                             <div
                                 key={pick.id}
-                                className="flex gap-3 justify-between text-base items-center w-full"
+                                className={`flex gap-3 justify-between font-bold text-base items-center w-full ${
+                                    pick.successful
+                                        ? "text-green-500"
+                                        : pick.successful === false &&
+                                          "text-red-500"
+                                }`}
                             >
                                 <div className="flex text-sm gap-3 text-gray-500 font-semibold items-center w-full">
                                     <Image
