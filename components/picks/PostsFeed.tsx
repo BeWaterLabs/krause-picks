@@ -12,7 +12,6 @@ async function fetch(): Promise<{ picks: SpreadPick[]; user: User | null }> {
             "*, account: accounts!spread_picks_account_fkey(*), game: games!inner(*, away_team: teams!games_away_team_fkey(*), home_team: teams!games_home_team_fkey(*)), selection: teams!spread_picks_selection_fkey(*)"
         )
         .gte("game.start", new Date().toISOString())
-        .limit(50)
         .order("created_at", { ascending: false });
 
     if (picksError) throw new Error(picksError.message);
@@ -42,7 +41,7 @@ export default async function PostsFeed() {
         <div className="relative w-full h-full gap-4 shadow-md overflow-visible">
             <div className="absolute top-0 bottom-0 left-0 right-0 overflow-y-scroll scrollbar-none">
                 <div className="flex flex-col gap-4 pb-4">
-                    {picks.map((pick) => (
+                    {picks.slice(0, 50).map((pick) => (
                         <PostCard
                             key={pick.id}
                             pick={pick}
