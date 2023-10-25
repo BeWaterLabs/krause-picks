@@ -2,10 +2,10 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 
-export default function todayPacificTime() {
-    dayjs.extend(utc);
-    dayjs.extend(timezone);
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
+export default function todayPacificTime() {
     const startOfTodayPT = dayjs()
         .tz("America/Los_Angeles")
         .startOf("day")
