@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 import type { Database } from "@/types/database.types";
 import { SupabaseClient, createClient } from "@supabase/supabase-js";
-import { Insert, Row } from "@/types/database-helpers.types";
+import { Insert, Row, Update } from "@/types/database-helpers.types";
 
 const updateScore = async (
     game: any,
@@ -19,11 +19,9 @@ const updateScore = async (
     if (!homeTeamId) throw new Error(`Unknown home team ${game.home_team}`);
     if (!awayTeamId) throw new Error(`Unknown away team ${game.away_team}`);
 
-    const upsertedGame: Insert<"games"> = {
+    const updatedGame: Update<"games"> = {
         odds_api_id: game.id,
         start: game.commence_time,
-        home_spread: game.home_spread,
-        away_spread: game.away_spread,
         home_team: homeTeamId,
         away_team: awayTeamId,
         final: game.completed,
@@ -36,7 +34,8 @@ const updateScore = async (
     };
     return await client
         .from("games")
-        .upsert(upsertedGame, { onConflict: "odds_api_id" });
+        .update(updatedGame)
+        .eq("odds_api_id", game.id);
 };
 
 export async function GET(request: NextRequest) {
@@ -86,6 +85,6 @@ export async function GET(request: NextRequest) {
         })
     );
 
-    console.info(`Updated odds for ${scores.length} games.`);
+    console.info(`Updated scores for ${scores.length} games.`);
     return NextResponse.json({ success: true });
 }
