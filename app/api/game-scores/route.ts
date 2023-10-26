@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 import type { Database } from "@/types/database.types";
 import { SupabaseClient, createClient } from "@supabase/supabase-js";
-import { Insert, Row } from "@/types/database-helpers.types";
+import { Insert, Row, Update } from "@/types/database-helpers.types";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -18,7 +18,7 @@ const updateScore = async (
     if (!homeTeamId) throw new Error(`Unknown home team ${game.home_team}`);
     if (!awayTeamId) throw new Error(`Unknown away team ${game.away_team}`);
 
-    const upsertedGame: Insert<"games"> = {
+    const upsertedGame: Update<"games"> = {
         odds_api_id: game.id,
         start: game.commence_time,
         home_team: homeTeamId,
@@ -33,7 +33,8 @@ const updateScore = async (
     };
     return await client
         .from("games")
-        .upsert(upsertedGame, { onConflict: "odds_api_id" });
+        .update(upsertedGame)
+        .eq("odds_api_id", game.id);
 };
 
 export async function GET(request: NextRequest) {
