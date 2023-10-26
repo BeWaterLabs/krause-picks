@@ -22,6 +22,8 @@ const updateScore = async (
     const upsertedGame: Insert<"games"> = {
         odds_api_id: game.id,
         start: game.commence_time,
+        home_spread: game.home_spread,
+        away_spread: game.away_spread,
         home_team: homeTeamId,
         away_team: awayTeamId,
         final: game.completed,
