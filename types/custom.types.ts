@@ -7,15 +7,11 @@ export type Game = Row<"games"> & {
     away_spread: number;
 };
 
-export type Score = Row<"scores"> & {
-    account: Row<"accounts">;
-};
-
 export type SpreadPick = Row<"spread_picks"> & {
     account: Row<"accounts">;
     game: Game;
     selection: Row<"teams">;
-    content?: {
+    content?: null | {
         text?: string;
     };
 };

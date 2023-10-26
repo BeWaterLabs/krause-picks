@@ -1,33 +1,25 @@
 import { Game } from "@/types/custom.types";
-import serverDatabaseClient from "@/util/server-database-client";
+
 import GameCard from "./GameCard";
 import HorizontalScroll from "../HorizontalScroll";
+import { serverDatabaseClient } from "@/database";
 
 async function fetch(): Promise<Game[]> {
-    const supabase = serverDatabaseClient();
+    const db = serverDatabaseClient();
     const {
         data: { user },
-    } = await supabase.auth.getUser();
+    } = await db.auth.getUser();
 
-    const { data: picks } = await supabase
-        .from("spread_picks")
-        .select("*")
-        .eq("account", user?.id || "");
+    const picks = await db.getSpreadPicks({
+        userId: user?.id,
+    });
 
-    const { data, error } = await supabase
-        .from("games")
-        .select(
-            "*, home_team: teams!games_home_team_fkey(*), away_team: teams!games_away_team_fkey(*)"
-        )
-        .not("id", "in", `(${picks?.map((p) => p.game).join(",") || ""})`)
-        .gt("start", new Date().toISOString())
-        .not("home_spread", "is", null)
-        .not("away_spread", "is", null)
-        .order("start", { ascending: true });
+    const games = await db.getGames({
+        excluded: picks.map((p) => p.game.id),
+        from: new Date(),
+    });
 
-    if (error) throw new Error(error.message);
-
-    return data as Game[];
+    return games;
 }
 
 export default async function GamesFeed() {
