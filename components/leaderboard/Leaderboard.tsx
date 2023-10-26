@@ -6,12 +6,12 @@ async function fetchData(): Promise<{
     userLeaderboard: UserLeaderboard;
     communityLeaderboard: CommunityLeaderboard;
 }> {
-    const { startOfTodayPT } = todayPacificTime(-1);
+    const { startOfTodayPT, endOfTodayPT } = todayPacificTime(-1);
 
     const userLeaderboardResponse = await fetch(
         `${
             process.env.NEXT_PUBLIC_API_URL
-        }/leaderboard/users?from=${startOfTodayPT.toISOString()}`
+        }/leaderboard/users?from=${startOfTodayPT.toISOString()}&to=${endOfTodayPT.toISOString()}`
     );
     const { leaderboard: userLeaderboard }: { leaderboard: UserLeaderboard } =
         await userLeaderboardResponse.json();
@@ -19,7 +19,7 @@ async function fetchData(): Promise<{
     const communityLeaderboardResponse = await fetch(
         `${
             process.env.NEXT_PUBLIC_API_URL
-        }/leaderboard/communities?from=${startOfTodayPT.toISOString()}`
+        }/leaderboard/communities?from=${startOfTodayPT.toISOString()}&to=${endOfTodayPT.toISOString()}`
     );
 
     const {
