@@ -5,7 +5,7 @@ import type { Metadata } from "next";
 import { Inter, Play } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 
-import Header from "@/components/Header";
+import Navbar from "@/components/Navbar";
 
 export const dynamic = "force-dynamic";
 
@@ -40,10 +40,15 @@ export default function RootLayout({
                         },
                     }}
                 />
-                <Header />
-                <main className="px-4 lg:px-8 pt-4 w-screen overflow-x-hidden flex-1">
-                    {children}
-                </main>
+                <div className="w-full from-blue-900 bg-gradient-to-br to-blue-700 p-1 text-sm md:text-base text-center text-white font-heading">
+                    Unlimited free picks • $20 daily prize to #1 performer
+                </div>
+                <div className="w-full flex h-full">
+                    <Navbar />
+                    <main className="px-4 lg:px-8 pt-4 w-screen overflow-x-hidden flex-1">
+                        {children}
+                    </main>
+                </div>
                 <Analytics />
             </body>
         </html>
