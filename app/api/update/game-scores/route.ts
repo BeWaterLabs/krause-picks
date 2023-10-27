@@ -7,6 +7,12 @@ import { NextRequest, NextResponse } from "next/server";
 import type { Database } from "@/types/database.types";
 import { SupabaseClient, createClient } from "@supabase/supabase-js";
 import { Insert, Row, Update } from "@/types/database-helpers.types";
+<<<<<<< HEAD:app/api/update/game-scores/route.ts
+=======
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+>>>>>>> main:app/api/game-scores/route.ts
 
 const updateScore = async (
     game: any,
