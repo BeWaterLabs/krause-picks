@@ -1,4 +1,4 @@
-import { Game, SpreadPick } from "@/types/custom.types";
+import { Game, Pick, Timeline } from "@/types/custom.types";
 import { Row } from "@/types/database-helpers.types";
 import { Database } from "@/types/database.types";
 import { SupabaseClient } from "@supabase/supabase-js";
@@ -106,7 +106,7 @@ export default abstract class DatabaseClient {
         return games;
     }
 
-    async getSpreadPick(pickId: number): Promise<SpreadPick> {
+    async getPick(pickId: number): Promise<Pick> {
         const { data: pick, error } = await this.client
             .from("spread_picks")
             .select(
@@ -121,15 +121,16 @@ export default abstract class DatabaseClient {
         return pick;
     }
 
-    async getSpreadPicks(
+    async getPicks(
         filters: {
             userId?: string;
+            gameId?: number;
             finalized?: boolean;
             successful?: boolean;
             from?: Date;
             to?: Date;
         } = {}
-    ): Promise<SpreadPick[]> {
+    ): Promise<Pick[]> {
         let query = this.client
             .from("spread_picks")
             .select(
@@ -138,6 +139,10 @@ export default abstract class DatabaseClient {
 
         if (filters.userId) {
             query = query.eq("account", filters.userId);
+        }
+
+        if (filters.gameId) {
+            query = query.eq("game", filters.gameId);
         }
 
         if (filters.finalized) {
@@ -165,5 +170,21 @@ export default abstract class DatabaseClient {
         if (error) throw error;
 
         return picks;
+    }
+
+    async getTimeline(
+        filters: {
+            userId?: string;
+            gameId?: number;
+            from?: Date;
+            to?: Date;
+        } = {}
+    ): Promise<Timeline> {
+        const picks = await this.getPicks(filters);
+
+        return picks.map((pick) => ({
+            type: "pick",
+            data: pick,
+        }));
     }
 }

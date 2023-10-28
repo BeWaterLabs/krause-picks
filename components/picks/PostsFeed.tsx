@@ -1,10 +1,10 @@
 import serverDatabaseClient from "@/util/server-database-client";
 
-import { SpreadPick } from "@/types/custom.types";
+import { Pick } from "@/types/custom.types";
 import PostCard from "./PostCard";
 import { User } from "@supabase/supabase-js";
 
-async function fetch(): Promise<{ picks: SpreadPick[]; user: User | null }> {
+async function fetch(): Promise<{ picks: Pick[]; user: User | null }> {
     const supabase = serverDatabaseClient();
     const { data: picks, error: picksError } = await supabase
         .from("spread_picks")
@@ -22,7 +22,7 @@ async function fetch(): Promise<{ picks: SpreadPick[]; user: User | null }> {
     } = await supabase.auth.getUser();
 
     return {
-        picks: picks as SpreadPick[],
+        picks: picks as Pick[],
         user,
     };
 }

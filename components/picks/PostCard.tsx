@@ -1,5 +1,5 @@
 "use client";
-import { SpreadPick } from "@/types/custom.types";
+import { Pick } from "@/types/custom.types";
 import formatTimeSince from "@/util/format-time-since";
 import Image from "next/image";
 import StackedAvatars from "../StackedAvatars";
@@ -15,8 +15,8 @@ export default function PostCard({
     otherPicks,
     user,
 }: {
-    pick: SpreadPick;
-    otherPicks: SpreadPick[];
+    pick: Pick;
+    otherPicks: Pick[];
     user: User | null;
 }) {
     const [modalOpen, setModalOpen] = useState(false);

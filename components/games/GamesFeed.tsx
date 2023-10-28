@@ -10,7 +10,7 @@ async function fetch(): Promise<Game[]> {
         data: { user },
     } = await db.auth.getUser();
 
-    const picks = await db.getSpreadPicks({
+    const picks = await db.getPicks({
         userId: user?.id,
     });
 

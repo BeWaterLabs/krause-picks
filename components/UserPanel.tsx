@@ -2,15 +2,11 @@ import Image from "next/image";
 import serverDatabaseClient from "@/util/server-database-client";
 
 import { User } from "@supabase/supabase-js";
-import {
-    AccountWithCommunity,
-    SpreadPick,
-    UserStats,
-} from "@/types/custom.types";
+import { AccountWithCommunity, Pick, UserStats } from "@/types/custom.types";
 import todayPacificTime from "@/util/today-pacific-time";
 
 async function fetchData(user: User): Promise<{
-    picks: SpreadPick[];
+    picks: Pick[];
     account: AccountWithCommunity;
     stats: UserStats;
 }> {
@@ -44,7 +40,7 @@ async function fetchData(user: User): Promise<{
     const { data: stats } = await statsResponse.json();
 
     return {
-        picks: picks as SpreadPick[],
+        picks: picks as Pick[],
         account,
         stats: stats[account.user_id] as UserStats,
     };

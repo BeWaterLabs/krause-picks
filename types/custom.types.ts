@@ -7,7 +7,7 @@ export type Game = Row<"games"> & {
     away_spread: number;
 };
 
-export type SpreadPick = Row<"spread_picks"> & {
+export type Pick = Row<"spread_picks"> & {
     account: Row<"accounts">;
     game: Game;
     selection: Row<"teams">;
@@ -15,6 +15,11 @@ export type SpreadPick = Row<"spread_picks"> & {
         text?: string;
     };
 };
+
+export type Timeline = {
+    type: "pick";
+    data: Pick;
+}[];
 
 export type AccountWithCommunity = Row<"accounts"> & {
     community: Row<"communities"> | null;
