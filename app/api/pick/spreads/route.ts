@@ -35,6 +35,9 @@ export async function POST(request: NextRequest) {
     if (!game || gameError)
         throw new Error(`Failed to find game: ${gameError?.message}}`);
 
+    if (new Date() > new Date(game.start))
+        return new NextResponse("Game has already started", { status: 400 });
+
     const { data: existingPick, error: existingPickError } = await userClient
         .from("spread_picks")
         .select("*")
