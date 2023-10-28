@@ -53,18 +53,6 @@ export async function POST(request: NextRequest) {
             { status: 400 }
         );
 
-    const { data: existingPick, error: existingPickError } = await userClient
-        .from("spread_picks")
-        .select("*")
-        .eq("game", game.id)
-        .eq("account", account.user_id)
-        .maybeSingle();
-
-    if (existingPick || existingPickError)
-        return NextResponse.json("You already have a pick for this game", {
-            status: 400,
-        });
-
     const adminClient = createClient<Database>(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
         process.env.SUPABASE_ADMIN_KEY!
@@ -79,11 +67,12 @@ export async function POST(request: NextRequest) {
             game.home_team === selection_id
                 ? game.home_spread
                 : game.away_spread,
+        created_at: new Date().toISOString(),
     };
 
     const { data, error } = await adminClient
         .from("spread_picks")
-        .insert([newPick])
+        .upsert([newPick], { onConflict: "game,account" })
         .select()
         .single();
 

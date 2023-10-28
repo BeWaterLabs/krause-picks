@@ -9,7 +9,23 @@ export default async function GameDetailPage({
     };
 }) {
     const db = serverDatabaseClient();
-    const game = await db.getGame(Number(params.id));
+    const gamePromise = db.getGame(Number(params.id));
+    const timelinePromise = db.getTimeline({ gameId: Number(params.id) });
+    const userPromise = db.auth.getUser();
 
-    return <GameDetail game={game} />;
+    const [game, timeline, user] = await Promise.all([
+        gamePromise,
+        timelinePromise,
+        userPromise,
+    ]);
+
+    return (
+        <GameDetail
+            game={{
+                ...game,
+                timeline,
+            }}
+            user={user.data.user || undefined}
+        />
+    );
 }

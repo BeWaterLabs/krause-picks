@@ -1,17 +1,7 @@
 "use client";
 
-import { browserDatabaseClient } from "@/database";
 import { Timeline } from "@/types/custom.types";
 import classNames from "@/util/class-names";
-import { Listbox } from "@headlessui/react";
-import {
-    CheckCircleIcon,
-    PaperClipIcon,
-    FaceSmileIcon,
-} from "@heroicons/react/20/solid";
-import { Transition } from "framer-motion";
-
-import { Fragment, useEffect, useState } from "react";
 import GameFeedPick from "./GameFeedPick";
 
 export default function GameFeed({
@@ -19,24 +9,17 @@ export default function GameFeed({
     isLoading,
 }: {
     feed: Timeline;
-    isLoading: boolean;
+    isLoading?: boolean;
 }) {
     return (
         <div>
-            <ul role="list" className="space-y-6">
+            <ul role="list" className="space-y-4">
                 {feed.map((feedItem, feedItemIdx) => (
-                    <li key={feedItemIdx} className="relative flex gap-x-4">
-                        <div
-                            className={classNames(
-                                feedItemIdx === feed.length - 1
-                                    ? "h-6"
-                                    : "-bottom-6",
-                                "absolute left-0 top-0 flex w-6 justify-center"
-                            )}
-                        >
-                            <div className="w-px bg-gray-200 dark:bg-slate-700" />
-                        </div>
-                        <GameFeedPick pick={feedItem.data} />
+                    <li key={feedItemIdx}>
+                        <GameFeedPick
+                            pick={feedItem.data}
+                            showDivider={feedItemIdx < feed.length - 1}
+                        />
                     </li>
                 ))}
             </ul>

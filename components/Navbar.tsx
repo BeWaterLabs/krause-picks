@@ -82,6 +82,8 @@ export default function DesktopNavbar() {
         supabase.auth.getUser().then((res) => {
             if (res.data.user) {
                 setIsLoggedIn(true);
+            } else {
+                setIsLoggedIn(false);
             }
         });
     }, []);

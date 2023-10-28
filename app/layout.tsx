@@ -48,7 +48,7 @@ export default async function RootLayout({
                         },
                     }}
                 />
-                <div className="w-full from-blue-900 bg-gradient-to-br to-blue-700 p-1 text-sm md:text-base text-center text-white font-heading">
+                <div className="w-full pl-16 from-blue-900 bg-gradient-to-br to-blue-700 p-1 text-sm md:text-base text-center text-white font-heading">
                     Unlimited free picks • $20 daily prize to #1 performer
                 </div>
                 <div className="w-full pl-16 flex h-full">
@@ -56,7 +56,11 @@ export default async function RootLayout({
                     <main className="px-4 lg:px-8 pt-4 w-screen overflow-x-hidden flex-1">
                         <div className="flex flex-col h-full gap-4 max-w-7xl mx-auto">
                             <div className={`flex items-stretch flex-1 gap-4`}>
-                                <div className="flex-[2]">{children}</div>
+                                <div className="flex-[2] relative">
+                                    <div className="grid absolute pb-4 left-0 scrollbar-none right-0 top-0 bottom-0 overflow-y-scroll gap-4 overflow-scroll">
+                                        {children}
+                                    </div>
+                                </div>
                                 {user && (
                                     <div className="flex-1 pb-4 hidden lg:block">
                                         <UserPanel user={user} />

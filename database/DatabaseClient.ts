@@ -1,4 +1,4 @@
-import { Game, Pick, Timeline } from "@/types/custom.types";
+import { Game, Pick, Timeline, TimelineType } from "@/types/custom.types";
 import { Row } from "@/types/database-helpers.types";
 import { Database } from "@/types/database.types";
 import { SupabaseClient } from "@supabase/supabase-js";
@@ -19,7 +19,7 @@ export default abstract class DatabaseClient {
             .eq("user_id", userId)
             .single();
 
-        if (error) throw error;
+        if (error) throw new Error(`Failed to find account: ${error.message}`);
         if (!account) throw new Error("Account not found");
 
         return account;
@@ -30,7 +30,7 @@ export default abstract class DatabaseClient {
             .from("accounts")
             .select("*");
 
-        if (error) throw error;
+        if (error) throw new Error(`Failed to find accounts: ${error.message}`);
 
         return accounts;
     }
@@ -42,7 +42,8 @@ export default abstract class DatabaseClient {
             .eq("id", communityId)
             .single();
 
-        if (error) throw error;
+        if (error)
+            throw new Error(`Failed to find community: ${error.message}`);
         if (!community) throw new Error("Community not found");
 
         return community;
@@ -53,7 +54,8 @@ export default abstract class DatabaseClient {
             .from("communities")
             .select("*");
 
-        if (error) throw error;
+        if (error)
+            throw new Error(`Failed to find communities: ${error.message}`);
 
         return communities;
     }
@@ -67,7 +69,7 @@ export default abstract class DatabaseClient {
             .eq("id", gameId)
             .single();
 
-        if (error) throw error;
+        if (error) throw new Error(`Failed to find game: ${error.message}`);
         if (!game) throw new Error("Game not found");
 
         return game;
@@ -101,7 +103,7 @@ export default abstract class DatabaseClient {
 
         const { data: games, error } = await query;
 
-        if (error) throw error;
+        if (error) throw new Error(`Failed to find games: ${error.message}`);
 
         return games;
     }
@@ -115,7 +117,7 @@ export default abstract class DatabaseClient {
             .eq("id", pickId)
             .single();
 
-        if (error) throw error;
+        if (error) throw new Error(`Failed to find pick: ${error.message}`);
         if (!pick) throw new Error("Pick not found");
 
         return pick;
@@ -167,7 +169,7 @@ export default abstract class DatabaseClient {
             ascending: false,
         });
 
-        if (error) throw error;
+        if (error) throw new Error(`Failed to find picks: ${error.message}`);
 
         return picks;
     }
@@ -183,7 +185,7 @@ export default abstract class DatabaseClient {
         const picks = await this.getPicks(filters);
 
         return picks.map((pick) => ({
-            type: "pick",
+            type: TimelineType.Pick,
             data: pick,
         }));
     }

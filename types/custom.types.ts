@@ -7,6 +7,10 @@ export type Game = Row<"games"> & {
     away_spread: number;
 };
 
+export type GameWithTimeline = Game & {
+    timeline: Timeline;
+};
+
 export type Pick = Row<"spread_picks"> & {
     account: Row<"accounts">;
     game: Game;
@@ -16,8 +20,11 @@ export type Pick = Row<"spread_picks"> & {
     };
 };
 
+export enum TimelineType {
+    Pick = "pick",
+}
 export type Timeline = {
-    type: "pick";
+    type: TimelineType;
     data: Pick;
 }[];
 
