@@ -26,12 +26,14 @@ export default async function GamesFeed() {
     const games = await fetch();
 
     return (
-        <HorizontalScroll>
-            {games.map((game) => (
-                <div className="mr-2" key={game.id}>
-                    <GameCard game={game} />
-                </div>
-            ))}
-        </HorizontalScroll>
+        <div className="w-full h-full relative">
+            <div className="grid absolute pb-4 left-0 scrollbar-none right-0 top-0 bottom-0 overflow-y-scroll gap-4 overflow-scroll">
+                {games.map((game) => (
+                    <div className="" key={game.id}>
+                        <GameCard game={game} />
+                    </div>
+                ))}
+            </div>
+        </div>
     );
 }

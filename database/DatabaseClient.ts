@@ -58,7 +58,7 @@ export default abstract class DatabaseClient {
         return communities;
     }
 
-    async getGame(gameId: number): Promise<Row<"games">> {
+    async getGame(gameId: number): Promise<Game> {
         const { data: game, error } = await this.client
             .from("games")
             .select(

@@ -56,7 +56,7 @@ export default async function UserPanel({ user }: { user: User }) {
     const { picks, account, stats } = await fetchData(user);
 
     return (
-        <div className="dark:bg-slate-800 p-6 flex overflow-hidden flex-col h-full bg-white border border-gray-200 dark:border-gray-700 shadow-md sm:rounded-lg">
+        <div className="dark:bg-slate-800 p-6 flex overflow-hidden flex-col h-full bg-white border border-gray-200 dark:border-gray-700 shadow-md rounded-lg">
             <div className="w-full text-center flex flex-col items-center justify-center">
                 <div className="relative">
                     <Image
