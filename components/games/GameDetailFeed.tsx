@@ -1,7 +1,4 @@
-"use client";
-
 import { Timeline } from "@/types/custom.types";
-import classNames from "@/util/class-names";
 import GameFeedPick from "./GameFeedPick";
 
 export default function GameFeed({

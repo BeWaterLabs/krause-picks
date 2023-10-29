@@ -10,10 +10,9 @@ export default function UserList({ users }: { users: UserLeaderboard }) {
             {users.map((userWithScore, idx) => (
                 <motion.div
                     initial={{ opacity: 0, y: 10 }}
-                    animate={{
+                    whileInView={{
                         opacity: 1,
                         y: 0,
-                        transition: { delay: 0.1 * idx },
                     }}
                     exit={{ opacity: 0, y: 10 }}
                     key={userWithScore.account.user_id}

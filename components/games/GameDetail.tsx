@@ -4,12 +4,10 @@ import Image from "next/image";
 import { GameWithTimeline, Pick, TimelineType } from "@/types/custom.types";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import GameFeed from "./GameFeed";
-import BrowserDatabaseClient from "@/database/BrowserDatabaseClient";
+import GameFeed from "./GameDetailFeed";
 import toast from "react-hot-toast";
 import { Row } from "@/types/database-helpers.types";
-import { redirect, useRouter } from "next/navigation";
-import { revalidatePath } from "next/cache";
+import { useRouter } from "next/navigation";
 import classNames from "@/util/class-names";
 import { User } from "@supabase/supabase-js";
 

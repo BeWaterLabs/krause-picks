@@ -130,7 +130,7 @@ export default function DesktopNavbar() {
                                     <CalendarDaysIcon className="w-full h-full" />
                                 }
                                 label="Upcoming"
-                                href="/upcoming"
+                                href="/games"
                             />
                             <DesktopNavLink
                                 icon={<TrophyIcon className="w-full h-full" />}
