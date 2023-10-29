@@ -44,9 +44,12 @@ export async function GET(request: NextRequest) {
     if (!category) throw new Error("No category provided.");
 
     if (Number(days) > 3)
-        return new NextResponse("Max 3 days of scores available", {
-            status: 400,
-        });
+        return NextResponse.json(
+            { error: "Max 3 days of scores available" },
+            {
+                status: 400,
+            }
+        );
 
     // see https://the-odds-api.com/liveapi/guides/v4/#get-scores
     const scoresResponse = await fetch(
@@ -65,7 +68,10 @@ export async function GET(request: NextRequest) {
     const teams = teamsResponse.data;
 
     if (!teams) {
-        return new NextResponse("Failed to fetch teams.", { status: 500 });
+        return NextResponse.json(
+            { error: "Failed to fetch teams." },
+            { status: 500 }
+        );
     }
 
     await Promise.all(
@@ -85,6 +91,6 @@ export async function GET(request: NextRequest) {
         })
     );
 
-    console.info(`Updated odds for ${scores.length} games.`);
+    console.info(`Updated scores for ${scores.length} games.`);
     return NextResponse.json({ success: true });
 }
