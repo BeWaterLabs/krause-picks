@@ -45,9 +45,12 @@ export async function GET(request: NextRequest) {
     if (!category) throw new Error("No category provided.");
 
     if (Number(days) > 3)
-        return new NextResponse("Max 3 days of scores available", {
-            status: 400,
-        });
+        return NextResponse.json(
+            { error: "Max 3 days of scores available" },
+            {
+                status: 400,
+            }
+        );
 
     const scoresResponse = await fetch(
         `https://api.the-odds-api.com/v4/sports/${category}/scores/?dateFormat=iso&daysFrom=${days}&apiKey=${process.env.ODDS_API_KEY}`
@@ -65,7 +68,10 @@ export async function GET(request: NextRequest) {
     const teams = teamsResponse.data;
 
     if (!teams) {
-        return new NextResponse("Failed to fetch teams.", { status: 500 });
+        return NextResponse.json(
+            { error: "Failed to fetch teams." },
+            { status: 500 }
+        );
     }
 
     await Promise.all(
