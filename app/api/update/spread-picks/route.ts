@@ -34,7 +34,7 @@ export async function GET(request: NextRequest) {
     try {
         picks = await fetchPicks(supabase);
     } catch (error: any) {
-        return new NextResponse(error.message, { status: 500 });
+        return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
     const upsertPicks: Insert<"spread_picks">[] = [];
@@ -67,7 +67,10 @@ export async function GET(request: NextRequest) {
         .select();
 
     if (updatedPicksError)
-        return new NextResponse(updatedPicksError.message, { status: 500 });
+        return NextResponse.json(
+            { error: updatedPicksError.message },
+            { status: 500 }
+        );
 
     console.info(`Updated ${updatedPicks.length} picks results.`);
     return NextResponse.json({ success: true });

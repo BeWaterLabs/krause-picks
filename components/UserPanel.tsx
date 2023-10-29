@@ -12,15 +12,11 @@ async function fetchData(user: User): Promise<{
 }> {
     const supabase = serverDatabaseClient();
 
-    const { startOfTodayPT, endOfTodayPT } = todayPacificTime();
-
     const { data: picks, error: picksError } = await supabase
         .from("spread_picks")
         .select(
             "*, account: accounts!spread_picks_account_fkey(*), game: games!inner(*, away_team: teams!games_away_team_fkey(*), home_team: teams!games_home_team_fkey(*)), selection: teams!spread_picks_selection_fkey(*)"
         )
-        .gte("game.start", startOfTodayPT.toISOString())
-        .lte("game.start", endOfTodayPT.toISOString())
         .eq("account", user?.id || "")
         .order("created_at", { ascending: false });
 
@@ -47,6 +43,7 @@ async function fetchData(user: User): Promise<{
 }
 
 export default async function UserPanel({ user }: { user: User }) {
+    const { startOfTodayPT, endOfTodayPT } = todayPacificTime();
     if (!user) return null;
 
     const { picks, account, stats } = await fetchData(user);
@@ -104,13 +101,12 @@ export default async function UserPanel({ user }: { user: User }) {
                     <h6 className="text-center text-gray-500">Accuracy</h6>
                 </div>
             </div>
-            <div className="mt-4 h-full flex flex-col">
-                <h3 className="text-xl font-heading dark:text-white text-black font-semibold">
-                    Today&apos;s Picks
-                </h3>
-
-                <div className="overflow-y-scroll scrollbar-track-transparent scrollbar-thumb-slate-700 scrollbar-none scrollbar-thumb-rounded-md flex flex-1 relative mt-3">
-                    <div className="absolute top-0 flex gap-4 flex-col min-h-full right-0 left-0">
+            <div className="h-full relative overflow-y-scroll scrollbar-none scrollbar-thumb-rounded-md scrollbar-track-transparent scrollbar-thumb-slate-700">
+                <div className="absolute top-0 flex flex-col min-h-full right-0 left-0">
+                    <h3 className="text-xl mt-6 font-heading dark:text-white text-black font-semibold">
+                        Your Picks
+                    </h3>
+                    <div className="flex flex-col gap-4 mt-3">
                         {picks.map((pick) => (
                             <div
                                 key={pick.id}
