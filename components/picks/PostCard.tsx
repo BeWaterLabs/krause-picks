@@ -49,8 +49,8 @@ export default function PostCard({
             />
             <motion.div
                 key={pick.id}
-                initial={{ scale: 0.8, opacity: 0 }}
-                whileInView={{ scale: 1, opacity: 1 }}
+                initial={{ y: 50, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
                 transition={{ ease: "easeOut", duration: 0.3, type: "tween" }}
                 className="dark:bg-slate-800 gap-3 p-5 flex overflow-hidden bg-white border border-gray-200 dark:border-gray-700 shadow-md rounded-lg"
             >
