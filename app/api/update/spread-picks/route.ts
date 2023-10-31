@@ -56,7 +56,7 @@ export async function GET(request: NextRequest) {
             game: pick.game.id,
             selection: pick.selection.id,
             spread: pick.spread,
-            successful: selectionScore! + pick.spread > opposingScore!,
+            successful: selectionScore! + pick.spread >= opposingScore!,
         });
     }
 
