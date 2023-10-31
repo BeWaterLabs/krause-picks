@@ -127,6 +127,7 @@ export default abstract class DatabaseClient {
         filters: {
             userId?: string;
             gameId?: number;
+            communityId?: number;
             finalized?: boolean;
             successful?: boolean;
             from?: Date;
@@ -141,6 +142,10 @@ export default abstract class DatabaseClient {
 
         if (filters.userId) {
             query = query.eq("account", filters.userId);
+        }
+
+        if (filters.communityId) {
+            query = query.eq("community", filters.communityId);
         }
 
         if (filters.gameId) {

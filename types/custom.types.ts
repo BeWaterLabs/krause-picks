@@ -33,7 +33,7 @@ export type AccountWithCommunity = Row<"accounts"> & {
 };
 
 export type UserLeaderboard = {
-    account: AccountWithCommunity;
+    account: Row<"accounts">;
     score: number;
 }[];
 export type CommunityLeaderboard = {
