@@ -145,7 +145,7 @@ export default abstract class DatabaseClient {
         }
 
         if (filters.communityId) {
-            query = query.eq("community", filters.communityId);
+            query = query.eq("account.community", filters.communityId);
         }
 
         if (filters.gameId) {

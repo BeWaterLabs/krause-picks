@@ -49,27 +49,29 @@ export default async function Leaderboard({
         ? await db.getCommunity(Number(searchParams.community))
         : null;
 
-    const userScores = picks.reduce(
-        (
-            acc: {
-                [user: string]: { score: number; account: Row<"accounts"> };
-            },
-            pick
-        ) => {
-            if (pick.successful) {
-                if (!acc[pick.account.user_id]) {
-                    acc[pick.account.user_id] = {
-                        account: pick.account,
-                        score: 10,
-                    };
-                } else {
-                    acc[pick.account.user_id].score += 10;
+    const userScores = picks
+        .filter((p) => p.account)
+        .reduce(
+            (
+                acc: {
+                    [user: string]: { score: number; account: Row<"accounts"> };
+                },
+                pick
+            ) => {
+                if (pick.successful) {
+                    if (!acc[pick.account.user_id]) {
+                        acc[pick.account.user_id] = {
+                            account: pick.account,
+                            score: 10,
+                        };
+                    } else {
+                        acc[pick.account.user_id].score += 10;
+                    }
                 }
-            }
-            return acc;
-        },
-        {}
-    );
+                return acc;
+            },
+            {}
+        );
 
     const userLeaderboard: UserLeaderboard = Object.values(userScores);
 

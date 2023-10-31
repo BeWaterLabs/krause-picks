@@ -27,6 +27,7 @@ export default async function LeaderboardLayout({
                         };
                     }),
                 ]}
+                defaultOption={0}
                 searchParam="community"
             />
             <div className={`flex items-stretch flex-1 gap-4`}>
