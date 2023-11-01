@@ -9,7 +9,6 @@ import {
 } from "@/types/custom.types";
 import { serverDatabaseClient } from "@/database";
 import FinalizedPick from "./picks/FinalizedPick";
-import PendingPick from "./picks/PendingPick";
 import QuickPick from "./picks/QuickPick";
 
 async function fetchData(user: User): Promise<{
@@ -30,16 +29,31 @@ async function fetchData(user: User): Promise<{
 
     const account = await db.getAccountWithCommunity(user.id);
 
-    const statsResponse = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/stats/users?user=${user.id}`
+    // determine stats from picks
+    const stats = picks.reduce(
+        (acc: UserStats, pick) => {
+            acc.totalPicks++;
+            if (pick.successful !== null) {
+                acc.completedPicks++;
+                if (pick.successful) {
+                    acc.successfulPicks++;
+                }
+            }
+
+            return acc;
+        },
+        {
+            totalPicks: 0,
+            completedPicks: 0,
+            successfulPicks: 0,
+        }
     );
-    const { data: stats } = await statsResponse.json();
 
     return {
         games,
         picks: picks as Pick[],
         account,
-        stats: stats[account.user_id] as UserStats,
+        stats: stats,
     };
 }
 
@@ -47,7 +61,7 @@ export default async function UserPanel({ user }: { user: User }) {
     const { games, picks, account, stats } = await fetchData(user);
 
     return (
-        <div className="dark:bg-slate-800 p-6 flex overflow-hidden flex-col h-full bg-white border border-gray-200 dark:border-gray-700 shadow-md rounded-lg">
+        <div className="dark:bg-slate-800 p-3 sm:p-6 flex overflow-hidden flex-col h-full bg-white border border-gray-200 dark:border-gray-700 shadow-md rounded-lg">
             <div className="w-full text-center flex flex-col items-center justify-center">
                 <div className="relative">
                     <Image

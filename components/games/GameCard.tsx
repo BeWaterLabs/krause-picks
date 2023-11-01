@@ -23,9 +23,9 @@ export default function GameCard({ game }: { game: GameWithTimeline }) {
     return (
         <Link
             href={`/games/${game.id}`}
-            className="shadow flex relative justify-between h-36 group cursor-pointer overflow-hidden dark:shadow-md dark:bg-slate-800 rounded-md border-gray-200 dark:border-gray-700 border"
+            className="shadow flex gap-2 sm:gap-0 relative justify-between flex-col sm:flex-row pb-2 sm:h-36 group cursor-pointer overflow-hidden dark:shadow-md dark:bg-slate-800 rounded-md border-gray-200 dark:border-gray-700 border"
         >
-            <div className="w-full items-center flex gap-2 lg:gap-4 p-6">
+            <div className="w-full items-center flex gap-2 lg:gap-4 p-3 md:p-6">
                 <Image
                     src={
                         game.away_team.icon_logo_url ||
@@ -33,14 +33,14 @@ export default function GameCard({ game }: { game: GameWithTimeline }) {
                     }
                     alt={`${game.away_team.full_name} logo`}
                     width={120}
-                    className="h-auto w-8 lg:w-16"
+                    className="h-auto w-10 lg:w-16"
                     height={120}
                 />
                 <div className="relative bg-gradient-to-t dark:from-slate-800 to-transparent w-full z-10 justify-center h-full text-left flex flex-col -space-y-1">
-                    <div className="uppercase font-body text-xs lg:text-sm opacity-75">
+                    <div className="uppercase whitespace-nowrap font-body text-xs lg:text-sm opacity-75">
                         {game.away_team.city}
                     </div>
-                    <div className="font-heading text-2xl lg:text-4xl font-bold">
+                    <div className="font-heading text-lg sm:text-2xl lg:text-4xl font-bold">
                         {game.away_team.team_name}
                     </div>
                 </div>
@@ -53,12 +53,12 @@ export default function GameCard({ game }: { game: GameWithTimeline }) {
                     View Game
                 </div>
             </div>
-            <div className="w-full items-center flex gap-2 lg:gap-4 p-6">
+            <div className="w-full items-center flex gap-2 lg:gap-4 p-3 md:p-6">
                 <div className="relative bg-gradient-to-t dark:from-slate-800 to-transparent w-full z-10 justify-center h-full text-right flex flex-col -space-y-1">
-                    <div className="uppercase font-body text-xs lg:text-sm opacity-75">
+                    <div className="uppercase font-body whitespace-nowrap text-xs lg:text-sm opacity-75">
                         {game.home_team.city}
                     </div>
-                    <div className="font-heading text-2xl lg:text-4xl font-bold">
+                    <div className="font-heading text-lg sm:text-2xl lg:text-4xl font-bold">
                         {game.home_team.team_name}
                     </div>
                 </div>
@@ -69,7 +69,7 @@ export default function GameCard({ game }: { game: GameWithTimeline }) {
                     }
                     alt={`${game.home_team.full_name} logo`}
                     width={120}
-                    className="h-auto w-8 lg:w-16"
+                    className="h-auto w-10 lg:w-16"
                     height={120}
                 />
             </div>

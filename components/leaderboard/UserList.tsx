@@ -32,8 +32,8 @@ function UserListing({
     }
 
     return (
-        <div className="border-b flex justify-between items-center dark:border-slate-600 hover:bg-gray-50 dark:hover:bg-slate-700/50">
-            <div className="flex w-full items-center pl-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
+        <div className="border-b flex px-3 sm:px-6 justify-between items-center dark:border-slate-600 hover:bg-gray-50 dark:hover:bg-slate-700/50">
+            <div className="flex w-full items-center  py-4 text-gray-900 whitespace-nowrap dark:text-white">
                 <div className="relative">
                     <Image
                         className="w-10 h-10 rounded-full"
@@ -52,7 +52,7 @@ function UserListing({
                     </div>
                 </div>
             </div>
-            <div className="pr-6 font-heading py-4 text-2xl text-center font-semibold">
+            <div className="font-heading py-4 text-2xl text-center font-semibold">
                 {score}
             </div>
         </div>

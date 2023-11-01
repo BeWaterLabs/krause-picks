@@ -13,6 +13,7 @@ export default function QuickPick({
     game: Game;
     selection?: Row<"teams">;
 }) {
+    console.log(selection);
     const router = useRouter();
     const makePickWithToast = async (selection: Row<"teams">) => {
         await pick(selection, game);
@@ -32,7 +33,8 @@ export default function QuickPick({
                             : "",
                 }}
                 className={classNames(
-                    `active:scale-95 flex text-sm border p-1 rounded-md border-gray-700 hover:border-gray-300 transition duration-200 cursor-pointer gap-3 font-semibold items-center w-full`
+                    `active:scale-95 flex text-sm border p-1 rounded-md border-gray-700 hover:border-gray-300 transition duration-200 cursor-pointer gap-3 font-semibold items-center w-full`,
+                    selection?.id === game.away_team.id ? `bg-slate-700` : ""
                 )}
             >
                 <div
@@ -69,7 +71,8 @@ export default function QuickPick({
                             : "",
                 }}
                 className={classNames(
-                    `active:scale-95 flex text-sm border p-1 rounded-md border-gray-700 hover:border-gray-300 transition duration-200 cursor-pointer gap-3 font-semibold items-center w-full`
+                    `active:scale-95 flex text-sm border p-1 rounded-md border-gray-700 hover:border-gray-300 transition duration-200 cursor-pointer gap-3 font-semibold items-center w-full`,
+                    selection?.id === game.home_team.id ? `bg-slate-700` : ""
                 )}
             >
                 <div

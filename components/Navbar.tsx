@@ -82,14 +82,14 @@ export function MobileNavLink({
     label: string;
 }) {
     return (
-        <Link href={href} className="group px-4">
+        <Link href={href} className="group px-2">
             <div
                 className={`p-1 px-2 flex-col dark:text-slate-400 transition items-center duration-200 flex dark:hover:text-white dark:hover:bg-white/10 rounded-md`}
             >
-                <div className="w-8 h-8 group-active:scale-95 transition duration-200">
+                <div className="w-6 h-6 group-active:scale-95 transition duration-200">
                     {icon}
                 </div>
-                <span className="font-heading whitespace-nowrap font-medium text-sm">
+                <span className="font-heading whitespace-nowrap font-medium text-xs">
                     {label}
                 </span>
             </div>
@@ -166,12 +166,12 @@ export default function Navbar() {
                                     />
                                     <button
                                         onClick={logout}
-                                        className="group px-4"
+                                        className="group px-2"
                                     >
                                         <div
                                             className={`p-1 px-2 flex-col dark:text-slate-400 transition items-center duration-200 flex dark:hover:text-white dark:hover:bg-white/10 rounded-md`}
                                         >
-                                            <div className="w-8 h-8 group-active:scale-95 transition duration-200">
+                                            <div className="w-6 h-6 group-active:scale-95 transition duration-200">
                                                 <ArrowLeftOnRectangleIcon className="w-full h-full" />
                                             </div>
                                             <span className="font-heading whitespace-nowrap font-medium text-sm">
