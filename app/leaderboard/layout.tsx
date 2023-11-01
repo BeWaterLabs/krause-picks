@@ -16,27 +16,33 @@ export default async function LeaderboardLayout({
 
     return (
         <div className="flex flex-col h-full gap-4 max-w-7xl mx-auto">
-            <Filters
-                options={[
-                    { value: "0", label: "Global" },
-                    ...communities.map((c) => {
-                        return {
-                            image: c.logo_url || undefined,
-                            label: c.name,
-                            value: `${c.id}`,
-                        };
-                    }),
-                ]}
-                defaultOption={"0"}
-                searchParam="community"
-            />
             <div className={`flex items-stretch flex-1 gap-4`}>
-                <div className="flex-[2] relative">
-                    <div className="absolute pb-4 left-0 scrollbar-none right-0 top-0 bottom-0 overflow-y-scroll overflow-scroll">
-                        {children}
+                <div className="flex-[2] flex flex-col gap-4">
+                    <Filters
+                        options={[
+                            { value: "0", label: "Global" },
+                            ...communities.map((c) => {
+                                return {
+                                    image: c.logo_url || undefined,
+                                    label: c.name,
+                                    value: `${c.id}`,
+                                };
+                            }),
+                        ]}
+                        defaultOption={"0"}
+                        searchParam="community"
+                    />
+                    <div className="w-full h-full relative">
+                        <div className="absolute pb-4 left-0 scrollbar-none right-0 top-0 bottom-0 overflow-y-scroll overflow-scroll">
+                            {children}
+                        </div>
                     </div>
                 </div>
-                <UserPanel />
+                {user && (
+                    <div className="flex-1 lg:block hidden pb-4">
+                        <UserPanel user={user} />
+                    </div>
+                )}
             </div>
         </div>
     );

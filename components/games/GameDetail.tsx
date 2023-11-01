@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import classNames from "@/util/class-names";
 import { User } from "@supabase/supabase-js";
 import pick from "@/actions/pick";
+import QuickPick from "../picks/QuickPick";
 
 export default function GameDetail({
     game,
@@ -67,7 +68,7 @@ export default function GameDetail({
 
     return (
         <div className="shadow h-full rounded-lg dark:shadow-md dark:bg-slate-800 border-gray-200 dark:border-gray-700 border">
-            <div className="h-64 flex justify-between relative w-full">
+            <div className="h-48 lg:h-64 flex justify-between relative w-full">
                 <button
                     onClick={() => makePickWithToast(game.away_team)}
                     className="group cursor-pointer w-full"
@@ -82,14 +83,14 @@ export default function GameDetail({
                         }
                         alt={`${game.away_team.full_name} logo`}
                         width={360}
-                        className="opacity-10 group-hover:opacity-100 group-hover:z-20 group-hover:scale-105 group-active:scale-100 group-hover:drop-shadow-lg transition duration-200 h-64 -left-4 absolute -bottom-4 w-auto"
+                        className="opacity-10 group-hover:opacity-100 group-hover:z-20 group-hover:scale-105 group-active:scale-100 group-hover:drop-shadow-lg transition duration-200 h-48 lg:h-64 -left-4 absolute -bottom-4 w-auto"
                         height={360}
                     />
                     <div className="relative bg-gradient-to-t p-6 group-hover:opacity-0 opacity-100 dark:from-slate-800 to-transparent w-full z-10 justify-end h-full text-left flex flex-col -space-y-1">
-                        <div className="uppercase font-body text-base opacity-75">
+                        <div className="uppercase font-body text-sm lg:text-base opacity-75">
                             {game.away_team.city}
                         </div>
-                        <div className="font-heading text-5xl font-bold">
+                        <div className="font-heading text-3xl lg:text-5xl font-bold">
                             {game.away_team.team_name}
                         </div>
                     </div>
@@ -112,14 +113,14 @@ export default function GameDetail({
                         }
                         alt={`${game.home_team.full_name} logo`}
                         width={360}
-                        className="opacity-10 group-hover:opacity-100 group-hover:z-20 group-hover:scale-105 group-active:scale-100 group-hover:drop-shadow-lg transition duration-200 h-64 -right-4 absolute -bottom-4 w-auto"
+                        className="opacity-10 group-hover:opacity-100 group-hover:z-20 group-hover:scale-105 group-active:scale-100 group-hover:drop-shadow-lg transition duration-200 h-48 lg:h-64 -right-4 absolute -bottom-4 w-auto"
                         height={360}
                     />
                     <div className="relative bg-gradient-to-t group-hover:opacity-0 opacity-100 p-6 dark:from-slate-800 to-transparent w-full z-10 justify-end h-full text-right flex flex-col -space-y-1">
-                        <div className="uppercase font-body text-base opacity-75">
+                        <div className="uppercase font-body text-sm lg:text-base opacity-75">
                             {game.home_team.city}
                         </div>
-                        <div className="font-heading text-5xl font-bold">
+                        <div className="font-heading text-3xl lg:text-5xl font-bold">
                             {game.home_team.team_name}
                         </div>
                     </div>
@@ -197,7 +198,10 @@ export default function GameDetail({
                     </div>
                 </motion.div>
             </div>
-            <div className="p-6">
+            <div className="p-6 max-w-md mx-auto">
+                <div className="flex mb-4 gap-4">
+                    <QuickPick game={game} selection={userPick?.selection} />
+                </div>
                 <GameFeed feed={game.timeline} />
             </div>
         </div>

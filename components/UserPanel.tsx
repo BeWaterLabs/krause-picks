@@ -49,104 +49,95 @@ async function fetchData(user: User): Promise<{
     };
 }
 
-export default async function UserPanel() {
-    const supabase = serverDatabaseClient();
-    const {
-        data: { user },
-        error,
-    } = await supabase.auth.getUser();
-    if (!user) return null;
-
+export default async function UserPanel({ user }: { user: User }) {
     const { games, picks, account, stats } = await fetchData(user);
 
     return (
-        <div className="flex-1 pb-4 hidden lg:block">
-            <div className="dark:bg-slate-800 p-6 flex overflow-hidden flex-col h-full bg-white border border-gray-200 dark:border-gray-700 shadow-md rounded-lg">
-                <div className="w-full text-center flex flex-col items-center justify-center">
-                    <div className="relative">
-                        <Image
-                            width={125}
-                            height={125}
-                            src={account.profile_picture_url}
-                            alt=""
-                            className="rounded-full"
-                        />
-                        {account.community?.logo_url && (
-                            <div className="absolute bottom-0 right-0 w-8 h-8">
-                                <Image
-                                    src={account.community?.logo_url}
-                                    alt=""
-                                    width={30}
-                                    height={30}
-                                />
-                            </div>
-                        )}
-                    </div>
-                    <div className="mt-3 font-heading">
-                        <h2 className="text-white text-xl font-semibold">
-                            {account.display_name}
-                        </h2>
-                        <p className="text-gray-500">@{account.username}</p>
-                    </div>
+        <div className="dark:bg-slate-800 p-6 flex overflow-hidden flex-col h-full bg-white border border-gray-200 dark:border-gray-700 shadow-md rounded-lg">
+            <div className="w-full text-center flex flex-col items-center justify-center">
+                <div className="relative">
+                    <Image
+                        width={125}
+                        height={125}
+                        src={account.profile_picture_url}
+                        alt=""
+                        className="rounded-full"
+                    />
+                    {account.community?.logo_url && (
+                        <div className="absolute bottom-0 right-0 w-8 h-8">
+                            <Image
+                                src={account.community?.logo_url}
+                                alt=""
+                                width={30}
+                                height={30}
+                            />
+                        </div>
+                    )}
                 </div>
-                <div className="grid grid-cols-3 py-4">
-                    <div className="flex flex-col -space-y-1">
-                        <h3 className="text-center text-xl font-heading font-bold">
-                            {stats.totalPicks}
-                        </h3>
-                        <h6 className="text-center text-gray-500">Picks</h6>
-                    </div>
-                    <div className="flex flex-col -space-y-1">
-                        <h3 className="text-center text-xl font-heading font-bold">
-                            {stats.completedPicks > 0 && stats.rank
-                                ? stats.rank
-                                : "TBD"}
-                        </h3>
-                        <h6 className="text-center text-gray-500">Rank</h6>
-                    </div>
-                    <div className="flex flex-col -space-y-1">
-                        <h3 className="text-center text-xl font-heading font-bold">
-                            {stats.completedPicks > 0
-                                ? Math.floor(
-                                      (stats.successfulPicks /
-                                          stats.completedPicks) *
-                                          100
-                                  ) + "%"
-                                : "TBD"}
-                        </h3>
-                        <h6 className="text-center text-gray-500">Accuracy</h6>
-                    </div>
+                <div className="mt-3 font-heading">
+                    <h2 className="text-white text-xl font-semibold">
+                        {account.display_name}
+                    </h2>
+                    <p className="text-gray-500">@{account.username}</p>
                 </div>
-                <div className="h-full relative overflow-y-scroll scrollbar-none scrollbar-thumb-rounded-md scrollbar-track-transparent scrollbar-thumb-slate-700">
-                    <div className="absolute top-0 flex flex-col min-h-full right-0 left-0">
-                        <h3 className="text-xl mt-6 font-heading dark:text-white text-black font-semibold">
-                            Quick Picks
-                        </h3>
-                        <div className="flex flex-col gap-4 mt-3">
-                            {games.map((game) => {
-                                const pick = picks.find(
-                                    (pick) => pick.game.id === game.id
-                                );
+            </div>
+            <div className="grid grid-cols-3 py-4">
+                <div className="flex flex-col -space-y-1">
+                    <h3 className="text-center text-xl font-heading font-bold">
+                        {stats.totalPicks}
+                    </h3>
+                    <h6 className="text-center text-gray-500">Picks</h6>
+                </div>
+                <div className="flex flex-col -space-y-1">
+                    <h3 className="text-center text-xl font-heading font-bold">
+                        {stats.completedPicks > 0 && stats.rank
+                            ? stats.rank
+                            : "TBD"}
+                    </h3>
+                    <h6 className="text-center text-gray-500">Rank</h6>
+                </div>
+                <div className="flex flex-col -space-y-1">
+                    <h3 className="text-center text-xl font-heading font-bold">
+                        {stats.completedPicks > 0
+                            ? Math.floor(
+                                  (stats.successfulPicks /
+                                      stats.completedPicks) *
+                                      100
+                              ) + "%"
+                            : "TBD"}
+                    </h3>
+                    <h6 className="text-center text-gray-500">Accuracy</h6>
+                </div>
+            </div>
+            <div className="h-full relative overflow-y-scroll scrollbar-none scrollbar-thumb-rounded-md scrollbar-track-transparent scrollbar-thumb-slate-700">
+                <div className="absolute top-0 flex flex-col min-h-full right-0 left-0">
+                    <h3 className="text-xl mt-6 font-heading dark:text-white text-black font-semibold">
+                        Quick Picks
+                    </h3>
+                    <div className="flex flex-col gap-4 mt-3">
+                        {games.map((game) => {
+                            const pick = picks.find(
+                                (pick) => pick.game.id === game.id
+                            );
 
-                                return (
-                                    <QuickPick
-                                        key={game.id}
-                                        game={game}
-                                        selection={pick?.selection}
-                                    />
-                                );
-                            })}
-                        </div>
-                        <h3 className="text-xl mt-6 font-heading dark:text-white text-black font-semibold">
-                            Past Picks
-                        </h3>
-                        <div className="flex flex-col gap-4 mt-3">
-                            {picks
-                                .filter((p) => p.successful !== null)
-                                .map((pick) => (
-                                    <FinalizedPick key={pick.id} pick={pick} />
-                                ))}
-                        </div>
+                            return (
+                                <QuickPick
+                                    key={game.id}
+                                    game={game}
+                                    selection={pick?.selection}
+                                />
+                            );
+                        })}
+                    </div>
+                    <h3 className="text-xl mt-6 font-heading dark:text-white text-black font-semibold">
+                        Past Picks
+                    </h3>
+                    <div className="flex flex-col gap-4 mt-3">
+                        {picks
+                            .filter((p) => p.successful !== null)
+                            .map((pick) => (
+                                <FinalizedPick key={pick.id} pick={pick} />
+                            ))}
                     </div>
                 </div>
             </div>

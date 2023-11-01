@@ -8,7 +8,7 @@ export default function LoadingLeaderboardPage() {
                             {[...Array(5)].map((_: unknown, i: number) => (
                                 <div
                                     key={i}
-                                    className="h-48 group cursor-pointer overflow-hidden dark:shadow-md dark:bg-slate-800 rounded-md animate-pulse"
+                                    className="h-36 group cursor-pointer overflow-hidden dark:shadow-md dark:bg-slate-800 rounded-md animate-pulse"
                                 />
                             ))}
                         </div>

@@ -45,9 +45,9 @@ export default async function RootLayout({
                 <div className="w-full pl-16 from-blue-900 bg-gradient-to-br to-blue-700 p-1 text-sm md:text-base text-center text-white font-heading">
                     Unlimited free picks • $20 daily prize to #1 performer
                 </div>
-                <div className="w-full pl-16 flex h-full">
+                <div className="w-full pb-20 lg:pb-0 lg:pl-16 flex h-full">
                     <Navbar />
-                    <main className="px-4 lg:px-8 pt-4 w-screen overflow-x-hidden flex-1">
+                    <main className="px-4 mx-auto max-w-lg lg:max-w-7xl lg:px-8 pt-4 w-screen overflow-x-hidden flex-1">
                         {children}
                     </main>
                 </div>

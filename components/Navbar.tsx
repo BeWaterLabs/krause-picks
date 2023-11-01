@@ -72,7 +72,32 @@ export function DesktopNavLink({
     );
 }
 
-export default function DesktopNavbar() {
+export function MobileNavLink({
+    icon,
+    href,
+    label,
+}: {
+    icon: React.ReactNode;
+    href: string;
+    label: string;
+}) {
+    return (
+        <Link href={href} className="group px-4">
+            <div
+                className={`p-1 px-2 flex-col dark:text-slate-400 transition items-center duration-200 flex dark:hover:text-white dark:hover:bg-white/10 rounded-md`}
+            >
+                <div className="w-8 h-8 group-active:scale-95 transition duration-200">
+                    {icon}
+                </div>
+                <span className="font-heading whitespace-nowrap font-medium text-sm">
+                    {label}
+                </span>
+            </div>
+        </Link>
+    );
+}
+
+export default function Navbar() {
     const [isLoggedIn, setIsLoggedIn] = useState<boolean | undefined>(
         undefined
     );
@@ -99,11 +124,72 @@ export default function DesktopNavbar() {
 
     return (
         <header>
+            <nav className="fixed z-30 dark:bg-slate-800 border lg:hidden dark:border-gray-700 p-2 bottom-0 left-0 right-0">
+                <nav className="flex w-full px-1 justify-center items-center divide-x divide-gray-700">
+                    <MobileNavLink
+                        icon={<RectangleStackIcon className="w-full h-full" />}
+                        label="Games"
+                        href="/"
+                    />
+                    <MobileNavLink
+                        icon={<TrophyIcon className="w-full h-full" />}
+                        label="Leaderboard"
+                        href="/leaderboard"
+                    />
+                    {isLoggedIn !== undefined && (
+                        <>
+                            {isLoggedIn === false ? (
+                                <>
+                                    <MobileNavLink
+                                        icon={
+                                            <ArrowRightOnRectangleIcon className="w-full h-full" />
+                                        }
+                                        label="Login"
+                                        href="/auth/login"
+                                    />
+                                    <MobileNavLink
+                                        icon={
+                                            <UserIcon className="w-full h-full" />
+                                        }
+                                        label="Signup"
+                                        href="/auth/signup"
+                                    />
+                                </>
+                            ) : (
+                                <>
+                                    <MobileNavLink
+                                        icon={
+                                            <UserIcon className="w-full h-full" />
+                                        }
+                                        label="Profile"
+                                        href="/profile"
+                                    />
+                                    <button
+                                        onClick={logout}
+                                        className="group px-4"
+                                    >
+                                        <div
+                                            className={`p-1 px-2 flex-col dark:text-slate-400 transition items-center duration-200 flex dark:hover:text-white dark:hover:bg-white/10 rounded-md`}
+                                        >
+                                            <div className="w-8 h-8 group-active:scale-95 transition duration-200">
+                                                <ArrowLeftOnRectangleIcon className="w-full h-full" />
+                                            </div>
+                                            <span className="font-heading whitespace-nowrap font-medium text-sm">
+                                                Logout
+                                            </span>
+                                        </div>
+                                    </button>
+                                </>
+                            )}
+                        </>
+                    )}
+                </nav>
+            </nav>
             <motion.div
                 initial="rest"
                 whileHover="hover"
                 animate="rest"
-                className="bg-white fixed top-0 overflow-hidden bottom-0 shadow-lg left-0 z-30 border-gray-200 h-full border-r dark:border-gray-700 p-4 px-2 dark:bg-slate-800"
+                className="bg-white hidden lg:block fixed top-0 overflow-hidden bottom-0 shadow-lg left-0 z-30 border-gray-200 h-full border-r dark:border-gray-700 p-4 px-2 dark:bg-slate-800"
             >
                 <div className="flex flex-col h-full justify-between items-center mx-auto">
                     <div className="flex items-start flex-col">
@@ -122,15 +208,8 @@ export default function DesktopNavbar() {
                                 icon={
                                     <RectangleStackIcon className="w-full h-full" />
                                 }
-                                label="Feed"
+                                label="Games"
                                 href="/"
-                            />
-                            <DesktopNavLink
-                                icon={
-                                    <CalendarDaysIcon className="w-full h-full" />
-                                }
-                                label="Upcoming"
-                                href="/games"
                             />
                             <DesktopNavLink
                                 icon={<TrophyIcon className="w-full h-full" />}
