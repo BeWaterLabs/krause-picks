@@ -107,7 +107,11 @@ export default async function UserPanel() {
                     <div className="flex flex-col -space-y-1">
                         <h3 className="text-center text-xl font-heading font-bold">
                             {stats.completedPicks > 0
-                                ? Math.floor(stats.accuracy * 100) + "%"
+                                ? Math.floor(
+                                      (stats.successfulPicks /
+                                          stats.completedPicks) *
+                                          100
+                                  ) + "%"
                                 : "TBD"}
                         </h3>
                         <h6 className="text-center text-gray-500">Accuracy</h6>

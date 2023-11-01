@@ -2,7 +2,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import classNames from "@/util/class-names";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useMemo } from "react";
 
 export function Filters({
@@ -10,27 +10,30 @@ export function Filters({
     options,
     searchParam,
 }: {
-    defaultOption: string | number;
-    options: { image?: string; label: string; value: string | number }[];
+    defaultOption: string;
+    options: { image?: string; label: string; value: string }[];
     searchParam: string;
 }) {
-    const search = useSearchParams();
+    const searchParams = useSearchParams();
     const pathname = usePathname();
+    const router = useRouter();
     const selected = useMemo(
-        () => search.get(searchParam) || defaultOption,
-        [searchParam, search]
+        () => searchParams.get(searchParam) || defaultOption,
+        [searchParam, searchParams]
     );
 
     return (
         <div className="w-full flex flex-row gap-2">
             {options.map((option) => (
-                <Link
+                <button
                     key={option.value}
-                    href={
-                        defaultOption === option.value
-                            ? pathname
-                            : `${pathname}?${searchParam}=${option.value}`
-                    }
+                    onClick={() => {
+                        const params = new URLSearchParams(searchParams);
+                        if (option.value === defaultOption)
+                            params.delete(searchParam);
+                        else params.set(searchParam, option.value);
+                        router.push(pathname + "?" + params.toString());
+                    }}
                     className={classNames(
                         "dark:bg-slate-800 flex gap-2 items-center border cursor-pointer dark:border-gray-700 transition duration-200 text-base font-heading rounded-md px-3 py-1",
                         `${option.value}` === selected
@@ -48,7 +51,7 @@ export function Filters({
                         />
                     )}
                     {option.label}
-                </Link>
+                </button>
             ))}
         </div>
     );

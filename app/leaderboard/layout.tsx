@@ -18,12 +18,12 @@ export default async function LeaderboardLayout({
         <div className="flex flex-col h-full gap-4 max-w-7xl mx-auto">
             <Filters
                 options={[
-                    { value: 0, label: "Global" },
+                    { value: "0", label: "Global" },
                     ...communities.map((c) => {
                         return {
                             image: c.logo_url || undefined,
                             label: c.name,
-                            value: c.id,
+                            value: `${c.id}`,
                         };
                     }),
                 ]}

@@ -1,45 +1,13 @@
-import { CommunityLeaderboard, UserLeaderboard } from "@/types/custom.types";
-import LeaderboardContent from "@/components/leaderboard/LeaderboardContent";
-import todayPacificTime from "@/util/today-pacific-time";
+import { UserLeaderboard, UserStats } from "@/types/custom.types";
 import { serverDatabaseClient } from "@/database";
 import UserList from "@/components/leaderboard/UserList";
 import { Row } from "@/types/database-helpers.types";
-
-async function fetchData(): Promise<{
-    userLeaderboard: UserLeaderboard;
-    communityLeaderboard: CommunityLeaderboard;
-}> {
-    const { startOfTodayPT, endOfTodayPT } = todayPacificTime(-1);
-
-    const userLeaderboardResponse = await fetch(
-        `${
-            process.env.NEXT_PUBLIC_API_URL
-        }/leaderboard/users?from=${startOfTodayPT.toISOString()}&to=${endOfTodayPT.toISOString()}`
-    );
-    const { leaderboard: userLeaderboard }: { leaderboard: UserLeaderboard } =
-        await userLeaderboardResponse.json();
-
-    const communityLeaderboardResponse = await fetch(
-        `${
-            process.env.NEXT_PUBLIC_API_URL
-        }/leaderboard/communities?from=${startOfTodayPT.toISOString()}&to=${endOfTodayPT.toISOString()}`
-    );
-
-    const {
-        leaderboard: communityLeaderboard,
-    }: { leaderboard: CommunityLeaderboard } =
-        await communityLeaderboardResponse.json();
-
-    return {
-        userLeaderboard,
-        communityLeaderboard,
-    };
-}
+import MetricDropdown from "@/components/leaderboard/MetricDropdown";
 
 export default async function Leaderboard({
     searchParams,
 }: {
-    searchParams: { community: string };
+    searchParams: { community: string; show: string };
 }) {
     const db = serverDatabaseClient();
     const picks = await db.getPicks({
@@ -48,26 +16,39 @@ export default async function Leaderboard({
     const community = searchParams.community
         ? await db.getCommunity(Number(searchParams.community))
         : null;
+    const metric = searchParams.show;
 
     const userScores = picks
         .filter((p) => p.account)
         .reduce(
             (
                 acc: {
-                    [user: string]: { score: number; account: Row<"accounts"> };
+                    [user: string]: {
+                        stats: UserStats;
+                        account: Row<"accounts">;
+                    };
                 },
                 pick
             ) => {
-                if (pick.successful) {
-                    if (!acc[pick.account.user_id]) {
-                        acc[pick.account.user_id] = {
-                            account: pick.account,
-                            score: 10,
-                        };
-                    } else {
-                        acc[pick.account.user_id].score += 10;
+                if (!acc[pick.account.user_id]) {
+                    acc[pick.account.user_id] = {
+                        account: pick.account,
+                        stats: {
+                            totalPicks: 0,
+                            completedPicks: 0,
+                            successfulPicks: 0,
+                        },
+                    };
+                }
+
+                acc[pick.account.user_id].stats.totalPicks++;
+                if (pick.successful !== null) {
+                    acc[pick.account.user_id].stats.completedPicks++;
+                    if (pick.successful) {
+                        acc[pick.account.user_id].stats.successfulPicks++;
                     }
                 }
+
                 return acc;
             },
             {}
@@ -87,11 +68,12 @@ export default async function Leaderboard({
                         </p>
                         Leaderboard
                     </h2>
+                    <MetricDropdown selected={metric} />
                 </div>
 
                 <div className="text-sm flex-1 relative text-left">
                     <div className="absolute dark:scrollbar-thumb-slate-700 scrollbar-thin scrollbar-thumb-rounded-md dark:scrollbar-track-slate-800 left-0 right-0 top-0 bottom-0 overflow-y-scroll">
-                        <UserList users={userLeaderboard} />
+                        <UserList users={userLeaderboard} metric={metric} />
                     </div>
                 </div>
             </div>

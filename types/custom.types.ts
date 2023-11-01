@@ -34,7 +34,7 @@ export type AccountWithCommunity = Row<"accounts"> & {
 
 export type UserLeaderboard = {
     account: Row<"accounts">;
-    score: number;
+    stats: UserStats;
 }[];
 export type CommunityLeaderboard = {
     community: Row<"communities">;
@@ -44,8 +44,6 @@ export type CommunityLeaderboard = {
 export type UserStats = {
     successfulPicks: number;
     totalPicks: number;
-    pendingPicks: number;
     completedPicks: number;
-    accuracy: number;
     rank?: number;
 };
