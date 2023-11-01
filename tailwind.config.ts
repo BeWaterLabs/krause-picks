@@ -21,9 +21,6 @@ const config: Config = {
         },
     },
     darkMode: "class",
-    plugins: [
-        require("flowbite/plugin"),
-        require("tailwind-scrollbar")({ nocompatible: true }),
-    ],
+    plugins: [require("tailwind-scrollbar")({ nocompatible: true })],
 };
 export default config;
