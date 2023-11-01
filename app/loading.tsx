@@ -5,7 +5,7 @@ export default function LoadingLeaderboardPage() {
                 <div className="flex-[2] relative">
                     <div className="absolute pb-4 left-0 scrollbar-none right-0 top-0 bottom-0 overflow-y-scroll overflow-scroll">
                         <div className="flex flex-col gap-4">
-                            {[...Array(5)].map((_: unknown, i: number) => (
+                            {[...Array(10)].map((_: unknown, i: number) => (
                                 <div
                                     key={i}
                                     className="h-36 group cursor-pointer overflow-hidden dark:shadow-md dark:bg-slate-800 rounded-md animate-pulse"

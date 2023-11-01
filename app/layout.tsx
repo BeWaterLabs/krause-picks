@@ -47,7 +47,7 @@ export default async function RootLayout({
                 </div>
                 <div className="w-full pb-20 lg:pb-0 lg:pl-16 flex h-full">
                     <Navbar />
-                    <main className="px-4 mx-auto max-w-lg lg:max-w-7xl lg:px-8 pt-4 w-screen overflow-x-hidden flex-1">
+                    <main className="px-4 mx-auto max-w-lg lg:max-w-7xl lg:px-8 pt-4 w-screen flex-1">
                         {children}
                     </main>
                 </div>
