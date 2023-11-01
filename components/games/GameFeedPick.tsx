@@ -32,11 +32,24 @@ export default function GameFeedPick({
             <div className="flex flex-col">
                 <div className="flex gap-1 py-2 items-center">
                     <div className="flex flex-auto items-center gap-2">
-                        <p className="py-0.5 text-base leading-5 text-gray-500 dark:text-gray-400">
+                        <p className="py-0.5 text-base flex items-center flex-wrap gap-1 leading-5 text-gray-500 dark:text-gray-400">
                             <span className="font-medium text-gray-900 dark:text-white">
                                 {pick.account.display_name}
                             </span>{" "}
-                            picked the {pick.selection.team_name}
+                            picked the{" "}
+                            <span className="flex items-center gap-1 ml-1">
+                                <Image
+                                    src={
+                                        pick.selection.icon_logo_url ||
+                                        pick.selection.primary_logo_url
+                                    }
+                                    alt={`${pick.selection.full_name} logo`}
+                                    width={25}
+                                    height={25}
+                                    className="h-5 w-auto"
+                                />
+                                {pick.selection.team_name}
+                            </span>
                         </p>
                         <time
                             dateTime={pick.created_at}

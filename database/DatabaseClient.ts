@@ -1,4 +1,10 @@
-import { Game, Pick, Timeline, TimelineType } from "@/types/custom.types";
+import {
+    AccountWithCommunity,
+    Game,
+    Pick,
+    Timeline,
+    TimelineType,
+} from "@/types/custom.types";
 import { Row } from "@/types/database-helpers.types";
 import { Database } from "@/types/database.types";
 import { SupabaseClient } from "@supabase/supabase-js";
@@ -21,6 +27,21 @@ export default abstract class DatabaseClient {
 
         if (error) throw new Error(`Failed to find account: ${error.message}`);
         if (!account) throw new Error("Account not found");
+
+        return account;
+    }
+
+    async getAccountWithCommunity(
+        userId: string
+    ): Promise<AccountWithCommunity> {
+        const { data: account, error: accountError } = await this.client
+            .from("accounts")
+            .select("*, community: communities!accounts_community_fkey(*)")
+            .eq("user_id", userId)
+            .single();
+
+        if (accountError)
+            throw new Error(`Failed to find account: ${accountError.message}`);
 
         return account;
     }
@@ -132,7 +153,8 @@ export default abstract class DatabaseClient {
             successful?: boolean;
             from?: Date;
             to?: Date;
-        } = {}
+        } = {},
+        order?: { orderBy: string; ascending: boolean }
     ): Promise<Pick[]> {
         let query = this.client
             .from("spread_picks")
@@ -168,6 +190,10 @@ export default abstract class DatabaseClient {
 
         if (filters.to) {
             query = query.lte("game.start", filters.to.toISOString());
+        }
+
+        if (order) {
+            query = query.order(order.orderBy, { ascending: order.ascending });
         }
 
         const { data: picks, error } = await query.order("created_at", {

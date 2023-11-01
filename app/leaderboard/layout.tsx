@@ -27,7 +27,7 @@ export default async function LeaderboardLayout({
                         };
                     }),
                 ]}
-                defaultOption={0}
+                defaultOption={"0"}
                 searchParam="community"
             />
             <div className={`flex items-stretch flex-1 gap-4`}>
@@ -36,11 +36,7 @@ export default async function LeaderboardLayout({
                         {children}
                     </div>
                 </div>
-                {user && (
-                    <div className="flex-1 pb-4 hidden lg:block">
-                        <UserPanel user={user} />
-                    </div>
-                )}
+                <UserPanel />
             </div>
         </div>
     );

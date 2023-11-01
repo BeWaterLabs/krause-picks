@@ -6,12 +6,6 @@ export default async function GamesLayout({
 }: {
     children: React.ReactNode;
 }) {
-    const supabase = serverDatabaseClient();
-    const {
-        data: { user },
-        error,
-    } = await supabase.auth.getUser();
-
     return (
         <div className="flex flex-col h-full gap-4 max-w-7xl mx-auto">
             <div className={`flex items-stretch flex-1 gap-4`}>
@@ -20,11 +14,7 @@ export default async function GamesLayout({
                         {children}
                     </div>
                 </div>
-                {user && (
-                    <div className="flex-1 pb-4 hidden lg:block">
-                        <UserPanel user={user} />
-                    </div>
-                )}
+                <UserPanel />
             </div>
         </div>
     );

@@ -1,19 +1,21 @@
+"use client";
 import dayjs from "dayjs";
 import Image from "next/image";
 import { GameWithTimeline, TimelineType } from "@/types/custom.types";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 export default function GameCard({ game }: { game: GameWithTimeline }) {
     const picks = game.timeline
         .filter((t) => t.type === TimelineType.Pick)
         .map((t) => t.data.selection);
     const awayPickPercentage = Math.round(
-        (picks.filter((p) => p.id === game.home_team.id).length /
+        (picks.filter((p) => p.id === game.away_team.id).length /
             Math.max(picks.length, 1)) *
             100
     );
     const homePickPercentage = Math.round(
-        (picks.filter((p) => p.id === game.away_team.id).length /
+        (picks.filter((p) => p.id === game.home_team.id).length /
             Math.max(picks.length, 1)) *
             100
     );
@@ -72,17 +74,29 @@ export default function GameCard({ game }: { game: GameWithTimeline }) {
                 />
             </div>
             <div className="absolute left-0 right-0 bg-slate-800 items-stretch bottom-0 flex h-2">
-                <div
-                    style={{
+                <motion.div
+                    initial={{
+                        width: "0%",
+                    }}
+                    animate={{
                         width: `${awayPickPercentage}%`,
                     }}
-                    className={`bg-gradient-to-r to-blue-500 from-blue-500/25`}
-                />
-                <div
                     style={{
+                        backgroundImage: `linear-gradient(to bottom right, ${game.away_team.primary_color}, ${game.away_team.primary_color}5A)`,
+                    }}
+                    className={`absolute left-0 ring-[1px] ring-gray-700 min-w-[10%] h-full max-w-[90%] bg-gradient-to-r to-blue-500 from-blue-500/25`}
+                />
+                <motion.div
+                    initial={{
+                        width: "0%",
+                    }}
+                    animate={{
                         width: `${homePickPercentage}%`,
                     }}
-                    className={`bg-gradient-to-l to-red-500 from-red-500/25`}
+                    style={{
+                        backgroundImage: `linear-gradient(to bottom right, ${game.home_team.primary_color}, ${game.home_team.primary_color}5A)`,
+                    }}
+                    className={`absolute right-0 ring-[1px] ring-gray-700 h-full min-w-[10%] max-w-[90%] bg-gradient-to-l to-red-500 from-red-500/25`}
                 />
             </div>
         </Link>

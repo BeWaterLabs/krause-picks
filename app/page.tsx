@@ -59,11 +59,8 @@ export default async function Home() {
                         </div>
                     </div>
                 </div>
-                {user && (
-                    <div className="flex-1 pb-4 hidden lg:block">
-                        <UserPanel user={user} />
-                    </div>
-                )}
+
+                <UserPanel />
             </div>
         </div>
     );

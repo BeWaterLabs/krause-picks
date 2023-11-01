@@ -10,33 +10,7 @@ import { Row } from "@/types/database-helpers.types";
 import { useRouter } from "next/navigation";
 import classNames from "@/util/class-names";
 import { User } from "@supabase/supabase-js";
-
-const pickingPhrases = [
-    "Putting your life savings on",
-    "Going all in on",
-    "Betting the house on",
-    "Risking it all on",
-    "Putting everything on",
-    "Going for broke on",
-    "Going for it all on",
-    "Rolling the dice on",
-    "Betting your kids' college fund on",
-    "Risking your life on",
-    "Pawning your wife's wedding ring for",
-    "Cashing out your 401k for",
-    "Selling your soul for",
-    "Selling your firstborn child for",
-    "Mortgaging your house for",
-];
-const pickMadePhrases = [
-    "The pick is in",
-    "Let's hope you don't regret this",
-    "Good luck with that",
-    "May the odds be ever in your favor",
-    "No turning back now",
-    "You're locked in",
-];
-const pickMadeIcon = ["✅", "👍", "👌", "👏", "🤞", "👀"];
+import pick from "@/actions/pick";
 
 export default function GameDetail({
     game,
@@ -80,60 +54,19 @@ export default function GameDetail({
         );
     }, [game]);
 
-    const makePick = async (team: Row<"teams">) => {
-        const res = await fetch("/api/pick", {
-            method: "POST",
-            body: JSON.stringify({
-                game_id: game.id,
-                selection_id: team.id,
-            }),
-        });
-
-        const data = await res.json();
-        if (!res.ok) {
-            throw new Error(data.error);
-        }
-
-        router.refresh();
-    };
-
-    const makePickWithToast = async (team: Row<"teams">) => {
+    const makePickWithToast = async (selection: Row<"teams">) => {
         if (!user) {
             toast.error("Login to make a pick", {
                 id: "pick-error",
             });
             return;
         }
-        const loadingPhrase =
-            pickingPhrases[Math.floor(Math.random() * pickingPhrases.length)];
-        const successPhrase =
-            pickMadePhrases[Math.floor(Math.random() * pickMadePhrases.length)];
-        const teamNameOrCity =
-            Math.random() < 0.5 ? `the ${team.team_name}` : team.city;
-        let toastId = toast.loading(`${loadingPhrase} ${teamNameOrCity}...`, {
-            id: "pick-loading",
-        });
-        try {
-            await makePick(team);
-            toast.dismiss(toastId);
-            toast.success(`${successPhrase}`, {
-                icon: pickMadeIcon[
-                    Math.floor(Math.random() * pickMadeIcon.length)
-                ],
-                duration: 3000,
-                id: "pick-success",
-            });
-        } catch (e: any) {
-            console.log(e.message);
-            toast.dismiss(toastId);
-            toast.error(e.message, {
-                id: "pick-error",
-            });
-        }
+        await pick(selection, game);
+        router.refresh();
     };
 
     return (
-        <div className="shadow rounded-lg dark:shadow-md dark:bg-slate-800 border-gray-200 dark:border-gray-700 border">
+        <div className="shadow h-full rounded-lg dark:shadow-md dark:bg-slate-800 border-gray-200 dark:border-gray-700 border">
             <div className="h-64 flex justify-between relative w-full">
                 <button
                     onClick={() => makePickWithToast(game.away_team)}
@@ -199,16 +132,19 @@ export default function GameDetail({
                     }}
                     animate={{
                         width: `${
-                            (homePicks.length /
+                            (awayPicks.length /
                                 (homePicks.length + awayPicks.length || 1)) *
                             100
                         }%`,
                     }}
-                    className="pr-2 absolute min-w-[20%] max-w-[80%] flex overflow-hidden items-center left-0 h-full px-3 justify-between bg-gradient-to-r from-blue-500/50 to-blue-500/100"
+                    style={{
+                        backgroundImage: `linear-gradient(to bottom right, ${game.away_team.primary_color}, ${game.away_team.primary_color}5A)`,
+                    }}
+                    className="pr-2 absolute min-w-[20%] max-w-[80%] flex overflow-hidden items-center left-0 h-full px-3 justify-between"
                 >
                     <div>
                         {(
-                            (homePicks.length /
+                            (awayPicks.length /
                                 (homePicks.length + awayPicks.length || 1)) *
                             100
                         ).toFixed(0)}
@@ -217,7 +153,7 @@ export default function GameDetail({
                     <div
                         className={classNames(
                             "text-sm",
-                            userPick?.selection.id === game.home_team.id
+                            userPick?.selection.id === game.away_team.id
                                 ? "opacity-100"
                                 : "opacity-0"
                         )}
@@ -231,17 +167,20 @@ export default function GameDetail({
                     }}
                     animate={{
                         width: `${
-                            (awayPicks.length /
+                            (homePicks.length /
                                 (homePicks.length + awayPicks.length || 1)) *
                             100
                         }%`,
                     }}
-                    className="absolute justify-between pl-2 min-w-[20%] max-w-[80%] flex overflow-hidden items-center right-0 px-3 h-full bg-gradient-to-r to-red-500/25 from-red-500/100"
+                    style={{
+                        backgroundImage: `linear-gradient(to bottom right, ${game.home_team.primary_color}, ${game.home_team.primary_color}5A)`,
+                    }}
+                    className="absolute justify-between pl-2 min-w-[20%] max-w-[80%] flex overflow-hidden items-center right-0 px-3 h-full"
                 >
                     <div
                         className={classNames(
                             "text-sm",
-                            userPick?.selection.id === game.away_team.id
+                            userPick?.selection.id === game.home_team.id
                                 ? "opacity-100"
                                 : "opacity-0"
                         )}
@@ -250,7 +189,7 @@ export default function GameDetail({
                     </div>
                     <div>
                         {(
-                            (awayPicks.length /
+                            (homePicks.length /
                                 (homePicks.length + awayPicks.length || 1)) *
                             100
                         ).toFixed(0)}
