@@ -82,7 +82,7 @@ export default function GameCard({ game }: { game: GameWithTimeline }) {
                         width: `${awayPickPercentage}%`,
                     }}
                     style={{
-                        backgroundImage: `linear-gradient(to bottom right, ${game.away_team.primary_color}, ${game.away_team.primary_color}5A)`,
+                        backgroundImage: `linear-gradient(to right, ${game.away_team.primary_color}, ${game.away_team.primary_color}5A)`,
                     }}
                     className={`absolute left-0 ring-[1px] ring-gray-700 min-w-[10%] h-full max-w-[90%] bg-gradient-to-r to-blue-500 from-blue-500/25`}
                 />
@@ -94,7 +94,7 @@ export default function GameCard({ game }: { game: GameWithTimeline }) {
                         width: `${homePickPercentage}%`,
                     }}
                     style={{
-                        backgroundImage: `linear-gradient(to bottom right, ${game.home_team.primary_color}, ${game.home_team.primary_color}5A)`,
+                        backgroundImage: `linear-gradient(to left, ${game.home_team.primary_color}, ${game.home_team.primary_color}5A)`,
                     }}
                     className={`absolute right-0 ring-[1px] ring-gray-700 h-full min-w-[10%] max-w-[90%] bg-gradient-to-l to-red-500 from-red-500/25`}
                 />

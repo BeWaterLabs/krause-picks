@@ -67,7 +67,7 @@ export default function GameDetail({
     };
 
     return (
-        <div className="shadow h-full rounded-lg dark:shadow-md dark:bg-slate-800 border-gray-200 dark:border-gray-700 border">
+        <div className="shadow h-full flex flex-col rounded-lg dark:shadow-md dark:bg-slate-800 border-gray-200 dark:border-gray-700 border">
             <div className="h-48 lg:h-64 flex justify-between relative w-full">
                 <button
                     onClick={() => makePickWithToast(game.away_team)}
@@ -139,9 +139,9 @@ export default function GameDetail({
                         }%`,
                     }}
                     style={{
-                        backgroundImage: `linear-gradient(to bottom right, ${game.away_team.primary_color}, ${game.away_team.primary_color}5A)`,
+                        backgroundImage: `linear-gradient(to right, ${game.away_team.primary_color}, ${game.away_team.primary_color}5A)`,
                     }}
-                    className="pr-2 absolute min-w-[20%] max-w-[80%] flex overflow-hidden items-center left-0 h-full px-3 justify-between"
+                    className="pr-2 absolute min-w-[20%] bg-gradient-to-r from-blue-500 to-blue-500/20 max-w-[80%] flex overflow-hidden items-center left-0 h-full px-3 justify-between"
                 >
                     <div>
                         {(
@@ -174,9 +174,9 @@ export default function GameDetail({
                         }%`,
                     }}
                     style={{
-                        backgroundImage: `linear-gradient(to bottom right, ${game.home_team.primary_color}, ${game.home_team.primary_color}5A)`,
+                        backgroundImage: `linear-gradient(to left, ${game.home_team.primary_color}, ${game.home_team.primary_color}5A)`,
                     }}
-                    className="absolute justify-between pl-2 min-w-[20%] max-w-[80%] flex overflow-hidden items-center right-0 px-3 h-full"
+                    className="absolute justify-between pl-2 bg-gradient-to-l from-red-500 to-red-500/20 min-w-[20%] max-w-[80%] flex overflow-hidden items-center right-0 px-3 h-full"
                 >
                     <div
                         className={classNames(
@@ -198,11 +198,17 @@ export default function GameDetail({
                     </div>
                 </motion.div>
             </div>
-            <div className="p-6 max-w-md mx-auto">
-                <div className="flex mb-4 gap-4">
+            <div className="p-6 pb-0 flex flex-col flex-1 w-full mx-auto">
+                <div className="flex mb-4 mx-auto gap-4 max-w-md w-full">
                     <QuickPick game={game} selection={userPick?.selection} />
                 </div>
-                <GameFeed feed={game.timeline} />
+                <div className="flex flex-1 relative overflow-scroll scrollbar-none">
+                    <div className="absolute top-0 bottom-0 max-w-md mx-auto right-0 left-0">
+                        <div className="pb-8">
+                            <GameFeed feed={game.timeline} />
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     );
