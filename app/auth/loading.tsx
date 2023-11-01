@@ -1,6 +1,3 @@
-import serverDatabaseClient from "@/util/server-database-client";
-import { redirect } from "next/navigation";
-
 export default async function AuthLoading() {
     return (
         <div className="w-full h-full flex items-center justify-center">
