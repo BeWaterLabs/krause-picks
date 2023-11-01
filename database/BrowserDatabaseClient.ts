@@ -8,4 +8,4 @@ class BrowserDatabaseClient extends DatabaseClient {
         super(client);
     }
 }
-export default BrowserDatabaseClient;
+export default () => new BrowserDatabaseClient();

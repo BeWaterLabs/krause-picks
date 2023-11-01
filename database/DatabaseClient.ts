@@ -154,7 +154,8 @@ export default abstract class DatabaseClient {
             from?: Date;
             to?: Date;
         } = {},
-        order?: { orderBy: string; ascending: boolean }
+        limit = 1000,
+        order = { orderBy: "created_at", ascending: false }
     ): Promise<Pick[]> {
         let query = this.client
             .from("spread_picks")
@@ -192,13 +193,11 @@ export default abstract class DatabaseClient {
             query = query.lte("game.start", filters.to.toISOString());
         }
 
-        if (order) {
-            query = query.order(order.orderBy, { ascending: order.ascending });
-        }
-
-        const { data: picks, error } = await query.order("created_at", {
-            ascending: false,
-        });
+        const { data: picks, error } = await query
+            .limit(limit)
+            .order(order.orderBy, {
+                ascending: order.ascending,
+            });
 
         if (error) throw new Error(`Failed to find picks: ${error.message}`);
 

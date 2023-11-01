@@ -20,15 +20,9 @@ async function fetchData(user: User): Promise<{
 }> {
     const db = serverDatabaseClient();
 
-    const picks = await db.getPicks(
-        {
-            userId: user.id,
-        },
-        {
-            orderBy: "created_at",
-            ascending: false,
-        }
-    );
+    const picks = await db.getPicks({
+        userId: user.id,
+    });
 
     const games = await db.getGames({
         from: new Date(),

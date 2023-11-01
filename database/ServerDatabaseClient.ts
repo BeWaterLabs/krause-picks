@@ -10,4 +10,4 @@ class ServerDatabaseClient extends DatabaseClient {
         super(client);
     }
 }
-export default ServerDatabaseClient;
+export default () => new ServerDatabaseClient();
