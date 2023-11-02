@@ -1,8 +1,6 @@
-export const runtime = "edge";
-
 import { Insert } from "@/types/database-helpers.types";
 import { Database } from "@/types/database.types";
-import { createServerActionClient } from "@supabase/auth-helpers-nextjs";
+import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 import { createClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
@@ -15,20 +13,24 @@ export async function POST(request: NextRequest) {
             { status: 400 }
         );
 
-    const userClient = createServerActionClient({ cookies });
+    const supabase = createRouteHandlerClient({
+        cookies,
+    });
+
     const {
-        data: { user },
-    } = await userClient.auth.getUser();
-    if (!user)
+        data: { session },
+    } = await supabase.auth.getSession();
+
+    if (!session?.user)
         return NextResponse.json(
             { error: "You must be logged in to make a pick" },
             { status: 401 }
         );
 
-    const { data: account, error: accountError } = await userClient
+    const { data: account, error: accountError } = await supabase
         .from("accounts")
         .select("*")
-        .eq("user_id", user.id)
+        .eq("user_id", session.user.id)
         .single();
     if (!account || accountError)
         return new NextResponse(
@@ -36,7 +38,7 @@ export async function POST(request: NextRequest) {
             { status: 400 }
         );
 
-    const { data: game, error: gameError } = await userClient
+    const { data: game, error: gameError } = await supabase
         .from("games")
         .select("*")
         .eq("id", game_id)
