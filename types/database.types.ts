@@ -70,11 +70,11 @@ export interface Database {
       games: {
         Row: {
           away_score: number | null
-          away_spread: number | null
+          away_spread: number
           away_team: number
           final: boolean | null
           home_score: number | null
-          home_spread: number | null
+          home_spread: number
           home_team: number
           id: number
           last_updated: string
@@ -84,11 +84,11 @@ export interface Database {
         }
         Insert: {
           away_score?: number | null
-          away_spread?: number | null
+          away_spread: number
           away_team: number
           final?: boolean | null
           home_score?: number | null
-          home_spread?: number | null
+          home_spread: number
           home_team: number
           id?: number
           last_updated?: string
@@ -98,11 +98,11 @@ export interface Database {
         }
         Update: {
           away_score?: number | null
-          away_spread?: number | null
+          away_spread?: number
           away_team?: number
           final?: boolean | null
           home_score?: number | null
-          home_spread?: number | null
+          home_spread?: number
           home_team?: number
           id?: number
           last_updated?: string
@@ -122,31 +122,6 @@ export interface Database {
             columns: ["home_team"]
             referencedRelation: "teams"
             referencedColumns: ["id"]
-          }
-        ]
-      }
-      scores: {
-        Row: {
-          account: string
-          date: string
-          score: number
-        }
-        Insert: {
-          account: string
-          date?: string
-          score?: number
-        }
-        Update: {
-          account?: string
-          date?: string
-          score?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "scores_account_fkey"
-            columns: ["account"]
-            referencedRelation: "accounts"
-            referencedColumns: ["user_id"]
           }
         ]
       }
@@ -210,6 +185,7 @@ export interface Database {
           icon_logo_url: string | null
           id: number
           league: string | null
+          primary_color: string | null
           primary_logo_url: string
           team_name: string | null
         }
@@ -220,6 +196,7 @@ export interface Database {
           icon_logo_url?: string | null
           id?: number
           league?: string | null
+          primary_color?: string | null
           primary_logo_url: string
           team_name?: string | null
         }
@@ -230,6 +207,7 @@ export interface Database {
           icon_logo_url?: string | null
           id?: number
           league?: string | null
+          primary_color?: string | null
           primary_logo_url?: string
           team_name?: string | null
         }

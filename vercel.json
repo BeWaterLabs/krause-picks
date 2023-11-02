@@ -1,19 +1,19 @@
 {
     "crons": [
         {
-            "path": "/api/game-scores?category=americanfootball_nfl",
+            "path": "/api/update/game-scores?category=americanfootball_nfl",
             "schedule": "0 9 * * *"
         },
         {
-            "path": "/api/resolve/spreads",
+            "path": "/api/update/spread-picks",
             "schedule": "10 * * * *"
         },
         {
-            "path": "/api/odds/spreads?days=6&category=basketball_nba",
+            "path": "/api/update/odds?days=6&category=basketball_nba",
             "schedule": "0 * * * *"
         },
         {
-            "path": "/api/game-scores?category=basketball_nba",
+            "path": "/api/update/game-scores?category=basketball_nba",
             "schedule": "0 * * * *"
         }
     ]
