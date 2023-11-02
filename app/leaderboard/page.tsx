@@ -10,7 +10,7 @@ export default async function Leaderboard({
 }) {
     return (
         <div className="dark:bg-slate-800 flex flex-col overflow-hidden h-full bg-white border border-gray-200 dark:border-gray-700 shadow-md rounded-lg">
-            <div className="flex items-start flex-0 justify-between p-4">
+            <div className="flex flex-col lg:flex-row gap-2 items-start flex-0 justify-between p-4">
                 <h2 className="text-2xl font-heading dark:text-white text-black font-semibold">
                     Leaderboard
                 </h2>
