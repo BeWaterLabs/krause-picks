@@ -10,6 +10,7 @@ import {
 import { serverDatabaseClient } from "@/database";
 import FinalizedPick from "./picks/FinalizedPick";
 import QuickPick from "./picks/QuickPick";
+import dayjs from "dayjs";
 
 async function fetchData(user: User): Promise<{
     games: Game[];
@@ -141,11 +142,37 @@ export default async function UserPanel({ user }: { user: User }) {
                         Past Picks
                     </h3>
                     <div className="flex flex-col gap-4 mt-3">
-                        {picks
-                            .filter((p) => p.successful !== null)
-                            .map((pick) => (
-                                <FinalizedPick key={pick.id} pick={pick} />
-                            ))}
+                        {Object.entries(
+                            picks
+                                .filter((p) => p.successful !== null)
+                                .reduce(
+                                    (acc: { [date: string]: Pick[] }, pick) => {
+                                        const date = dayjs(
+                                            pick.game.start
+                                        ).format("YYYY-MM-DD");
+                                        if (!acc[date]) {
+                                            acc[date] = [];
+                                        }
+                                        acc[date].push(pick);
+                                        return acc;
+                                    },
+                                    {}
+                                )
+                        ).map(([date, picks]) => (
+                            <div key={date}>
+                                <h4 className="text-lg mt-2 font-heading dark:text-gray-500 text-black font-semibold">
+                                    {dayjs(date).format("MMMM D, YYYY")}
+                                </h4>
+                                <div className="flex flex-col gap-4 mt-3">
+                                    {picks.map((pick) => (
+                                        <FinalizedPick
+                                            key={pick.id}
+                                            pick={pick}
+                                        />
+                                    ))}
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>
