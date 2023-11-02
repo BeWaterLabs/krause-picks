@@ -139,7 +139,7 @@ export default function GameDetail({
                         }%`,
                     }}
                     style={{
-                        backgroundImage: `linear-gradient(to right, ${game.away_team.primary_color}, ${game.away_team.primary_color}5A)`,
+                        backgroundImage: `linear-gradient(to left, ${game.away_team.primary_color}, ${game.away_team.primary_color}5A)`,
                     }}
                     className="pr-2 text-lg md:text-2xl absolute min-w-[20%] bg-gradient-to-r from-blue-500 to-blue-500/20 max-w-[80%] flex overflow-hidden items-center left-0 h-full px-3 justify-between"
                 >
@@ -174,7 +174,7 @@ export default function GameDetail({
                         }%`,
                     }}
                     style={{
-                        backgroundImage: `linear-gradient(to left, ${game.home_team.primary_color}, ${game.home_team.primary_color}5A)`,
+                        backgroundImage: `linear-gradient(to right, ${game.home_team.primary_color}, ${game.home_team.primary_color}5A)`,
                     }}
                     className=" text-lg md:text-2xl absolute justify-between pl-2 bg-gradient-to-l from-red-500 to-red-500/20 min-w-[20%] max-w-[80%] flex overflow-hidden items-center right-0 px-3 h-full"
                 >

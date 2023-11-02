@@ -13,7 +13,6 @@ export default function QuickPick({
     game: Game;
     selection?: Row<"teams">;
 }) {
-    console.log(selection);
     const router = useRouter();
     const makePickWithToast = async (selection: Row<"teams">) => {
         await pick(selection, game);

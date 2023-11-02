@@ -6,17 +6,17 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 
 export default function todayPacificTime(offsetDays = 0) {
-    const startOfTodayPT = dayjs()
+    const start = dayjs()
         .tz("America/Los_Angeles")
         .add(offsetDays, "day")
         .startOf("day")
         .toDate();
 
-    const endOfTodayPT = dayjs()
+    const end = dayjs()
         .tz("America/Los_Angeles")
         .add(offsetDays, "day")
         .endOf("day")
         .toDate();
 
-    return { startOfTodayPT, endOfTodayPT };
+    return { start, end };
 }

@@ -4,12 +4,18 @@ import { Row } from "@/types/database-helpers.types";
 import { useState, useEffect } from "react";
 import browserDatabaseClient from "@/database/BrowserDatabaseClient";
 import UserList from "./UserList";
+import todayPacificTime from "@/util/today-pacific-time";
 
-async function getLeaderboard(metric: string, communityId?: number) {
+async function getLeaderboard(
+    metric: string,
+    startTime?: Date,
+    communityId?: number
+) {
     const db = browserDatabaseClient();
     const picks = await db.getPicks(
         {
             communityId,
+            from: startTime,
         },
         10000
     );
@@ -76,23 +82,42 @@ async function getLeaderboard(metric: string, communityId?: number) {
     return { community, userLeaderboard };
 }
 
+function getTimestampFromPeriod(period: string) {
+    switch (period) {
+        case "all-time":
+            return undefined;
+        case "past-week":
+            const { start } = todayPacificTime(-6);
+            return start;
+        case "yesterday":
+            const { start: startOfYesterday } = todayPacificTime(-1);
+            return startOfYesterday;
+        default:
+            return undefined;
+    }
+}
+
 export default function LeaderboardContent({
     metric,
     communityId,
+    period,
 }: {
     metric: string;
+    period: string;
     communityId?: number;
 }) {
+    const start = getTimestampFromPeriod(period);
     const [community, setCommunity] = useState<null | Row<"communities">>(null);
     const [userLeaderboard, setUserLeaderboard] = useState<UserLeaderboard>([]);
+
     useEffect(() => {
-        getLeaderboard(metric, communityId).then(
+        getLeaderboard(metric, start, communityId).then(
             ({ community, userLeaderboard }) => {
                 setCommunity(community);
                 setUserLeaderboard(userLeaderboard);
             }
         );
-    }, [communityId, metric]);
+    }, [communityId, metric, period]);
 
     if (!userLeaderboard) return null;
 
