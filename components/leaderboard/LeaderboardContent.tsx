@@ -8,14 +8,16 @@ import todayPacificTime from "@/util/today-pacific-time";
 
 async function getLeaderboard(
     metric: string,
+    communityId?: number,
     startTime?: Date,
-    communityId?: number
+    endTime?: Date
 ) {
     const db = browserDatabaseClient();
     const picks = await db.getPicks(
         {
             communityId,
             from: startTime,
+            to: endTime,
         },
         10000
     );
@@ -85,15 +87,16 @@ async function getLeaderboard(
 function getTimestampFromPeriod(period: string) {
     switch (period) {
         case "all-time":
-            return undefined;
+            return { start: undefined, end: undefined };
         case "past-week":
             const { start } = todayPacificTime(-6);
-            return start;
+            return { start: start, end: new Date() };
         case "yesterday":
-            const { start: startOfYesterday } = todayPacificTime(-1);
-            return startOfYesterday;
+            const { start: startOfYesterday, end: endOfYesterday } =
+                todayPacificTime(-1);
+            return { start: startOfYesterday, end: endOfYesterday };
         default:
-            return undefined;
+            return { start: undefined, end: undefined };
     }
 }
 
@@ -106,12 +109,12 @@ export default function LeaderboardContent({
     period: string;
     communityId?: number;
 }) {
-    const start = getTimestampFromPeriod(period);
+    const { start, end } = getTimestampFromPeriod(period);
     const [community, setCommunity] = useState<null | Row<"communities">>(null);
     const [userLeaderboard, setUserLeaderboard] = useState<UserLeaderboard>([]);
 
     useEffect(() => {
-        getLeaderboard(metric, start, communityId).then(
+        getLeaderboard(metric, communityId, start, end).then(
             ({ community, userLeaderboard }) => {
                 setCommunity(community);
                 setUserLeaderboard(userLeaderboard);
