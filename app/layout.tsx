@@ -43,7 +43,7 @@ export default async function RootLayout({
                     }}
                 />
                 <div className="w-full lg:pl-16 from-blue-900 bg-gradient-to-br to-blue-700 p-1 text-xs sm:text-sm md:text-base text-center text-white font-heading">
-                    Unlimited free picks • $20 daily prize to #1 performer
+                    Unlimited free picks! • $20 daily prize to #1 performer
                 </div>
                 <div className="w-full pb-32 lg:pb-0 lg:pl-16 flex h-full">
                     <Navbar />
