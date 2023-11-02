@@ -67,8 +67,8 @@ export default function GameDetail({
     };
 
     return (
-        <div className="shadow h-full flex flex-col rounded-lg dark:shadow-md dark:bg-slate-800 border-gray-200 dark:border-gray-700 border">
-            <div className="h-48 lg:h-64 flex justify-between relative w-full">
+        <div className="shadow overflow-hidden h-full flex flex-col rounded-lg dark:shadow-md dark:bg-slate-800 border-gray-200 dark:border-gray-700 border">
+            <div className="hidden h-48 lg:h-64 sm:flex justify-between relative w-full">
                 <button
                     onClick={() => makePickWithToast(game.away_team)}
                     className="group cursor-pointer w-full"
@@ -126,7 +126,7 @@ export default function GameDetail({
                     </div>
                 </button>
             </div>
-            <div className="flex h-12 relative z-10 bg-slate-800 text-2xl font-semibold font-heading">
+            <div className="flex h-12 relative z-10 bg-slate-800 font-semibold font-heading">
                 <motion.div
                     initial={{
                         width: "0%",
@@ -141,7 +141,7 @@ export default function GameDetail({
                     style={{
                         backgroundImage: `linear-gradient(to right, ${game.away_team.primary_color}, ${game.away_team.primary_color}5A)`,
                     }}
-                    className="pr-2 absolute min-w-[20%] bg-gradient-to-r from-blue-500 to-blue-500/20 max-w-[80%] flex overflow-hidden items-center left-0 h-full px-3 justify-between"
+                    className="pr-2 text-lg md:text-2xl absolute min-w-[20%] bg-gradient-to-r from-blue-500 to-blue-500/20 max-w-[80%] flex overflow-hidden items-center left-0 h-full px-3 justify-between"
                 >
                     <div>
                         {(
@@ -153,7 +153,7 @@ export default function GameDetail({
                     </div>
                     <div
                         className={classNames(
-                            "text-sm",
+                            "text-xs sm:text-sm",
                             userPick?.selection.id === game.away_team.id
                                 ? "opacity-100"
                                 : "opacity-0"
@@ -176,11 +176,11 @@ export default function GameDetail({
                     style={{
                         backgroundImage: `linear-gradient(to left, ${game.home_team.primary_color}, ${game.home_team.primary_color}5A)`,
                     }}
-                    className="absolute justify-between pl-2 bg-gradient-to-l from-red-500 to-red-500/20 min-w-[20%] max-w-[80%] flex overflow-hidden items-center right-0 px-3 h-full"
+                    className=" text-lg md:text-2xl absolute justify-between pl-2 bg-gradient-to-l from-red-500 to-red-500/20 min-w-[20%] max-w-[80%] flex overflow-hidden items-center right-0 px-3 h-full"
                 >
                     <div
                         className={classNames(
-                            "text-sm",
+                            "text-xs sm:text-sm",
                             userPick?.selection.id === game.home_team.id
                                 ? "opacity-100"
                                 : "opacity-0"
@@ -198,7 +198,7 @@ export default function GameDetail({
                     </div>
                 </motion.div>
             </div>
-            <div className="p-6 pb-0 flex flex-col flex-1 w-full mx-auto">
+            <div className="p-3 lg:p-6 pb-0 flex flex-col flex-1 w-full mx-auto">
                 <div className="flex mb-4 mx-auto gap-4 max-w-md w-full">
                     <QuickPick game={game} selection={userPick?.selection} />
                 </div>
