@@ -9,10 +9,6 @@
             "schedule": "10 * * * *"
         },
         {
-            "path": "/api/update/odds?days=6&category=americanfootball_nfl",
-            "schedule": "0 * * * *"
-        },
-        {
             "path": "/api/update/odds?days=6&category=basketball_nba",
             "schedule": "0 * * * *"
         },
