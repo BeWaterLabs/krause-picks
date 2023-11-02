@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { Insert } from "@/types/database-helpers.types";
 import { Database } from "@/types/database.types";
 import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
