@@ -1,71 +1,128 @@
 "use client";
-import { AnimatePresence } from "framer-motion";
-import Dropdown from "@/components/common/Dropdown";
-import { useMemo, useState } from "react";
-import { CommunityLeaderboard, UserLeaderboard } from "@/types/custom.types";
-import { UserGroupIcon, UserIcon } from "@heroicons/react/20/solid";
+import { UserStats, UserLeaderboard } from "@/types/custom.types";
+import { Row } from "@/types/database-helpers.types";
+import { useState, useEffect } from "react";
+import browserDatabaseClient from "@/database/BrowserDatabaseClient";
 import UserList from "./UserList";
-import CommunityList from "./CommunityList";
+import todayPacificTime from "@/util/today-pacific-time";
 
-enum Category {
-    Users = "Users",
-    Communities = "Communities",
+async function getLeaderboard(
+    metric: string,
+    communityId?: number,
+    startTime?: Date,
+    endTime?: Date
+) {
+    const db = browserDatabaseClient();
+    const picks = await db.getPicks(
+        {
+            communityId,
+            from: startTime,
+            to: endTime,
+        },
+        10000
+    );
+    const community = communityId ? await db.getCommunity(communityId) : null;
+
+    const userScores = picks
+        .filter((p) => p.account)
+        .reduce(
+            (
+                acc: {
+                    [user: string]: {
+                        stats: UserStats;
+                        account: Row<"accounts">;
+                    };
+                },
+                pick
+            ) => {
+                if (!acc[pick.account.user_id]) {
+                    acc[pick.account.user_id] = {
+                        account: pick.account,
+                        stats: {
+                            totalPicks: 0,
+                            completedPicks: 0,
+                            successfulPicks: 0,
+                        },
+                    };
+                }
+
+                acc[pick.account.user_id].stats.totalPicks++;
+                if (pick.successful !== null) {
+                    acc[pick.account.user_id].stats.completedPicks++;
+                    if (pick.successful) {
+                        acc[pick.account.user_id].stats.successfulPicks++;
+                    }
+                }
+
+                return acc;
+            },
+            {}
+        );
+
+    const userLeaderboard: UserLeaderboard = Object.values(userScores).filter(
+        (user) => user.stats.completedPicks > 0
+    );
+
+    switch (metric) {
+        case "score":
+            userLeaderboard.sort(
+                (a, b) => b.stats.successfulPicks - a.stats.successfulPicks
+            );
+            break;
+        case "accuracy":
+            userLeaderboard.sort(
+                (a, b) =>
+                    b.stats.successfulPicks / b.stats.completedPicks -
+                    a.stats.successfulPicks / a.stats.completedPicks
+            );
+            break;
+        default:
+            userLeaderboard.sort(
+                (a, b) => b.stats.successfulPicks - a.stats.successfulPicks
+            );
+    }
+    return { community, userLeaderboard };
 }
-const CategoryIcons = {
-    Users: <UserIcon className="w-5 h-5" />,
-    Communities: <UserGroupIcon className="w-5 h-5" />,
-};
+
+function getTimestampFromPeriod(period: string) {
+    switch (period) {
+        case "all-time":
+            return { start: undefined, end: undefined };
+        case "past-week":
+            const { start } = todayPacificTime(-6);
+            return { start: start, end: new Date() };
+        case "yesterday":
+            const { start: startOfYesterday, end: endOfYesterday } =
+                todayPacificTime(-1);
+            return { start: startOfYesterday, end: endOfYesterday };
+        default:
+            return { start: undefined, end: undefined };
+    }
+}
 
 export default function LeaderboardContent({
-    topUserScores,
-    topCommunityScores,
+    metric,
+    communityId,
+    period,
 }: {
-    topUserScores: UserLeaderboard;
-    topCommunityScores: CommunityLeaderboard;
+    metric: string;
+    period: string;
+    communityId?: number;
 }) {
-    const [selectedCategory, setSelectedCategory] = useState<Category>(
-        Category.Users
-    );
-    const categories = useMemo(() => {
-        return {
-            [Category.Users]: topUserScores,
-            [Category.Communities]: topCommunityScores,
-        };
-    }, [topUserScores, topCommunityScores]);
+    const { start, end } = getTimestampFromPeriod(period);
+    const [community, setCommunity] = useState<null | Row<"communities">>(null);
+    const [userLeaderboard, setUserLeaderboard] = useState<UserLeaderboard>([]);
 
-    return (
-        <div className="flex overflow-hidden flex-col h-full">
-            <div className="flex items-start flex-0 justify-between p-4">
-                <h2 className="text-2xl font-heading dark:text-white text-black font-semibold">
-                    <p className="text-xs font-body text-white/50 font-medium">
-                        Yesterday&apos;s
-                    </p>
-                    Leaderboard
-                </h2>
-                <Dropdown
-                    values={Object.values(Category).map((category) => ({
-                        icon: CategoryIcons[category],
-                        value: category,
-                    }))}
-                    selectedValue={selectedCategory}
-                    setSelectedValue={setSelectedCategory}
-                />
-            </div>
+    useEffect(() => {
+        getLeaderboard(metric, communityId, start, end).then(
+            ({ community, userLeaderboard }) => {
+                setCommunity(community);
+                setUserLeaderboard(userLeaderboard);
+            }
+        );
+    }, [communityId, metric, period]);
 
-            <div className="text-sm flex-1 relative text-left">
-                <div className="absolute dark:scrollbar-thumb-slate-700 scrollbar-thin scrollbar-thumb-rounded-md dark:scrollbar-track-slate-800 left-0 right-0 top-0 bottom-0 overflow-y-scroll">
-                    <AnimatePresence>
-                        {selectedCategory === Category.Users && (
-                            <UserList users={categories[selectedCategory]} />
-                        )}
-                        {selectedCategory === Category.Communities && (
-                            <CommunityList
-                                communities={categories[selectedCategory]}
-                            />
-                        )}
-                    </AnimatePresence>
-                </div>
-            </div>
-        </div>
-    );
+    if (!userLeaderboard) return null;
+
+    return <UserList users={userLeaderboard} metric={metric} />;
 }

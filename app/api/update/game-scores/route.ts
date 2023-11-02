@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 import type { Database } from "@/types/database.types";
 import { SupabaseClient, createClient } from "@supabase/supabase-js";
-import { Insert, Row, Update } from "@/types/database-helpers.types";
+import { Row, Update } from "@/types/database-helpers.types";
 
 const updateScore = async (
     game: any,

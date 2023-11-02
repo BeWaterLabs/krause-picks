@@ -6,11 +6,9 @@ import { NextRequest, NextResponse } from "next/server";
 import type { Database } from "@/types/database.types";
 import { SupabaseClient, createClient } from "@supabase/supabase-js";
 import { Insert } from "@/types/database-helpers.types";
-import { SpreadPick } from "@/types/custom.types";
+import { Pick } from "@/types/custom.types";
 
-async function fetchPicks(
-    client: SupabaseClient<Database>
-): Promise<SpreadPick[]> {
+async function fetchPicks(client: SupabaseClient<Database>): Promise<Pick[]> {
     const { data: picks, error: picksError } = await client
         .from("spread_picks")
         .select(
@@ -23,7 +21,7 @@ async function fetchPicks(
 
     if (picksError) throw picksError;
 
-    return picks as SpreadPick[];
+    return picks as Pick[];
 }
 
 export async function GET(request: NextRequest) {
@@ -32,7 +30,7 @@ export async function GET(request: NextRequest) {
         process.env.SUPABASE_ADMIN_KEY!
     );
 
-    let picks: SpreadPick[] = [];
+    let picks: Pick[] = [];
     try {
         picks = await fetchPicks(supabase);
     } catch (error: any) {

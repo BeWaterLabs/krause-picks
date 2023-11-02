@@ -7,7 +7,11 @@ export type Game = Row<"games"> & {
     away_spread: number;
 };
 
-export type SpreadPick = Row<"spread_picks"> & {
+export type GameWithTimeline = Game & {
+    timeline: Timeline;
+};
+
+export type Pick = Row<"spread_picks"> & {
     account: Row<"accounts">;
     game: Game;
     selection: Row<"teams">;
@@ -16,13 +20,21 @@ export type SpreadPick = Row<"spread_picks"> & {
     };
 };
 
+export enum TimelineType {
+    Pick = "pick",
+}
+export type Timeline = {
+    type: TimelineType;
+    data: Pick;
+}[];
+
 export type AccountWithCommunity = Row<"accounts"> & {
     community: Row<"communities"> | null;
 };
 
 export type UserLeaderboard = {
-    account: AccountWithCommunity;
-    score: number;
+    account: Row<"accounts">;
+    stats: UserStats;
 }[];
 export type CommunityLeaderboard = {
     community: Row<"communities">;
@@ -32,8 +44,6 @@ export type CommunityLeaderboard = {
 export type UserStats = {
     successfulPicks: number;
     totalPicks: number;
-    pendingPicks: number;
     completedPicks: number;
-    accuracy: number;
     rank?: number;
 };

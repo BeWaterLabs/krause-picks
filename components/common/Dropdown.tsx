@@ -4,7 +4,7 @@ import { Fragment, ReactNode } from "react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { Menu, Transition } from "@headlessui/react";
 
-export default function Dropdown<T extends ReactNode>({
+export function Dropdown<T extends ReactNode>({
     values,
     selectedValue,
     setSelectedValue,
@@ -12,7 +12,7 @@ export default function Dropdown<T extends ReactNode>({
     values: {
         icon?: ReactNode;
         activeIcon?: ReactNode;
-        label?: string;
+        label: string;
         value: T;
     }[];
     selectedValue: T;
@@ -26,6 +26,10 @@ export default function Dropdown<T extends ReactNode>({
                         ?.activeIcon ||
                         values.find((value) => value.value === selectedValue)
                             ?.icon}
+                    {
+                        values.find((value) => value.value === selectedValue)
+                            ?.label
+                    }
                     <ChevronDownIcon
                         className="ml-2 -mr-1 h-5 w-5 text-violet-200 hover:text-violet-100"
                         aria-hidden="true"

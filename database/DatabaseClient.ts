@@ -1,4 +1,10 @@
-import { Game, SpreadPick } from "@/types/custom.types";
+import {
+    AccountWithCommunity,
+    Game,
+    Pick,
+    Timeline,
+    TimelineType,
+} from "@/types/custom.types";
 import { Row } from "@/types/database-helpers.types";
 import { Database } from "@/types/database.types";
 import { SupabaseClient } from "@supabase/supabase-js";
@@ -19,8 +25,23 @@ export default abstract class DatabaseClient {
             .eq("user_id", userId)
             .single();
 
-        if (error) throw error;
+        if (error) throw new Error(`Failed to find account: ${error.message}`);
         if (!account) throw new Error("Account not found");
+
+        return account;
+    }
+
+    async getAccountWithCommunity(
+        userId: string
+    ): Promise<AccountWithCommunity> {
+        const { data: account, error: accountError } = await this.client
+            .from("accounts")
+            .select("*, community: communities!accounts_community_fkey(*)")
+            .eq("user_id", userId)
+            .single();
+
+        if (accountError)
+            throw new Error(`Failed to find account: ${accountError.message}`);
 
         return account;
     }
@@ -30,7 +51,7 @@ export default abstract class DatabaseClient {
             .from("accounts")
             .select("*");
 
-        if (error) throw error;
+        if (error) throw new Error(`Failed to find accounts: ${error.message}`);
 
         return accounts;
     }
@@ -42,7 +63,8 @@ export default abstract class DatabaseClient {
             .eq("id", communityId)
             .single();
 
-        if (error) throw error;
+        if (error)
+            throw new Error(`Failed to find community: ${error.message}`);
         if (!community) throw new Error("Community not found");
 
         return community;
@@ -53,12 +75,13 @@ export default abstract class DatabaseClient {
             .from("communities")
             .select("*");
 
-        if (error) throw error;
+        if (error)
+            throw new Error(`Failed to find communities: ${error.message}`);
 
         return communities;
     }
 
-    async getGame(gameId: number): Promise<Row<"games">> {
+    async getGame(gameId: number): Promise<Game> {
         const { data: game, error } = await this.client
             .from("games")
             .select(
@@ -67,7 +90,7 @@ export default abstract class DatabaseClient {
             .eq("id", gameId)
             .single();
 
-        if (error) throw error;
+        if (error) throw new Error(`Failed to find game: ${error.message}`);
         if (!game) throw new Error("Game not found");
 
         return game;
@@ -101,12 +124,12 @@ export default abstract class DatabaseClient {
 
         const { data: games, error } = await query;
 
-        if (error) throw error;
+        if (error) throw new Error(`Failed to find games: ${error.message}`);
 
         return games;
     }
 
-    async getSpreadPick(pickId: number): Promise<SpreadPick> {
+    async getPick(pickId: number): Promise<Pick> {
         const { data: pick, error } = await this.client
             .from("spread_picks")
             .select(
@@ -115,21 +138,25 @@ export default abstract class DatabaseClient {
             .eq("id", pickId)
             .single();
 
-        if (error) throw error;
+        if (error) throw new Error(`Failed to find pick: ${error.message}`);
         if (!pick) throw new Error("Pick not found");
 
         return pick;
     }
 
-    async getSpreadPicks(
+    async getPicks(
         filters: {
             userId?: string;
+            gameId?: number;
+            communityId?: number;
             finalized?: boolean;
             successful?: boolean;
             from?: Date;
             to?: Date;
-        } = {}
-    ): Promise<SpreadPick[]> {
+        } = {},
+        limit = 1000,
+        order = { orderBy: "created_at", ascending: false }
+    ): Promise<Pick[]> {
         let query = this.client
             .from("spread_picks")
             .select(
@@ -138,6 +165,14 @@ export default abstract class DatabaseClient {
 
         if (filters.userId) {
             query = query.eq("account", filters.userId);
+        }
+
+        if (filters.communityId) {
+            query = query.eq("account.community", filters.communityId);
+        }
+
+        if (filters.gameId) {
+            query = query.eq("game", filters.gameId);
         }
 
         if (filters.finalized) {
@@ -158,12 +193,30 @@ export default abstract class DatabaseClient {
             query = query.lte("game.start", filters.to.toISOString());
         }
 
-        const { data: picks, error } = await query.order("created_at", {
-            ascending: false,
-        });
+        const { data: picks, error } = await query
+            .limit(limit)
+            .order(order.orderBy, {
+                ascending: order.ascending,
+            });
 
-        if (error) throw error;
+        if (error) throw new Error(`Failed to find picks: ${error.message}`);
 
         return picks;
+    }
+
+    async getTimeline(
+        filters: {
+            userId?: string;
+            gameId?: number;
+            from?: Date;
+            to?: Date;
+        } = {}
+    ): Promise<Timeline> {
+        const picks = await this.getPicks(filters);
+
+        return picks.map((pick) => ({
+            type: TimelineType.Pick,
+            data: pick,
+        }));
     }
 }

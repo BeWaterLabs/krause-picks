@@ -14,7 +14,7 @@ export default function CommunityList({
             {communities.map((community, idx) => (
                 <motion.div
                     initial={{ opacity: 0, y: 10 }}
-                    animate={{
+                    whileInView={{
                         opacity: 1,
                         y: 0,
                         transition: { delay: 0.1 * idx },

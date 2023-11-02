@@ -185,6 +185,7 @@ export interface Database {
           icon_logo_url: string | null
           id: number
           league: string | null
+          primary_color: string | null
           primary_logo_url: string
           team_name: string | null
         }
@@ -195,6 +196,7 @@ export interface Database {
           icon_logo_url?: string | null
           id?: number
           league?: string | null
+          primary_color?: string | null
           primary_logo_url: string
           team_name?: string | null
         }
@@ -205,6 +207,7 @@ export interface Database {
           icon_logo_url?: string | null
           id?: number
           league?: string | null
+          primary_color?: string | null
           primary_logo_url?: string
           team_name?: string | null
         }

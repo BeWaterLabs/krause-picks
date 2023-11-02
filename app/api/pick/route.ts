@@ -9,15 +9,21 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
     const { game_id, selection_id, content } = await request.json();
-    if (!game_id || !selection_id) {
-        throw new Error("Missing game_id or selection_id");
-    }
+    if (!game_id || !selection_id)
+        return NextResponse.json(
+            { error: "Missing game_id or selection_id" },
+            { status: 400 }
+        );
 
     const userClient = createServerActionClient({ cookies });
     const {
         data: { user },
     } = await userClient.auth.getUser();
-    if (!user) throw new Error("You must be logged in to make a pick");
+    if (!user)
+        return NextResponse.json(
+            { error: "You must be logged in to make a pick" },
+            { status: 401 }
+        );
 
     const { data: account, error: accountError } = await userClient
         .from("accounts")
@@ -25,7 +31,10 @@ export async function POST(request: NextRequest) {
         .eq("user_id", user.id)
         .single();
     if (!account || accountError)
-        throw new Error(`Failed to find account: ${accountError?.message}}`);
+        return new NextResponse(
+            `Failed to find account: ${accountError?.message}}`,
+            { status: 400 }
+        );
 
     const { data: game, error: gameError } = await userClient
         .from("games")
@@ -33,18 +42,15 @@ export async function POST(request: NextRequest) {
         .eq("id", game_id)
         .single();
     if (!game || gameError)
-        throw new Error(`Failed to find game: ${gameError?.message}}`);
+        return NextResponse.json(
+            { error: `Failed to find game: ${gameError?.message}}` },
+            { status: 400 }
+        );
 
-    const { data: existingPick, error: existingPickError } = await userClient
-        .from("spread_picks")
-        .select("*")
-        .eq("game", game.id)
-        .eq("account", account.user_id)
-        .maybeSingle();
-
-    if (existingPick || existingPickError)
-        throw new Error(
-            `You already have a pick for this game: ${existingPickError?.message}}`
+    if (new Date() > new Date(game.start))
+        return NextResponse.json(
+            { error: "Game has already started" },
+            { status: 400 }
         );
 
     const adminClient = createClient<Database>(
@@ -61,14 +67,19 @@ export async function POST(request: NextRequest) {
             game.home_team === selection_id
                 ? game.home_spread
                 : game.away_spread,
+        created_at: new Date().toISOString(),
     };
 
     const { data, error } = await adminClient
         .from("spread_picks")
-        .insert([newPick])
+        .upsert([newPick], { onConflict: "game,account" })
         .select()
         .single();
 
-    if (error) throw new Error(`Failed to insert pick: ${error.message}`);
+    if (error)
+        return NextResponse.json(
+            { error: `Failed to insert pick: ${error.message}` },
+            { status: 400 }
+        );
     return NextResponse.json({ success: true, data });
 }

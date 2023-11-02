@@ -1,59 +1,68 @@
 import Image from "next/image";
-import serverDatabaseClient from "@/util/server-database-client";
 
 import { User } from "@supabase/supabase-js";
 import {
     AccountWithCommunity,
-    SpreadPick,
+    Game,
+    Pick,
     UserStats,
 } from "@/types/custom.types";
-import todayPacificTime from "@/util/today-pacific-time";
+import { serverDatabaseClient } from "@/database";
+import FinalizedPick from "./picks/FinalizedPick";
+import QuickPick from "./picks/QuickPick";
+import dayjs from "dayjs";
 
 async function fetchData(user: User): Promise<{
-    picks: SpreadPick[];
+    games: Game[];
+    picks: Pick[];
     account: AccountWithCommunity;
     stats: UserStats;
 }> {
-    const supabase = serverDatabaseClient();
+    const db = serverDatabaseClient();
 
-    const { data: picks, error: picksError } = await supabase
-        .from("spread_picks")
-        .select(
-            "*, account: accounts!spread_picks_account_fkey(*), game: games!inner(*, away_team: teams!games_away_team_fkey(*), home_team: teams!games_home_team_fkey(*)), selection: teams!spread_picks_selection_fkey(*)"
-        )
-        .eq("account", user?.id || "")
-        .order("created_at", { ascending: false });
+    const picks = await db.getPicks({
+        userId: user.id,
+    });
 
-    if (picksError) throw new Error(picksError.message);
+    const games = await db.getGames({
+        from: new Date(),
+    });
 
-    const { data: account, error: accountError } = await supabase
-        .from("accounts")
-        .select("*, community: communities!accounts_community_fkey(*)")
-        .eq("user_id", user.id)
-        .single();
+    const account = await db.getAccountWithCommunity(user.id);
 
-    if (accountError) throw new Error(accountError.message);
+    // determine stats from picks
+    const stats = picks.reduce(
+        (acc: UserStats, pick) => {
+            acc.totalPicks++;
+            if (pick.successful !== null) {
+                acc.completedPicks++;
+                if (pick.successful) {
+                    acc.successfulPicks++;
+                }
+            }
 
-    const statsResponse = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/stats/users?user=${user.id}`
+            return acc;
+        },
+        {
+            totalPicks: 0,
+            completedPicks: 0,
+            successfulPicks: 0,
+        }
     );
-    const { data: stats } = await statsResponse.json();
 
     return {
-        picks: picks as SpreadPick[],
+        games,
+        picks: picks as Pick[],
         account,
-        stats: stats[account.user_id] as UserStats,
+        stats: stats,
     };
 }
 
 export default async function UserPanel({ user }: { user: User }) {
-    const { startOfTodayPT, endOfTodayPT } = todayPacificTime();
-    if (!user) return null;
-
-    const { picks, account, stats } = await fetchData(user);
+    const { games, picks, account, stats } = await fetchData(user);
 
     return (
-        <div className="dark:bg-slate-800 p-6 flex overflow-hidden flex-col h-full bg-white border border-gray-200 dark:border-gray-700 shadow-md sm:rounded-lg">
+        <div className="dark:bg-slate-800 p-3 sm:p-6 flex overflow-hidden flex-col h-full bg-white border border-gray-200 dark:border-gray-700 shadow-md rounded-lg">
             <div className="w-full text-center flex flex-col items-center justify-center">
                 <div className="relative">
                     <Image
@@ -99,7 +108,11 @@ export default async function UserPanel({ user }: { user: User }) {
                 <div className="flex flex-col -space-y-1">
                     <h3 className="text-center text-xl font-heading font-bold">
                         {stats.completedPicks > 0
-                            ? Math.floor(stats.accuracy * 100) + "%"
+                            ? Math.floor(
+                                  (stats.successfulPicks /
+                                      stats.completedPicks) *
+                                      100
+                              ) + "%"
                             : "TBD"}
                     </h3>
                     <h6 className="text-center text-gray-500">Accuracy</h6>
@@ -108,45 +121,58 @@ export default async function UserPanel({ user }: { user: User }) {
             <div className="h-full relative overflow-y-scroll scrollbar-none scrollbar-thumb-rounded-md scrollbar-track-transparent scrollbar-thumb-slate-700">
                 <div className="absolute top-0 flex flex-col min-h-full right-0 left-0">
                     <h3 className="text-xl mt-6 font-heading dark:text-white text-black font-semibold">
-                        Your Picks
+                        Quick Picks
                     </h3>
                     <div className="flex flex-col gap-4 mt-3">
-                        {picks.map((pick) => (
-                            <div
-                                key={pick.id}
-                                className={`flex gap-3 justify-between font-bold text-base items-center w-full ${
-                                    pick.successful
-                                        ? "text-green-500"
-                                        : pick.successful === false &&
-                                          "text-red-500"
-                                }`}
-                            >
-                                <div className="flex text-sm gap-3 text-gray-500 font-semibold items-center w-full">
-                                    <Image
-                                        src={
-                                            pick.selection.icon_logo_url ||
-                                            pick.selection.primary_logo_url
+                        {games.map((game) => {
+                            const pick = picks.find(
+                                (pick) => pick.game.id === game.id
+                            );
+
+                            return (
+                                <QuickPick
+                                    key={game.id}
+                                    game={game}
+                                    selection={pick?.selection}
+                                />
+                            );
+                        })}
+                    </div>
+                    <h3 className="text-xl mt-6 font-heading dark:text-white text-black font-semibold">
+                        Past Picks
+                    </h3>
+                    <div className="flex flex-col gap-4 mt-3">
+                        {Object.entries(
+                            picks
+                                .filter((p) => p.successful !== null)
+                                .reduce(
+                                    (acc: { [date: string]: Pick[] }, pick) => {
+                                        const date = dayjs(
+                                            pick.game.start
+                                        ).format("YYYY-MM-DD");
+                                        if (!acc[date]) {
+                                            acc[date] = [];
                                         }
-                                        alt={`${pick.selection.full_name} logo`}
-                                        width={125}
-                                        height={125}
-                                        className="w-auto h-7"
-                                    />
-                                    {pick.selection.full_name}
-                                </div>
-                                <div className="rounded-md w-16 flex justify-center py-1 text-sm bg-slate-700">
-                                    {pick.spread > 0 ? "+" : ""}
-                                    {pick.spread}
+                                        acc[date].push(pick);
+                                        return acc;
+                                    },
+                                    {}
+                                )
+                        ).map(([date, picks]) => (
+                            <div key={date}>
+                                <h4 className="text-lg mt-2 font-heading dark:text-gray-500 text-black font-semibold">
+                                    {dayjs(date).format("MMMM D, YYYY")}
+                                </h4>
+                                <div className="flex flex-col gap-4 mt-3">
+                                    {picks.map((pick) => (
+                                        <FinalizedPick
+                                            key={pick.id}
+                                            pick={pick}
+                                        />
+                                    ))}
                                 </div>
                             </div>
                         ))}
-                        {picks.length === 0 && (
-                            <div className="flex justify-center mt-4 font-heading items-center h-full">
-                                <h6 className="text-gray-500">
-                                    No picks made for today&apos;s games
-                                </h6>
-                            </div>
-                        )}
                     </div>
                 </div>
             </div>
