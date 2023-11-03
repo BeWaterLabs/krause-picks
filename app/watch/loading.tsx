@@ -1,8 +1,8 @@
 import { Spinner } from "@/components/common";
 
-export default function LoadingGamesPage() {
+export default function WatchLoading() {
     return (
-        <div className="flex w-full items-center h-full justify-center">
+        <div className="w-full h-full flex items-center justify-center">
             <Spinner size={12} color="fill-gray-700" />
         </div>
     );

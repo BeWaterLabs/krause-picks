@@ -1,5 +1,9 @@
+import { Spinner } from "@/components/common";
+
 export default function LoadingLeaderboardPage() {
     return (
-        <div className="dark:bg-slate-800 overflow-hidden h-full bg-white shadow-md sm:rounded-lg animate-pulse"></div>
+        <div className="w-full h-full flex items-center justify-center">
+            <Spinner size={12} color="fill-gray-700" />
+        </div>
     );
 }

@@ -9,7 +9,7 @@ import createBrowserClient from "@/util/browser-database-client";
 import { Provider } from "@supabase/supabase-js";
 import { Row } from "@/types/database-helpers.types";
 import { useState } from "react";
-import Spinner from "@/components/common/Spinner";
+import { Spinner } from "@/components/common";
 
 export default function SignupForm({
     community,
