@@ -1,5 +1,9 @@
+import { Spinner } from "@/components/common";
+
 export default function LoadingGameDetailPage() {
     return (
-        <div className="shadow rounded-lg h-full dark:shadow-md dark:bg-slate-800 border-gray-200 dark:border-gray-700 border animate-pulse" />
+        <div className="w-full h-full flex items-center justify-center">
+            <Spinner size={12} color="fill-gray-700" />
+        </div>
     );
 }

@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import browserDatabaseClient from "@/database/BrowserDatabaseClient";
 import UserList from "./UserList";
 import todayPacificTime from "@/util/today-pacific-time";
+import { Spinner } from "@/components/common";
 
 async function getLeaderboard(
     metric: string,
@@ -110,19 +111,25 @@ export default function LeaderboardContent({
     communityId?: number;
 }) {
     const { start, end } = getTimestampFromPeriod(period);
-    const [community, setCommunity] = useState<null | Row<"communities">>(null);
     const [userLeaderboard, setUserLeaderboard] = useState<UserLeaderboard>([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        setLoading(true);
         getLeaderboard(metric, communityId, start, end).then(
-            ({ community, userLeaderboard }) => {
-                setCommunity(community);
+            ({ userLeaderboard }) => {
                 setUserLeaderboard(userLeaderboard);
+                setLoading(false);
             }
         );
     }, [communityId, metric, period]);
 
-    if (!userLeaderboard) return null;
+    if (userLeaderboard.length === 0 || loading)
+        return (
+            <div className="w-full h-full flex items-center justify-center">
+                <Spinner size={12} color="fill-gray-600" />
+            </div>
+        );
 
     return <UserList users={userLeaderboard} metric={metric} />;
 }

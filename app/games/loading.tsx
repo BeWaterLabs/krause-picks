@@ -1,12 +1,9 @@
+import { Spinner } from "@/components/common";
+
 export default function LoadingGamesPage() {
     return (
-        <div className="flex flex-col gap-4">
-            {[...Array(10)].map((_: unknown, i: number) => (
-                <div
-                    key={i}
-                    className="h-36 group cursor-pointer overflow-hidden dark:shadow-md dark:bg-slate-800 rounded-md animate-pulse"
-                />
-            ))}
+        <div className="flex w-full items-center h-full justify-center">
+            <Spinner size={12} color="fill-gray-700" />
         </div>
     );
 }
