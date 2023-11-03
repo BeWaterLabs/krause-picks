@@ -70,7 +70,7 @@ export default async function UserPanel({ user }: { user: User }) {
                         height={125}
                         src={account.profile_picture_url}
                         alt=""
-                        className="rounded-full"
+                        className="rounded-full h-full w-full"
                     />
                     {account.community?.logo_url && (
                         <div className="absolute bottom-0 right-0 w-8 h-8">
@@ -79,6 +79,7 @@ export default async function UserPanel({ user }: { user: User }) {
                                 alt=""
                                 width={30}
                                 height={30}
+                                className="h-full w-full"
                             />
                         </div>
                     )}

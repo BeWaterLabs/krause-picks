@@ -6,8 +6,6 @@ import { Inter, Play } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 
 import Navbar from "@/components/Navbar";
-import { serverDatabaseClient } from "@/database";
-import UserPanel from "@/components/UserPanel";
 
 export const dynamic = "force-dynamic";
 

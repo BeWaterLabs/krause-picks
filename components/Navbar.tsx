@@ -7,6 +7,7 @@ import {
     CalendarDaysIcon,
     RectangleStackIcon,
     TrophyIcon,
+    TvIcon,
     UserIcon,
 } from "@heroicons/react/20/solid";
 import { motion } from "framer-motion";
@@ -136,6 +137,11 @@ export default function Navbar() {
                         label="Leaderboard"
                         href="/leaderboard"
                     />
+                    <MobileNavLink
+                        icon={<TvIcon className="w-full h-full" />}
+                        label="Watch"
+                        href="/watch"
+                    />
                     {isLoggedIn !== undefined && (
                         <>
                             {isLoggedIn === false ? (
@@ -215,6 +221,11 @@ export default function Navbar() {
                                 icon={<TrophyIcon className="w-full h-full" />}
                                 label="Leaderboard"
                                 href="/leaderboard"
+                            />
+                            <DesktopNavLink
+                                icon={<TvIcon className="w-full h-full" />}
+                                label="Watch"
+                                href="/watch"
                             />
                         </nav>
                     </div>
