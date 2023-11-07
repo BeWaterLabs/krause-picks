@@ -9,16 +9,14 @@ export default function GameCard({ game }: { game: GameWithTimeline }) {
     const picks = game.timeline
         .filter((t) => t.type === TimelineType.Pick)
         .map((t) => t.data.selection);
-    const awayPickPercentage = Math.round(
+    const awayPickPercentage =
         (picks.filter((p) => p.id === game.away_team.id).length /
             Math.max(picks.length, 1)) *
-            100
-    );
-    const homePickPercentage = Math.round(
+        100;
+    const homePickPercentage =
         (picks.filter((p) => p.id === game.home_team.id).length /
             Math.max(picks.length, 1)) *
-            100
-    );
+        100;
 
     return (
         <Link
