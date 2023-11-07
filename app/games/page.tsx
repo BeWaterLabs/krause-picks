@@ -1,6 +1,8 @@
 import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat";
+import utc from "dayjs/plugin/utc";
 dayjs.extend(advancedFormat);
+dayjs.extend(utc);
 
 import { serverDatabaseClient } from "@/database";
 import { GameWithTimeline } from "@/types/custom.types";
@@ -33,17 +35,17 @@ export default async function GamesPage() {
     return (
         <div className="w-full flex flex-col gap-4">
             {games
-                .sort(
-                    (a, b) =>
-                        new Date(a.start).getTime() -
-                        new Date(b.start).getTime()
-                )
+                .sort((a, b) => dayjs(a.start).unix() - dayjs(b.start).unix())
                 .reduce((acc: React.ReactNode[], game, index, arr) => {
                     const prevGame = arr[index - 1];
                     if (
                         (prevGame &&
-                            new Date(prevGame.start).toDateString() !==
-                                new Date(game.start).toDateString()) ||
+                            dayjs(prevGame.start)
+                                .local()
+                                .format("YYYY-MM-DD") !==
+                                dayjs(game.start)
+                                    .local()
+                                    .format("YYYY-MM-DD")) ||
                         index === 0
                     ) {
                         acc.push(
@@ -51,7 +53,9 @@ export default async function GamesPage() {
                                 className="mt-4 text-gray-400 mx-auto font-heading text-lg font-semibold"
                                 key={game.start}
                             >
-                                {dayjs(game.start).format("dddd, MMMM Do")}
+                                {dayjs(game.start)
+                                    .local()
+                                    .format("dddd, MMMM Do")}
                             </div>
                         );
                     }
