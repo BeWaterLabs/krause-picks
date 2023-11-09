@@ -16,7 +16,6 @@ export default function GamesFeed({ games }: { games: GameWithTimeline[] }) {
                 .sort((a, b) => dayjs(a.start).unix() - dayjs(b.start).unix())
                 .reduce((acc: React.ReactNode[], game, index, arr) => {
                     const prevGame = arr[index - 1];
-                    console.log(game.start);
                     if (
                         (prevGame &&
                             dayjs(prevGame.start)
