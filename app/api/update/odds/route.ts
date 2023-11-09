@@ -54,7 +54,9 @@ export async function GET(request: NextRequest) {
     const oddsResponse = await fetch(
         `https://api.the-odds-api.com/v4/sports/upcoming/odds/?regions=us&sport=${category}&markets=spreads&oddsFormat=american&dateFormat=iso&commenceTimeFrom=${isoNow}&commenceTimeTo=${endTime}&apiKey=${process.env.ODDS_API_KEY}`
     );
+    console.log(oddsResponse);
     const odds = await oddsResponse.json();
+    console.log(odds);
 
     const supabase = createClient<Database>(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,

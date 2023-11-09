@@ -8,6 +8,7 @@ import { Toaster } from "react-hot-toast";
 import Navbar from "@/components/Navbar";
 
 export const dynamic = "force-dynamic";
+export const runtime = "edge";
 
 const inter = Inter({ subsets: ["latin"], variable: "--inter" });
 const play = Play({
