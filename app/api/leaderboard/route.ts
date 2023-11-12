@@ -4,12 +4,10 @@ export const revalidate = 0;
 
 import { NextRequest, NextResponse } from "next/server";
 
-import type { Database } from "@/types/database.types";
-import { SupabaseClient, createClient } from "@supabase/supabase-js";
 import DatabaseClient from "@/database/DatabaseClient";
 import { UserStats, UserLeaderboard } from "@/types/custom.types";
 import { Row } from "@/types/database-helpers.types";
-import ServerDatabaseClient from "@/database/ServerDatabaseClient";
+import routeDatabaseClient from "@/database/RouteDatabaseClient";
 import todayPacificTime from "@/util/today-pacific-time";
 
 async function getLeaderboard(
@@ -76,7 +74,7 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
     const days = searchParams.get("days") || "1";
 
-    const db = ServerDatabaseClient();
+    const db = routeDatabaseClient();
 
     const { start } = todayPacificTime(-1 * parseInt(days));
 
