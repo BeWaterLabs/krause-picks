@@ -7,7 +7,7 @@ import { NextRequest, NextResponse } from "next/server";
 import DatabaseClient from "@/database/DatabaseClient";
 import { UserStats, UserLeaderboard } from "@/types/custom.types";
 import { Row } from "@/types/database-helpers.types";
-import routeDatabaseClient from "@/database/RouteDatabaseClient";
+import adminDatabaseClient from "@/database/AdminDatabaseClient";
 import todayPacificTime from "@/util/today-pacific-time";
 
 async function getLeaderboard(
@@ -74,7 +74,7 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
     const days = searchParams.get("days") || "1";
 
-    const db = routeDatabaseClient();
+    const db = adminDatabaseClient();
 
     const { start } = todayPacificTime(-1 * parseInt(days));
 
