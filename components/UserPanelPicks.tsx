@@ -29,10 +29,24 @@ export default function UserPanelPicks({
                     );
                 })}
             </div>
-            <h3 className="text-xl mt-6 font-heading dark:text-white text-black font-semibold">
+            {picks.filter((p) => p.successful === null).length > 0 && (
+                <>
+                    <h3 className="text-xl mt-8 font-heading dark:text-white text-black font-semibold">
+                        Pending Picks
+                    </h3>
+                    <div className="flex flex-col gap-4 mt-3">
+                        {picks
+                            .filter((p) => p.successful === null)
+                            .map((pick) => (
+                                <FinalizedPick key={pick.id} pick={pick} />
+                            ))}
+                    </div>
+                </>
+            )}
+            <h3 className="text-xl mt-8 font-heading dark:text-white text-black font-semibold">
                 Past Picks
             </h3>
-            <div className="flex flex-col gap-4 mt-3">
+            <div className="flex flex-col gap-4">
                 {Object.entries(
                     picks
                         .filter((p) => p.successful !== null)

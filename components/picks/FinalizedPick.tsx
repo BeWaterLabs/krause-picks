@@ -5,9 +5,11 @@ export default function FinalizedPick({ pick }: { pick: Pick }) {
     return (
         <div
             className={`flex gap-3 justify-between font-bold text-base items-center w-full ${
-                pick.successful
+                pick.successful === null
+                    ? "text-white"
+                    : pick.successful
                     ? "text-green-500"
-                    : pick.successful === false && "text-red-500"
+                    : "text-red-500"
             }`}
         >
             <div className="flex text-sm gap-3 text-gray-500 font-semibold items-center w-full">

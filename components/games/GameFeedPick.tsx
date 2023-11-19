@@ -11,7 +11,7 @@ export default function GameFeedPick({
     showDivider?: boolean;
 }) {
     return (
-        <div className="flex gap-x-1 sm:gap-x-2 relative">
+        <div className="flex gap-x-1 relative">
             <div
                 className={classNames(
                     !showDivider ? "h-6" : "-bottom-6",
@@ -34,7 +34,12 @@ export default function GameFeedPick({
                     <div className="flex flex-auto items-center gap-2">
                         <p className="py-0.5 text-sm sm:text-base flex items-center flex-wrap gap-1 leading-5 text-gray-500 dark:text-gray-400">
                             <span className="font-medium text-gray-900 dark:text-white">
-                                {pick.account.display_name}
+                                {pick.account.display_name.length > 12
+                                    ? `${pick.account.display_name.substring(
+                                          0,
+                                          12
+                                      )}...`
+                                    : pick.account.display_name}
                             </span>{" "}
                             picked <span className="hidden sm:block">the</span>{" "}
                             <span className="flex items-center gap-1 ml-1">
@@ -54,6 +59,11 @@ export default function GameFeedPick({
                                 <span className="md:hidden">
                                     {pick.selection.abbreviation}
                                 </span>
+                            </span>{" "}
+                            at{" "}
+                            <span className="font-medium">
+                                {pick.spread > 0 ? "+" : ""}
+                                {pick.spread}
                             </span>
                         </p>
                         <time
