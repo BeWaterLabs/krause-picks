@@ -15,7 +15,7 @@ export default async function Watch({
                 .
             </div>
             <iframe
-                src="https://www.playback.tv/b2b2"
+                src="https://www.playback.tv/b2b"
                 className="w-full h-full"
                 sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
             />
