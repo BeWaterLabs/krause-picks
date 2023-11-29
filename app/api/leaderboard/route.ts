@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 import DatabaseClient from "@/database/DatabaseClient";
 import { UserStats, UserLeaderboard } from "@/types/custom.types";
-import { Row } from "@/types/database-helpers.types";
+import { Insert, Row } from "@/types/database-helpers.types";
 import adminDatabaseClient from "@/database/AdminDatabaseClient";
 import todayPacificTime from "@/util/today-pacific-time";
 
@@ -70,15 +70,56 @@ async function getLeaderboard(
     return userLeaderboard;
 }
 
-export async function GET(request: NextRequest) {
-    const searchParams = request.nextUrl.searchParams;
-    const days = searchParams.get("days") || "1";
+// export async function GET(request: NextRequest) {
+//     const searchParams = request.nextUrl.searchParams;
+//     const days = searchParams.get("days") || "1";
 
+//     const db = adminDatabaseClient();
+
+//     const { start } = todayPacificTime(-1 * parseInt(days));
+
+//     const leaderboard = await getLeaderboard(db, start);
+
+//     return NextResponse.json({ success: true, leaderboard });
+// }
+
+export async function GET() {
     const db = adminDatabaseClient();
+    const currentLeaderboard = await db.getLeaderboard();
+    const current = currentLeaderboard.data ? currentLeaderboard.data : null;
 
-    const { start } = todayPacificTime(-1 * parseInt(days));
+    let wasTie = false;
+    // if there's a tie, add to the existing scores
+    if (
+        current != null &&
+        current.length > 0 &&
+        current[0].score === current[1].score
+    ) {
+        wasTie = true;
+    }
 
-    const leaderboard = await getLeaderboard(db, start);
+    const { start, end } = todayPacificTime(-1);
+    const yesterdayResults = await getLeaderboard(db, start, end);
+    const newRows: Insert<"leaderboard">[] = [];
+    yesterdayResults.forEach((score) => {
+        if (wasTie) {
+            const usersCurrent = current!.find(
+                (u) => u.user === score.account.user_id
+            );
+            const usersCurrentScore = usersCurrent ? usersCurrent.score : 0;
+            newRows.push({
+                user: score.account.user_id,
+                score: (score.stats.successfulPicks + usersCurrentScore) * 10,
+            });
+        } else {
+            newRows.push({
+                user: score.account.user_id,
+                score: score.stats.successfulPicks * 10,
+            });
+        }
+    });
 
-    return NextResponse.json({ success: true, leaderboard });
+    await db.postLeaderboard(newRows);
+
+    return NextResponse.json({ success: true });
 }

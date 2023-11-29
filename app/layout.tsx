@@ -6,6 +6,7 @@ import { Inter, Play } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 
 import Navbar from "@/components/Navbar";
+import serverDatabaseClient from "@/database/ServerDatabaseClient";
 
 export const dynamic = "force-dynamic";
 
@@ -26,6 +27,17 @@ export default async function RootLayout({
 }: {
     children: React.ReactNode;
 }) {
+    const db = serverDatabaseClient();
+    const leaderboard = await db.getLeaderboard();
+
+    let winner = null;
+    if (
+        leaderboard.data &&
+        leaderboard.data[0].score > leaderboard.data[1].score
+    ) {
+        winner = await db.getAccount(leaderboard.data[0].user);
+    }
+
     return (
         <html lang="en" className="dark">
             <body
@@ -41,7 +53,9 @@ export default async function RootLayout({
                     }}
                 />
                 <div className="w-full lg:pl-16 from-blue-900 bg-gradient-to-br to-blue-700 p-1 text-xs sm:text-sm md:text-base text-center text-white font-heading">
-                    Unlimited free picks! • $20 daily prize to #1 performer
+                    {winner
+                        ? `🏆 ${winner.display_name} won yesterday's pool! Today's pool is $25`
+                        : `No one won the pool yesterday! $25 has been added to today's pool!`}
                 </div>
                 <div className="w-full pb-32 lg:pb-0 lg:pl-16 flex h-full">
                     <Navbar />

@@ -219,4 +219,11 @@ export default abstract class DatabaseClient {
             data: pick,
         }));
     }
+
+    async getLeaderboard() {
+        return await this.client
+            .from("leaderboard")
+            .select("*")
+            .order("score", { ascending: false });
+    }
 }

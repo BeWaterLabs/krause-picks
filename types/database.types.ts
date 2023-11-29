@@ -125,6 +125,31 @@ export interface Database {
           }
         ]
       }
+      leaderboard: {
+        Row: {
+          id: number
+          score: number
+          user: string
+        }
+        Insert: {
+          id?: number
+          score: number
+          user: string
+        }
+        Update: {
+          id?: number
+          score?: number
+          user?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "leaderboard_user_fkey"
+            columns: ["user"]
+            referencedRelation: "accounts"
+            referencedColumns: ["user_id"]
+          }
+        ]
+      }
       spread_picks: {
         Row: {
           account: string

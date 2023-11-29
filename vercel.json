@@ -1,10 +1,6 @@
 {
     "crons": [
         {
-            "path": "/api/update/game-scores?category=americanfootball_nfl",
-            "schedule": "0 9 * * *"
-        },
-        {
             "path": "/api/update/spread-picks",
             "schedule": "10 * * * *"
         },
@@ -15,6 +11,10 @@
         {
             "path": "/api/update/game-scores?category=basketball_nba",
             "schedule": "0 * * * *"
+        },
+        {
+            "path": "/api/leaderboard",
+            "schedule": "0 10 * * *"
         }
     ]
 }
