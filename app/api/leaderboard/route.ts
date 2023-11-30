@@ -109,7 +109,7 @@ export async function GET() {
             const usersCurrentScore = usersCurrent ? usersCurrent.score : 0;
             newRows.push({
                 user: score.account.user_id,
-                score: (score.stats.successfulPicks + usersCurrentScore) * 10,
+                score: score.stats.successfulPicks * 10 + usersCurrentScore,
             });
         } else {
             newRows.push({
