@@ -119,6 +119,19 @@ export async function GET() {
         }
     });
 
+    // find users who didn't play yesterday but are on the leaderboard
+    current!.forEach((score) => {
+        if (
+            !yesterdayResults.find((u) => u.account.user_id === score.user) &&
+            score.score > 0
+        ) {
+            newRows.push({
+                user: score.user,
+                score: 0,
+            });
+        }
+    });
+
     await db.postLeaderboard(newRows);
 
     return NextResponse.json({ success: true });
