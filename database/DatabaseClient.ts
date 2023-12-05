@@ -226,4 +226,13 @@ export default abstract class DatabaseClient {
             .select("*")
             .order("score", { ascending: false });
     }
+
+    async getLeaderboardWithUsers() {
+        return await this.client
+            .from("leaderboard")
+            .select(
+                "*, account: accounts!leaderboard_user_fkey(*, community: communities!accounts_community_fkey(*))"
+            )
+            .order("score", { ascending: false });
+    }
 }
