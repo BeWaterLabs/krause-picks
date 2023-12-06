@@ -7,8 +7,8 @@ import adminDatabaseClient from "@/database/AdminDatabaseClient";
 
 const CHANNEL_IDS = [
     "847583837991207005",
-    "849005289670967356",
-    "847583837991207005",
+    "1007786363250290820",
+    "849346727923417139",
 ];
 
 export async function GET() {
@@ -44,16 +44,21 @@ export async function GET() {
 
     await Promise.all(
         CHANNEL_IDS.map(async (id) => {
-            await fetch(`https://discord.com/api/channels/${id}/messages`, {
-                method: "POST",
-                headers: {
-                    Authorization: `Bot ${process.env.DISCORD_TOKEN}`,
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    content: `${announcement}\n${topTen}\n\nMake your picks 👉 https://krausepicks.com\nWatch the games with B2B on Playback 👉 https://www.playback.tv/b2b/`,
-                }),
-            });
+            const result = await fetch(
+                `https://discord.com/api/channels/${id}/messages`,
+                {
+                    method: "POST",
+                    headers: {
+                        Authorization: `Bot ${process.env.DISCORD_TOKEN}`,
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        content: `${announcement}\n${topTen}\n\nMake your picks 👉 https://krausepicks.com\nWatch the games with B2B on Playback 👉 https://www.playback.tv/b2b/`,
+                    }),
+                }
+            );
+            const data = await result.json();
+            console.log(data);
         })
     );
 
