@@ -53,9 +53,7 @@ export default async function RootLayout({
                     }}
                 />
                 <div className="w-full lg:pl-16 from-blue-900 bg-gradient-to-br to-blue-700 p-1 text-xs sm:text-sm md:text-base text-center text-white font-heading">
-                    {winner
-                        ? `🏆 ${winner.display_name} won yesterday's pool! Today's pool is $25`
-                        : `No one won the pool yesterday! $25 has been added to today's pool!`}
+                    No more prizes available! Continue to play for bragging rights
                 </div>
                 <div className="w-full pb-32 lg:pb-0 lg:pl-16 flex h-full">
                     <Navbar />
