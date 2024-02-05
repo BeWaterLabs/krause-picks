@@ -39,7 +39,7 @@ export async function GET() {
         .join("\n");
 
     const announcement = wasTie
-        ? "**We had a tie last night! Another $25 added to the pool today!**"
+        ? "**We had a tie last night!**"
         : `**${current[0].account?.display_name} takes the win!**`;
 
     await Promise.all(
