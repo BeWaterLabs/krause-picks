@@ -20,7 +20,7 @@ async function getLeaderboard(
             from: startTime,
             to: endTime,
         },
-        30000
+        60000
     );
     const community = communityId ? await db.getCommunity(communityId) : null;
 
